@@ -1,0 +1,28 @@
+{% extends 'NantarenaPaymentBundle::PaymentProcess/layout.html.twig' %}
+
+{% block title 'payment.payment.title'|trans %}
+
+{% block page_title 'payment.payment.title'|trans %}
+
+{% block payment_process %}
+
+	<ul>
+		<li>Tous les paiements sont protégés avec le système paypal</li>
+		<li>Vous pouvez vérifier le logo HTTPS de la barre d'adresse pour le chiffrage de la communication</li>
+	</ul>
+
+	<p>Choix de la méthode de paiement :</p>
+
+	<div class="text-center">
+
+		<a href="{{ path('nantarena_payment_paypalpayment_pay', {'slug': entry.entryType.event.slug}) }}">
+			<p class="btn btn-primary">Utiliser son compte paypal</p>
+		</a>
+
+		<a href="#">
+			<p class="btn btn-primary">Utiliser une carte bancaire</p>
+		</a>
+		<!-- PayPal Logo --><table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center"><a href="#" title="PayPal Comment Ca Marche" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=600');"><img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark"></a></td></tr></table><!-- PayPal Logo -->
+	</div>
+
+{% endblock %}

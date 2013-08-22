@@ -1,0 +1,28 @@
+{% extends 'NantarenaPaymentBundle::PaymentProcess/layout.html.twig' %}
+
+{% block title 'payment.success.title'|trans %}
+
+{% block page_title 'payment.success.title'|trans %}
+
+{% block payment_process %}
+
+	<h2>Voici le dernier récapitulatif</h2>
+
+	<p>
+		{{'payment.index.event'|trans({'%event%': trans.event.name})}}
+	</p>
+	<p>
+		Le prix de votre place est de {{trans.price}}€
+	</p>
+
+	<p>La confirmation entraînera l'exécution du paiement</p>
+	<p>Le prix total est : {{trans.payment.amount}}€</p>
+
+
+	<div class="text-center">
+		<a href="{{ path('nantarena_payment_paypalpayment_payme') }}">
+			<p class="btn btn-primary">Valider le formulaire</p>
+		</a>
+	</div>
+
+{% endblock %}
