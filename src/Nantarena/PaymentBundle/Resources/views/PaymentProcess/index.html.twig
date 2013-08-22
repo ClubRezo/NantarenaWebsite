@@ -1,0 +1,64 @@
+{% extends 'NantarenaPaymentBundle::PaymentProcess/layout.html.twig' %}
+
+{% block title 'payment.index.title'|trans %}
+
+{% block page_title 'payment.index.title'|trans %}
+
+{% block payment_process %}
+    {% if transaction is not null %}
+        {% if transaction.payment.valid %}
+            <p>Vous avez déjà payé</p>
+        {% else %}
+            <p>Vous avez une transaction non finie en cours</p>
+        {% endif %}
+        <a href="{{ path('nantarena_payment_clean') }}">
+            <p class="btn btn-danger">Clean</p>
+        </a>
+    {% endif %}
+
+    <h2>Explications</h2>
+    <ul>
+        <li>Ce système de paiement fonctionne entièrement avec Paypal</li>
+        <li>Aucune information bancaire utilisée n'est enregistrée sur notre site</li>
+        <li>SVP, n'utilisez pas les flèches de navigation</li>
+        <li>Une fois le paiment effectué, votre compte sera automatiquement mis à jour</li>
+    </ul>
+
+    
+
+    <!-- PayPal Logo --><table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center"><a href="#" title="PayPal Comment Ca Marche" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=600');"><img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_site_fr.png" border="0" alt="Now accepting PayPal"></a><div style="text-align:center"></div></td></tr></table><!-- PayPal Logo -->
+
+    <h2>Votre place</h2>
+    <h3>Résumé de votre status</h3>
+    <p>
+        {{'payment.index.event'|trans({'%event%': entry.entryType.event.name})}}
+    </p>
+    <p>
+        {{'payment.index.status'|trans({'%status%': entry.entryType.name})}}
+    </p>
+    <p>
+        {{'payment.index.prix'|trans({'%prix%': entry.entryType.price})}}
+    </p>
+
+    <h3>Sélection de vos coupons</h3>
+    <ul>
+        <li>Vos coupons de réduction</li>
+        <li>Les coupons et services supplémentaires (Ces coupons sont vérifiés à votre arrivée à la NA)</li>
+    </ul>
+    
+
+    <h2>Payer pour des membres de votre équipe</h2>
+    <p>Liste des membres de votre équipe et leur status</p>
+    <p>Payer pour un membre de son équipe prive la personne de l'utilisation des ses coupons</p>
+
+    <!-- <div class="text-center">
+        <a href="{{ path('nantarena_payment_paymentprocess_paymentchoice', {'slug': entry.entryType.event.slug}) }}">
+            <p class="btn btn-primary">Valider le formulaire</p>
+        </a>
+    </div> -->
+    {% embed 'NantarenaPaymentBundle:Form:_payment.html.twig' with {
+        'submit': 'Valider le formulaire'
+    } %}{% endembed %}
+
+
+{% endblock %}

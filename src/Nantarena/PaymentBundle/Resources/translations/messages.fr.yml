@@ -1,0 +1,14 @@
+payment:
+    title: 'Paiement'
+    index:
+        title: 'Sélection des options de paiement'
+        event: 'Vous allez payer pour l''événement %event%'
+        status: 'Vous avez le status %status%.'
+        prix: 'Le prix est de %prix%€.'
+        flash_error_connection: 'Vous devez être connecté'
+        flash_error_signup: 'Vous n''êtes pas inscrit à cet événement !'
+        flash_error_running: 'La transaction en cours a été supprimé !'
+    payment:
+        title: 'Choisir son moyen de paiement'
+    success:
+        title: 'Récapitulatif de la commande'
