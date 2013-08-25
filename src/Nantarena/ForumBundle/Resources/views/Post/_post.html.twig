@@ -1,0 +1,42 @@
+<tr id="post-{{ post.id }}" class="forum-table-header">
+    <th class="infos-column">
+        {{ post.user.username }}
+    </th>
+    <th class="content-colum text-right">
+        {% include 'NantarenaForumBundle:Control:_post.html.twig' %}
+        <div class="text-right">
+            {{ post.creationDate|localizeddate('medium', 'medium') }}
+        </div>
+    </th>
+</tr>
+<tr>
+    <td>
+        <p class="text-center">
+            {# TODO changer l'image par défaut ou ne pas en mettre #}
+            <img src="{{ gravatar(post.user, 80, 'https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/man-24-64.png') }}" alt="User image" />
+        </p>
+        <p class="text-center">
+            {# TODO écrire ça d'une meilleure manière (fonction) #}
+            {% if post.user.hasRole('ROLE_SUPER_ADMIN') %}
+                <span class="label label-important">{{ 'forum.role.admin'|trans }}</span>
+            {% elseif post.user.hasRole('ROLE_FORUM_MODERATE') %}
+                <span class="label label-success">{{ 'forum.role.moderator'|trans }}</span>
+            {% elseif post.user.hasRole('ROLE_STAFF_FORUM') %}
+                <span class="label label-info">{{ 'forum.role.staff'|trans }}</span>
+            {% else %}
+                <span class="label">{{ 'forum.role.member'|trans }}</span>
+            {% endif %}
+        </p>
+    </td>
+    <td>
+        <div class="forum-post-content">
+            {{ post.content|e|nl2br|bbcode }}
+        </div>
+
+        {% if post.creationDate != post.updateDate %}
+            <p class="post-edited">
+                {{ 'forum.thread.show.edited'|trans({'%date%': post.updateDate|localizeddate('medium', 'medium')}) }}
+            </p>
+        {% endif %}
+    </td>
+</tr>

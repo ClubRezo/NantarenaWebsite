@@ -4,6 +4,7 @@ namespace Nantarena\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 use Nantarena\UserBundle\Entity\User;
 
 /**
@@ -57,6 +58,7 @@ class Post
      * @var string
      *
      * @ORM\Column(name="content", type="text")
+     * @Assert\NotBlank()
      */
     private $content;
 

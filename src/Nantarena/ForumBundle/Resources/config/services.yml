@@ -69,6 +69,11 @@ services:
         calls:
             - [ setContainer, [@service_container] ]
 
+    nantarena_forum.twig.bbcode_extension:
+        class: Nantarena\ForumBundle\Twig\BbcodeExtension
+        tags:
+            - { name: twig.extension }
+
     # Validateurs
     nantarena_forum.sticky_validator:
         class: Nantarena\ForumBundle\Validator\Constraints\StickyValidator

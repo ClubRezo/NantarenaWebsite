@@ -22,8 +22,10 @@
             {% endfor %}
         </ul>
 
-        <p class="unreads text-center">
-            <a href="{{ path('nantarena_forum_default_unreads') }}">{{ 'forum.widget.recent.unreads'|trans }}</a>
-        </p>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <p class="unreads text-center">
+                <a href="{{ path('nantarena_forum_default_unreads') }}">{{ 'forum.widget.recent.unreads'|trans }}</a>
+            </p>
+        {% endif %}
     </div>
 </div>

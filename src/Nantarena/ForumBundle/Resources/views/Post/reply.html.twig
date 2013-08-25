@@ -18,30 +18,7 @@
 
     <table class="table">
         {% for post in last %}
-            <tr id="post-{{ post.id }}" class="forum-table-header">
-                <th>{{ post.user.username }}</th>
-                <th class="text-right">
-                    <div class="text-right">
-                        {{ post.creationDate|localizeddate('medium', 'medium') }}
-                    </div>
-                </th>
-            </tr>
-            <tr>
-                <td>
-
-                </td>
-                <td>
-                    <div class="forum-post-content">
-                        {{ post.content|e|nl2br }}
-                    </div>
-
-                    {% if post.creationDate != post.updateDate %}
-                        <p class="post-edited">
-                            {{ 'forum.thread.show.edited'|trans({'%date%': post.updateDate|localizeddate('medium', 'medium')}) }}
-                        </p>
-                    {% endif %}
-                </td>
-            </tr>
+            {% include 'NantarenaForumBundle:Post:_post.html.twig' %}
         {% endfor %}
     </table>
 {% endblock %}
