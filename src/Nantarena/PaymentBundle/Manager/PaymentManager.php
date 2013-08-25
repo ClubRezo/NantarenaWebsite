@@ -24,9 +24,9 @@ class PaymentManager
         $this->router = $router;
     }
 
-    public function Payment(Event $event)
+    public function createPayment(Event $event)
     {
-        return $this->router->generate('nantarena_payment_paymentprocess_index', array(
+        return $this->router->generate('nantarena_payment_paymentprocess_create', array(
             'slug' => $event->getSlug(),
         ));
     }

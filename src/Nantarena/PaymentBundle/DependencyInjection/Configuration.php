@@ -20,9 +20,39 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('nantarena_payment');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('paypal')
+                    ->children()
+                        ->arrayNode('credentials')
+                            ->children()
+                                ->scalarNode('clientid')->defaultValue('~')->end()
+                                ->scalarNode('secret')->defaultValue('~')->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('service')
+                            ->children()
+                                ->scalarNode('http_connection_timeout')->defaultValue('30')->end()
+                                ->scalarNode('http_retry')->defaultValue('1')->end()
+                                ->scalarNode('http_proxy')
+                                    ->defaultValue('~')
+                                    ->example('http://[username:password]@hostname[:port][/path]')
+                                    ->end()
+                                ->scalarNode('mode')
+                                    ->defaultValue('sandbox')
+                                    ->info('live or sanbox mode')
+                                    ->end()
+                                ->scalarNode('log_enable')->defaultValue('true')->end()
+                                ->scalarNode('log_file')->defaultValue('../PayPal.log')->end()
+                                ->scalarNode('log_level')
+                                    ->defaultValue('FINE')
+                                    ->info('in verbose ordor FINE(max), INFO, WARN or ERROR(min)')
+                                    ->end() 
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }

@@ -17,3 +17,7 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     db_prefix:         na_
+
+    paypal_clientid:   ~
+    paypal_secret:     ~
+    paypal_mode:        sanbox

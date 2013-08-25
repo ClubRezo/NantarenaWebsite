@@ -25,17 +25,14 @@ class Transaction
     private $id;
 
     /**
-     * @ORM\ManyToOne(
-     *      targetEntity="Nantarena\UserBundle\Entity\User",
-     *      inversedBy="entries")
+     * @ORM\ManyToOne(targetEntity="Nantarena\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
 
     /**
     * @ORM\ManyToOne(
-    *   targetEntity="Nantarena\EventBundle\Entity\Event",
-    *   inversedBy="entryTypes")
+    *   targetEntity="Nantarena\EventBundle\Entity\Event")
     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", nullable=false)
     */
     private $event;
@@ -49,16 +46,15 @@ class Transaction
     /**
     * @ORM\ManyToOne(
     *   targetEntity="Nantarena\PaymentBundle\Entity\Payment",
-    *   inversedBy="entryTypes")
-    * @ORM\JoinColumn(name="payment_id", referencedColumnName="id", nullable=false)
+    *   inversedBy="transactions")
+    * @ORM\JoinColumn(name="payment_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
     */
     private $payment;
 
     /**
     * @ORM\ManyToOne(
-    *   targetEntity="Nantarena\PaymentBundle\Entity\Refund",
-    *   inversedBy="entryTypes")
-    * @ORM\JoinColumn(name="refund_id", referencedColumnName="id", nullable=true)
+    *   targetEntity="Nantarena\PaymentBundle\Entity\Refund")
+    * @ORM\JoinColumn(name="refund_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
     */
     private $refund;
     
