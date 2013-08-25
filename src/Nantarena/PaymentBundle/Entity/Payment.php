@@ -5,15 +5,16 @@ namespace Nantarena\PaymentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-
- // * @ORM\InheritanceType("SINGLE_TABLE")
- // * @ORM\DiscriminatorColumn(name="method", type="string")
- // * @ORM\DiscriminatorMap({"classic" = "Payment", "paypal" = "PaypalPayment"})
+ 
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Payment
  *
  * @ORM\Entity
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="method", type="string")
+ * @ORM\DiscriminatorMap({"classic" = "Payment", "paypal" = "PaypalPayment"})
  * @ORM\Table(name="payment_payment")
  */
 class Payment
@@ -26,9 +27,7 @@ class Payment
     private $id;
 
     /**
-     * @ORM\ManyToOne(
-     *      targetEntity="Nantarena\UserBundle\Entity\User",
-     *      inversedBy="entries")
+     * @ORM\ManyToOne(targetEntity="Nantarena\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
@@ -50,22 +49,15 @@ class Payment
     private $valid;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="paymentid", type="string", length=100, nullable=true)
+     * @ORM\OneToMany(targetEntity="Nantarena\PaymentBundle\Entity\Transaction", mappedBy="payment", cascade={"remove"})
      */
-    private $paymentId;
+    private $transactions;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="payerid", type="string", length=100, nullable=true)
-     */
-    private $payerId;
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
+    }
 
-
-
- 
 
     /**
      * Get id
@@ -147,52 +139,6 @@ class Payment
     }
 
     /**
-     * Set paymentId
-     *
-     * @param string $paymentId
-     * @return Payment
-     */
-    public function setPaymentId($paymentId)
-    {
-        $this->paymentId = $paymentId;
-    
-        return $this;
-    }
-
-    /**
-     * Get paymentId
-     *
-     * @return string 
-     */
-    public function getPaymentId()
-    {
-        return $this->paymentId;
-    }
-
-    /**
-     * Set payerId
-     *
-     * @param string $payerId
-     * @return Payment
-     */
-    public function setPayerId($payerId)
-    {
-        $this->payerId = $payerId;
-    
-        return $this;
-    }
-
-    /**
-     * Get payerId
-     *
-     * @return string 
-     */
-    public function getPayerId()
-    {
-        return $this->payerId;
-    }
-
-    /**
      * Set user
      *
      * @param \Nantarena\UserBundle\Entity\User $user
@@ -213,5 +159,38 @@ class Payment
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add transactions
+     *
+     * @param \Nantarena\PaymentBundle\Entity\Transaction $transactions
+     * @return Payment
+     */
+    public function addTransaction(\Nantarena\PaymentBundle\Entity\Transaction $transactions)
+    {
+        $this->transactions[] = $transactions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove transactions
+     *
+     * @param \Nantarena\PaymentBundle\Entity\Transaction $transactions
+     */
+    public function removeTransaction(\Nantarena\PaymentBundle\Entity\Transaction $transactions)
+    {
+        $this->transactions->removeElement($transactions);
+    }
+
+    /**
+     * Get transactions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
     }
 }

@@ -7,71 +7,102 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-
 /**
- * Payment
+ * PaypalPayment
  *
  * @ORM\Entity
  */
-// class PaypalPayment extends Payment
-// {
-//     /**
-//      * @var string
-//      *
-//      * @ORM\Column(name="ident", type="string", length=100)
-//      */
-//     private $ident;
+class PaypalPayment extends Payment
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paypal_paymentid", type="string", length=100, nullable=true)
+     */
+    private $paymentId;
 
-//     /**
-//      * @var string
-//      *
-//      * @ORM\Column(name="state", type="string", length=100)
-//      */
-//     private $state;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paypal_payerid", type="string", length=100, nullable=true)
+     */
+    private $payerId;
 
-//     /**
-//      * Set ident
-//      *
-//      * @param string $ident
-//      * @return PaypalPayment
-//      */
-//     public function setIdent($ident)
-//     {
-//         $this->ident = $ident;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paypal_state", type="string", length=100, nullable=true)
+     */
+    private $state;
+
+
+
+    /**
+     * Set paymentId
+     *
+     * @param string $paymentId
+     * @return PaypalPayment
+     */
+    public function setPaymentId($paymentId)
+    {
+        $this->paymentId = $paymentId;
     
-//         return $this;
-//     }
+        return $this;
+    }
 
-//     /**
-//      * Get ident
-//      *
-//      * @return string 
-//      */
-//     public function getIdent()
-//     {
-//         return $this->ident;
-//     }
+    /**
+     * Get paymentId
+     *
+     * @return string 
+     */
+    public function getPaymentId()
+    {
+        return $this->paymentId;
+    }
 
-//     /**
-//      * Set state
-//      *
-//      * @param string $state
-//      * @return PaypalPayment
-//      */
-//     public function setState($state)
-//     {
-//         $this->state = $state;
+    /**
+     * Set payerId
+     *
+     * @param string $payerId
+     * @return PaypalPayment
+     */
+    public function setPayerId($payerId)
+    {
+        $this->payerId = $payerId;
     
-//         return $this;
-//     }
+        return $this;
+    }
 
-//     /**
-//      * Get state
-//      *
-//      * @return string 
-//      */
-//     public function getState()
-//     {
-//         return $this->state;
-//     }
-// }
+    /**
+     * Get payerId
+     *
+     * @return string 
+     */
+    public function getPayerId()
+    {
+        return $this->payerId;
+    }
+
+    /**
+     * Set state
+     *
+     * @param string $state
+     * @return PaypalPayment
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return string 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+}

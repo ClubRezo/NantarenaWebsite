@@ -1,28 +1,13 @@
 parameters:
-    # Credentials
-    nantarena_payment.paypal_service.credentials_clientid: ~
-    nantarena_payment.paypal_service.credentials_secret: ~
-
-    # HTTP service
-    nantarena_payment.paypal_service.http_connection_timeout: 30
-    nantarena_payment.paypal_service.http_retry: 1
-    # http://[username:password]@hostname[:port][/path]
-    nantarena_payment.paypal_service.http_proxy: ~
-
-    # Paypal service mode
-    # sandbox or live
-    nantarena_payment.paypal_service.service_mode: sandbox
-
-    # Configure logging
-    nantarena_payment.paypal_service.log_enable: true
-    nantarena_payment.paypal_service.log_file: ../PayPal.log
-    # in verbose ordor FINE(max), INFO, WARN or ERROR(min)
-    nantarena_payment.paypal_service.log_level: FINE
 
 services:
     nantarena_payment.paypal_service:
         class:        Nantarena\PaymentBundle\Paypal\PaypalService
-        arguments:    [%nantarena_payment.paypal_service.credentials_clientid%, %nantarena_payment.paypal_service.credentials_secret%, %nantarena_payment.paypal_service.http_connection_timeout%, %nantarena_payment.paypal_service.http_retry%, %nantarena_payment.paypal_service.http_proxy%, %nantarena_payment.paypal_service.service_mode%, %nantarena_payment.paypal_service.log_enable%, %nantarena_payment.paypal_service.log_file%, %nantarena_payment.paypal_service.log_level%]
+        arguments:    [""]
+
+    nantarena_payment.payment_service:
+        class:        Nantarena\PaymentBundle\Payment\PaymentService
+        arguments:	  [@doctrine.orm.entity_manager]
 
     nantarena_payment.payment_manager:
         class: Nantarena\PaymentBundle\Manager\PaymentManager

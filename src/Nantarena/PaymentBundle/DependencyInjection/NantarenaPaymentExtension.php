@@ -24,5 +24,9 @@ class NantarenaPaymentExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        // $container->setParameter('nantarena_payment.paypal_service', $config['paypal']);
+        $container->findDefinition('nantarena_payment.paypal_service')
+            ->replaceArgument(0, $config['paypal']);
     }
 }

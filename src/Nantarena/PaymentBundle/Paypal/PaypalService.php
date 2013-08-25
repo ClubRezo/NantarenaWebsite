@@ -26,17 +26,18 @@ class PaypalService
 
     private $parameters;
 
-    public function __construct(
-        $credentials_clientid,
-        $credentials_secret,
-        $http_connection_timeout,
-        $http_retry,
-        $http_proxy,
-        $service_mode,
-        $log_enable,
-        $log_file,
-        $log_level)
+    public function __construct($paypal)
     {
+        $credentials_clientid = $paypal['credentials']['clientid'];
+        $credentials_secret = $paypal['credentials']['secret'];
+        $http_connection_timeout = $paypal['service']['http_connection_timeout'];
+        $http_retry = $paypal['service']['http_retry'];
+        $http_proxy = $paypal['service']['http_proxy'];
+        $service_mode = $paypal['service']['mode'];
+        $log_enable = $paypal['service']['log_enable'];
+        $log_file = $paypal['service']['log_file'];
+        $log_level = $paypal['service']['log_level'];
+
         // set service parameters
         $this->clientID = $credentials_clientid;
         $this->clientSecret = $credentials_secret;
@@ -110,48 +111,49 @@ class PaypalService
      */
     function paypalPaymentApproval($total, $payment_desc, $item_array, $url_succes, $url_cancel)
     {
-        // ### Payer
+        // Payer
         $payer = new Payer();
         $payer->setPayment_method("paypal");
 
-        ### Amount details
+        // Amount details
         $amountDetails = new Details();
         $amountDetails->setSubtotal(strval($total));
         $amountDetails->setTax('0');
         $amountDetails->setShipping('0');
 
-        // ### Amount
+        // Amount
         $amount = new Amount();
         $amount->setCurrency("EUR");
         $amount->setTotal(strval($total));
         $amount->setDetails($amountDetails);
 
-        // ### Item_list
+        // Item_list
         $item_list = new ItemList();
         $item_list->setItems($item_array);
 
-        // ### Transaction
+        // Transaction
         $transaction = new Transaction();
         $transaction->setAmount($amount);
         $transaction->setDescription($payment_desc);
 
-        // ### Redirect urls
+        // Redirect urls
         $redirectUrls = new RedirectUrls();
         $redirectUrls->setReturn_url($url_succes);
         $redirectUrls->setCancel_url($url_cancel);
 
-        // ### Payment
+        // Payment
         $payment = new Payment();
         $payment->setIntent("sale");
         $payment->setPayer($payer);
         $payment->setRedirect_urls($redirectUrls);
         $payment->setTransactions(array($transaction));
 
-        // ### Create Payment
+        // Create Payment
         $payment->create($this->getApiContext());
         
         return $payment;
     }
+
 
     function getPaymentLink($payment)
     {
@@ -178,7 +180,8 @@ class PaypalService
      * @param string $payerId PayerId as returned by PayPal post
      *      buyer approval.
      */
-    function executePayment($paymentId, $payerId) {
+    function executePayment($paymentId, $payerId)
+    {
         // retrieve payment on paypal
         $payment = Payment::get($paymentId, $this->getApiContext());
 

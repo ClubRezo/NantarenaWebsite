@@ -63,6 +63,8 @@ security:
 
         - { path: ^/profile, roles: ROLE_USER }
 
+        - { path: ^/payment, roles: ROLE_USER }
+
         - { path: ^/admin/forum, roles: ROLE_FORUM_ADMIN }
 
         - { path: ^/admin/static, roles: ROLE_STATIC_ADMIN }

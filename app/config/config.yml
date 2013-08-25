@@ -120,3 +120,21 @@ stof_doctrine_extensions:
 knp_paginator:
     template:
         pagination: NantarenaSiteBundle:Pagination:sliding.html.twig
+
+nantarena_payment:
+    paypal:
+        credentials:
+            clientid: %paypal_clientid%
+            secret: %paypal_secret%
+        service:
+            http_connection_timeout: 30
+            http_retry: 1
+            http_proxy: ~
+
+            # live / sandbox
+            mode: %paypal_mode%
+
+            log_enable: true
+            log_file: ../PayPal.log
+            # FINE(max), INFO, WARN or ERROR(min)
+            log_level: FINE

@@ -5,22 +5,12 @@
 {% block page_title 'payment.index.title'|trans %}
 
 {% block payment_process %}
-    {% if transaction is not null %}
-        {% if transaction.payment.valid %}
-            <p>Vous avez déjà payé</p>
-        {% else %}
-            <p>Vous avez une transaction non finie en cours</p>
-        {% endif %}
-        <a href="{{ path('nantarena_payment_clean') }}">
-            <p class="btn btn-danger">Clean</p>
-        </a>
-    {% endif %}
 
     <h2>Explications</h2>
     <ul>
         <li>Ce système de paiement fonctionne entièrement avec Paypal</li>
         <li>Aucune information bancaire utilisée n'est enregistrée sur notre site</li>
-        <li>SVP, n'utilisez pas les flèches de navigation</li>
+        <li>SVP, n'utilisez pas les flèches de navigation où vous recommencerez la procédure à zéro</li>
         <li>Une fois le paiment effectué, votre compte sera automatiquement mis à jour</li>
     </ul>
 
@@ -52,7 +42,7 @@
     <p>Payer pour un membre de son équipe prive la personne de l'utilisation des ses coupons</p>
 
     <!-- <div class="text-center">
-        <a href="{{ path('nantarena_payment_paymentprocess_paymentchoice', {'slug': entry.entryType.event.slug}) }}">
+        <a href="{{ path('nantarena_payment_paymentprocess_paypalpreconnection', {'slug': entry.entryType.event.slug}) }}">
             <p class="btn btn-primary">Valider le formulaire</p>
         </a>
     </div> -->
