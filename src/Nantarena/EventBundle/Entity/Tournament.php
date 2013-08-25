@@ -59,6 +59,14 @@ class Tournament
      */
     private $startDate;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="exclusive", type="boolean")
+     * @Assert\Type(type="boolean")
+     */
+    private $exclusive;
+
 
     /**
      * Get id
@@ -183,5 +191,28 @@ class Tournament
     public function getAdmin()
     {
         return $this->admin;
+    }
+
+    /**
+     * Set exclusive
+     *
+     * @param boolean $exclusive
+     * @return Tournament
+     */
+    public function setExclusive($exclusive)
+    {
+        $this->exclusive = $exclusive;
+    
+        return $this;
+    }
+
+    /**
+     * Get exclusive
+     *
+     * @return boolean 
+     */
+    public function getExclusive()
+    {
+        return $this->exclusive;
     }
 }

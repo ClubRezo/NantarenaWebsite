@@ -34,6 +34,9 @@ class TournamentType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy HH:mm'
             ))
+            ->add('exclusive', 'checkbox', array(
+                'required' => false
+            ))
         ;
     }
 

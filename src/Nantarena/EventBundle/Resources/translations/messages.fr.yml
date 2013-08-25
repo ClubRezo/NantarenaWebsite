@@ -128,6 +128,7 @@ event:
 
         tournament:
             admin: Responsable
+            exclusive: 'Exclusif'
             game: Jeu
             maxTeams: 'Nombre d''équipes maximal'
             startDate: 'Début du tournoi'
