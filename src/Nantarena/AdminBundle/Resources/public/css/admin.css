@@ -39,7 +39,7 @@
     table input.filter,
     table select.filter {
         max-width: 150px;
-        width: auto;
+        width: 100%;
     }
 
     table.sortable th.header {

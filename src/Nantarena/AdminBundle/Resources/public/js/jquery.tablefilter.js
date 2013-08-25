@@ -15,7 +15,11 @@
         $('th', $table).each(function(index) {
             var filter = $('<th></th>');
 
+            if ($(this).hasClass('tiny'))   filter.addClass('tiny');
+            if ($(this).hasClass('mini'))   filter.addClass('mini');
+
             if ($(this).text()) {
+
                 if ($(this).data('filter') && $(this).data('filter') == 'select') {
 
                     filter.append('<select class="filter filter-select" data-field="'+ index +'"></select>');
