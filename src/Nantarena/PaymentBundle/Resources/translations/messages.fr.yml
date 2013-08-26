@@ -1,5 +1,16 @@
 payment:
     title: 'Paiement'
+    admin:
+        dashboard:
+            title: 'Gestion des paiements'
+            payment_management: 'Gestion des paiements'
+            paypal_management: 'Gestion de paypal'
+        paypal:
+            list:
+                title: 'Payment paypal en cours'
+        payment:
+            list:
+                title: 'Liste des paiements effectués'
     index:
         title: 'Sélection des options de paiement'
         event: 'Vous allez payer pour l''événement %event%'
