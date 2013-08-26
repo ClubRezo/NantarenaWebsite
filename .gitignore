@@ -23,6 +23,3 @@ app/config/parameters.yml
 /*.sublime*
 /composer.lock
 *.*~
-
-# paypal log
-PayPal.log
