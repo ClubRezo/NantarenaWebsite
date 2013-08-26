@@ -23,10 +23,9 @@ class TablePrefixSubscriber implements EventSubscriber
     public function loadClassMetadata(LoadClassMetadataEventArgs $args)
     {
         $classMetadata = $args->getClassMetadata();
-        if ($classMetadata->getTableName() != 'na_payment_payment')
-            
+
         if (!empty($this->prefix)) {
-            if($this->prefix != substr($classMetadata->getTableName(), strlen($this->prefix)))
+            if($this->prefix != substr($classMetadata->getTableName(), 0, strlen($this->prefix)))
             {
                 $classMetadata->setPrimaryTable(array('name' => $this->prefix . $classMetadata->getTableName()));
             }

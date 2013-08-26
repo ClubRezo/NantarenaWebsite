@@ -16,7 +16,7 @@ class PaymentService
     function getValidTransaction($entry)
     {
         $repository = $this->em->getRepository('NantarenaPaymentBundle:Transaction');
-        $transaction = $repository->findOneBy(array('user' => $entry->getUser()->getId(), 
+        $transaction = $repository->findOneBy(array('user' => $entry->getUser(), 
             'event' => $entry->getEntryType()->getEvent(), 'refund' => null));
 
         if ($transaction && $transaction->getPayment()->getValid()) {

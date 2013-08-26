@@ -41,7 +41,7 @@ class PaymentProcessController extends Controller
      * Affichage du formulaire des choix de paiement
      * Création d'une transaction et d'un paiement en BDD
      *
-     * @Route("/create/{slug}", name="nantarena_payment_paymentprocess_create")
+     * @Route("/{slug}/create", name="nantarena_payment_paymentprocess_create")
      * @Template()
      */
     public function createAction(Event $event, Request $request)
@@ -49,24 +49,17 @@ class PaymentProcessController extends Controller
         // Get user
         $user = $this->getUser();
 
+        // Check if a transaction is running and delete it if possible
+        $result = $this->cleanPaypalTransaction($event);
+        if (!$result) {
+            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+        }
+
         // Get associated entry
         $entry = null;
         if (!$user->hasEntry($event, $entry)) {
             $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.index.flash_error_signup'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        }
-
-        $payment = $this->get('nantarena_payment.payment_service');
-        if ($payment->isPaid($entry)) {
-            $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà payé');
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        }
-
-        // Check if a transaction is running and delete it if possible
-        $transaction = $this->cleanTransaction($entry);
-        if ($transaction) {
-            $this->get('session')->getFlashBag()->add('error', 'Une personne de votre équipe paye actuellement pour vous');
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return false;
         }
 
         $form = $this->createForm(new PaymentType(), new PaymentModel(), array(
@@ -101,7 +94,8 @@ class PaymentProcessController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', "Une nouvelle transaction a été créée");
-            return $this->redirect($this->generateUrl('nantarena_payment_paymentprocess_paypalpreconnection'));
+            return $this->redirect($this->generateUrl('nantarena_payment_paymentprocess_paypalpreconnection', 
+                array('slug' => $event->getSlug())));
         }
 
         return array(
@@ -110,65 +104,50 @@ class PaymentProcessController extends Controller
         );
     }
 
+
     /**
-     * Return null and delete transaction if necessary
-     * or return transaction if it is impossible to delete it
+     * @Route("/{slug}/paypal-pre-connection", name="nantarena_payment_paymentprocess_paypalpreconnection")
+     * @Template()
      */
-    private function cleanTransaction($entry)
+    public function paypalPreConnectionAction(Event $event)
     {
-        $repository = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:Transaction');
-        $transaction = $repository->findOneBy(array('user' => $entry->getUser()->getId(), 
-            'event' => $entry->getEntryType()->getEvent(), 'refund' => null));
-
-        if ($transaction) {
-            $payment = $transaction->getPayment();
-            if (!$payment->getValid() && $payment instanceof PaypalPayment 
-                && $payment->getUser() === $entry->getUser()) {
-                $this->get('session')->getFlashBag()->add('success', 'La transaction non finie a été supprimée');
-                $em = $this->getDoctrine()->getManager();
-                $em->remove($payment);
-                $em->flush();
-
-                return null;
+        $transaction = $this->getActivePaypalTransaction($event);
+        if (!$transaction) {
+            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+        } else {
+            $paypalpayment = $this->getPaypalPayment($transaction);
+            if (!empty($paypalpayment->getPaymentId())
+                || !empty($paypalpayment->getState())
+                || !empty($paypalpayment->getPayerId())) {
+                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                return $this->redirect($this->generateUrl('nantarena_user_profile'));
             }
         }
 
-        return $transaction;
+        return array(
+            'event' => $event
+        );
     }
 
 
     /**
-     * @Route("/paypal-pre-connection", name="nantarena_payment_paymentprocess_paypalpreconnection")
+     * @Route("/{slug}/paypal-connection", name="nantarena_payment_paypalpayment_paypalconnection")
      * @Template()
      */
-    public function paypalPreConnectionAction()
+    public function paypalConnectionAction(Event $event)
     {
         $user = $this->getUser();
-        $transaction = $this->getActiveTransaction($user);
+        $transaction = $this->getActivePaypalTransaction($event);
         if (!$transaction) {
-            $this->get('session')->getFlashBag()->add('error', "Aucune transaction en cours");
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         } else {
-            // check step
-        }
-
-        return array();
-    }
-
-
-    /**
-     * @Route("/paypal-connection", name="nantarena_payment_paypalpayment_paypalconnection")
-     * @Template()
-     */
-    public function paypalConnectionAction()
-    {
-        $user = $this->getUser();
-        $transaction = $transaction = $this->getActiveTransaction();
-        if (!$transaction) {
-            $this->get('session')->getFlashBag()->add('error', "Aucune transaction en cours");
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        } else {
-            // check step
+            $paypalpayment = $this->getPaypalPayment($transaction);
+            if (!empty($paypalpayment->getPaymentId())
+                || !empty($paypalpayment->getState())
+                || !empty($paypalpayment->getPayerId())) {
+                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            }
         }
 
         // get associated entry
@@ -194,26 +173,22 @@ class PaymentProcessController extends Controller
                 "Paiement de l'entrée à l'évènement ".$event->getName(),
                 $item_array,
                 $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', 
-                    array('State' => 'success'), true),
+                    array('State' => 'success', 'slug' => $event->getSlug()), true),
                 $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', 
-                    array('State' => 'cancel'), true));
+                    array('State' => 'cancel', 'slug' => $event->getSlug()), true));
         
             // Retrieve paypal url
             $redirectUrl = $paypal->getPaymentLink($payment);
 
             // Save state
-            $paypalpayment = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:PaypalPayment')
-                ->findOneById($transaction->getPayment()->getId());
             $em = $this->getDoctrine()->getManager();
             $paypalpayment->setPaymentID($payment->getId());
             $paypalpayment->setState($payment->getState());
             $em->flush();
 
-            if (!empty($redirectUrl))
-            {
+            if (!empty($redirectUrl)) {
                 return $this->redirect($redirectUrl);
-            } else
-            {
+            } else {
                 $this->get('session')->getFlashBag()->add('error', "Quelque chose ne s'est pas bien passé");
                 return $this->redirect($this->generateUrl('nantarena_user_profile'));
             }
@@ -231,30 +206,34 @@ class PaymentProcessController extends Controller
 
 
     /**
-     * @Route("/paypal-return", name="nantarena_payment_paypalpayment_paypalreturn")
+     * @Route("/{slug}/paypal-return", name="nantarena_payment_paypalpayment_paypalreturn")
      */
-    public function paypalReturnAction(Request $request)
+    public function paypalReturnAction(Event $event, Request $request)
     {
-        $transaction = $transaction = $this->getActiveTransaction();
+        $transaction = $this->getActivePaypalTransaction($event);
         if (!$transaction) {
-            $this->get('session')->getFlashBag()->add('error', "Aucune transaction en cours");
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         } else {
-            // check step
+            $paypalpayment = $this->getPaypalPayment($transaction);
+            if (empty($paypalpayment->getPaymentId())
+                || empty($paypalpayment->getState())
+                || !empty($paypalpayment->getPayerId())) {
+
+                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            }
         }
 
         if ($request->query->get('State') === 'success') {
             // Save state
-            $paypalpayment = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:PaypalPayment')
-                ->findOneById($transaction->getPayment()->getId());
             $em = $this->getDoctrine()->getManager();
             $paypalpayment->setPayerId($request->query->get('PayerID'));
             $em->flush();
 
-            return $this->redirect($this->generateUrl('nantarena_payment_paypalpayment_success'));
+            return $this->redirect($this->generateUrl('nantarena_payment_paypalpayment_success', array('slug' => $event->getSlug())));
         } elseif ($request->query->get('State') === 'cancel') {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($transaction->getPayment());
+            $em->remove($paypalpayment);
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('error', "La transaction a été annulée");
@@ -267,17 +246,22 @@ class PaymentProcessController extends Controller
 
 
      /**
-     * @Route("/success", name="nantarena_payment_paypalpayment_success")
+     * @Route("/{slug}/success", name="nantarena_payment_paypalpayment_success")
      * @Template()
      */
-    public function successAction(Request $request)
+    public function successAction(Event $event)
     {
-        $transaction = $transaction = $this->getActiveTransaction();
+        $transaction = $this->getActivePaypalTransaction($event);
         if (!$transaction) {
-            $this->get('session')->getFlashBag()->add('error', "Aucune transaction en cours");
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         } else {
-            // check step
+            $paypalpayment = $this->getPaypalPayment($transaction);
+            if (empty($paypalpayment->getPaymentId())
+                || empty($paypalpayment->getState())
+                || empty($paypalpayment->getPayerId())) {
+                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            }
         }
 
         return array(
@@ -287,87 +271,147 @@ class PaymentProcessController extends Controller
 
 
     /**
-     * @Route("/pay", name="nantarena_payment_paypalpayment_pay")
+     * @Route("/{slug}/pay", name="nantarena_payment_paypalpayment_pay")
      * @Template()
      */
-    public function payAction()
+    public function payAction(Event $event)
     {
-        $transaction = $transaction = $this->getActiveTransaction();
+        $transaction = $this->getActivePaypalTransaction($event);
         if (!$transaction) {
-            $this->get('session')->getFlashBag()->add('error', "Aucune transaction en cours");
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         } else {
-            // check step
-        }
-
-        if($transaction)
-        {
-            try {
-                // Execution du paiement
-                $paypal = $this->get('nantarena_payment.paypal_service');
-                $payment = $paypal->executePayment(
-                    $transaction->getPayment()->getPaymentId(),
-                    $transaction->getPayment()->getPayerId());
-
-
-                $this->get('session')->getFlashBag()->add('success', "Le paiement s'est bien déroulé - Merci");
-                $em = $this->getDoctrine()->getManager();
-                $transaction->getPayment()->setValid(True);
-                $em->flush();
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            } catch (\PPConnectionException $ex) {
-
-                $this->get('session')->getFlashBag()->add('error', $paypal->parseApiError($ex->getData()));
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            } catch (\Exception $ex) {
-
-                $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
+            $paypalpayment = $this->getPaypalPayment($transaction);
+            if (empty($paypalpayment->getPaymentId())
+                || empty($paypalpayment->getState())
+                || empty($paypalpayment->getPayerId())) {
+                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
                 return $this->redirect($this->generateUrl('nantarena_user_profile'));
             }
         }
+
+        try {
+            // Execution du paiement
+            $paypal = $this->get('nantarena_payment.paypal_service');
+            $payment = $paypal->executePayment(
+                $transaction->getPayment()->getPaymentId(),
+                $transaction->getPayment()->getPayerId());
+
+
+            $this->get('session')->getFlashBag()->add('success', "Le paiement s'est bien déroulé - Merci");
+            $em = $this->getDoctrine()->getManager();
+            $transaction->getPayment()->setValid(True);
+            $em->flush();
+            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+        } catch (\PPConnectionException $ex) {
+
+            $this->get('session')->getFlashBag()->add('error', $paypal->parseApiError($ex->getData()));
+            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+        } catch (\Exception $ex) {
+
+            $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
+            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+        }
+
 
        return array();
     }
 
 
-    private function getActiveTransaction()
+    private function getActivePaypalTransaction($event)
     {
         $user = $this->getUser();
 
+        // Get associated entry
+        $entry = null;
+        if (!$user->hasEntry($event, $entry)) {
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.index.flash_error_signup'));
+            return null;
+        }
+
         $repository = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:Transaction');
-        $transaction = $repository->findOneBy(array('user' => $user->getId(), 'refund' => null));
+        $transaction = $repository->findOneBy(array('user' => $entry->getUser(), 
+            'event' => $entry->getEntryType()->getEvent(), 'refund' => null));
 
-        if ($transaction) {
-            $payment = $transaction->getPayment();
-            if (!$payment->getValid() && $payment instanceof PaypalPayment 
-                && $payment->getUser() === $user) {
-                return $transaction;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @Route("/clean", name="nantarena_payment_clean")
-     */
-    public function cleanAction()
-    {
-        $transaction = $transaction = $this->getActiveTransaction();
         if (!$transaction) {
-            $this->get('session')->getFlashBag()->add('error', "Aucune transaction en cours");
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        } else {
-            
-            $this->get('session')->getFlashBag()->add('success', "Le transaction a été retrouvé - elle est supprimé");
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($transaction);
-            $em->remove($transaction->getPayment());
-            $em->flush();
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            $this->get('session')->getFlashBag()->add('error', 'Auncune transaction en cours');
+            return null;
         }
 
-       return array();
+        $payment = $transaction->getPayment();
+
+        if ($payment->getValid()) {
+            $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà payé');
+            return null;
+        }
+
+        if (!($payment instanceof PaypalPayment)) {
+            $this->get('session')->getFlashBag()->add('error', 'Un paiement administrateur est en cours pour votre compte');
+            return null;
+        }
+
+        if ($payment->getUser() !== $user) {
+            $this->get('session')->getFlashBag()->add('error', 'Un partenaire paye actuellement votre place. Sa session expire dans XX mins');
+            return null;
+        }
+        
+        return $transaction;
     }
 
 
+    private function getPaypalPayment($transaction)
+    {
+        $payment = $transaction->getPayment();
+        $paypalpayment = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:PaypalPayment')
+            ->findOneById($transaction->getPayment()->getId());
+        return $paypalpayment;
+    }
+
+    private function cleanPaypalTransaction($event)
+    {
+        $user = $this->getUser();
+
+        // Get associated entry
+        $entry = null;
+        if (!$user->hasEntry($event, $entry)) {
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.index.flash_error_signup'));
+            return false;
+        }
+
+        $repository = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:Transaction');
+        $transaction = $repository->findOneBy(array('user' => $entry->getUser(), 
+            'event' => $entry->getEntryType()->getEvent(), 'refund' => null));
+
+        // best case
+        if (!$transaction) {
+            return true;
+        }
+
+        $payment = $transaction->getPayment();
+
+        if ($payment->getValid()) {
+            $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà payé');
+            return false;
+        }
+
+        if (!($payment instanceof PaypalPayment)) {
+            $this->get('session')->getFlashBag()->add('error', 'Un paiement administrateur est en cours pour votre compte');
+            return false;
+        }
+
+        if ($payment->getUser() !== $user) {
+            $this->get('session')->getFlashBag()->add('error', 'Un partenaire paye actuellement votre place. Sa session expire dans XX mins');
+            
+            // TODO : check time > 20 min
+
+            return false;
+        }
+
+        // clean transaction
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($payment);
+        $em->flush();
+        
+        $this->get('session')->getFlashBag()->add('success', 'La transaction non finie a été supprimée');
+        return true;
+    }
 }
