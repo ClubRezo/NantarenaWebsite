@@ -20,9 +20,16 @@
 
 
 	<div class="text-center">
-		<a href="{{ path('nantarena_payment_paypalpayment_pay', {'slug' : trans.event.slug}) }}">
-			<p class="btn btn-primary">Confirmer et payer</p>
-		</a>
+		<p>
+            <a class="btn btn-primary" href="{{ path('nantarena_payment_paypalpayment_pay', {'slug': trans.event.slug}) }}">
+                Confirmer et payer
+            </a>
+        </p>
+		<p>
+            <a class="btn btn-danger" href="{{ path('nantarena_payment_paypalpayment_clean', {'slug': trans.event.slug}) }}">
+                Annuler
+            </a>
+        </p>
 	</div>
 
 {% endblock %}
