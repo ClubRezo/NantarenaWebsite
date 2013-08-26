@@ -7,6 +7,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Nantarena\EventBundle\Entity\Event;
 use Nantarena\EventBundle\Entity\EntryType;
+use Nantarena\EventBundle\Entity\Tournament;
 
 class LoadEventData extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -58,6 +59,16 @@ class LoadEventData extends AbstractFixture implements OrderedFixtureInterface
 
         $na133->addEntryType($types133);
         $na133->addEntryType($types134);
+
+        $lol = new Tournament();
+        $lol->setEvent($na133);
+        $lol->setAdmin($this->getReference('user-1'));
+        $lol->setExclusive(true);
+        $lol->setGame($this->getReference('game-1'));
+        $lol->setMaxTeams(16);
+        $lol->setStartDate(new \DateTime('2013-11-16 14:00'));
+
+        $na133->addTournament($lol);
 
         $this->addReference('event-1', $na131);
         $this->addReference('event-2', $na132);
