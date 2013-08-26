@@ -18,7 +18,7 @@ class BaseUserType extends AbstractType
             ->add('birthdate', 'birthday', array(
                 'widget' => 'single_text',
                 'format' => 'dd/MM/yyyy',
-                'required' => 'false'
+                'required' => false
             ))
             ->add('email', 'email')
             ->add('groups', 'entity', array(
