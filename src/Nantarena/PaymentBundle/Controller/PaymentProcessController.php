@@ -292,34 +292,35 @@ class PaymentProcessController extends Controller
      */
     public function payAction()
     {
-        $user = $this->getUser();
+        $transaction = $transaction = $this->getActiveTransaction();
+        if (!$transaction) {
+            $this->get('session')->getFlashBag()->add('error', "Aucune transaction en cours");
+            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+        } else {
+            // check step
+        }
 
-        // Vérification pour des possibles transactions en cours
-        $repository = $this->getDoctrine()
-            ->getRepository('NantarenaPaymentBundle:Transaction');
-
-        $transss = $repository->findOneBy(array('user' => $user->getId(), 'refund' => null));        
-
-        if($transss)
+        if($transaction)
         {
             try {
                 // Execution du paiement
                 $paypal = $this->get('nantarena_payment.paypal_service');
                 $payment = $paypal->executePayment(
-                    $transss->getPayment()->getPaymentId(),
-                    $transss->getPayment()->getPayerId());
+                    $transaction->getPayment()->getPaymentId(),
+                    $transaction->getPayment()->getPayerId());
 
 
-                $this->get('session')->getFlashBag()->add('success', "Le paiment a été retrouvé - Vous allez banquer");
+                $this->get('session')->getFlashBag()->add('success', "Le paiement s'est bien déroulé - Merci");
                 $em = $this->getDoctrine()->getManager();
-                $transss->getPayment()->setValid(True);
+                $transaction->getPayment()->setValid(True);
                 $em->flush();
-
+                return $this->redirect($this->generateUrl('nantarena_user_profile'));
             } catch (\PPConnectionException $ex) {
 
                 $this->get('session')->getFlashBag()->add('error', $paypal->parseApiError($ex->getData()));
                 return $this->redirect($this->generateUrl('nantarena_user_profile'));
             } catch (\Exception $ex) {
+
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
                 return $this->redirect($this->generateUrl('nantarena_user_profile'));
             }
@@ -351,20 +352,16 @@ class PaymentProcessController extends Controller
      */
     public function cleanAction()
     {
-        $user = $this->getUser();
-
-        // Vérification pour des possibles transactions en cours
-        $repository = $this->getDoctrine()
-            ->getRepository('NantarenaPaymentBundle:Transaction');
-
-        $transss = $repository->findOneBy(array('user' => $user->getId(), 'refund' => null));        
-
-        if($transss)
-        {
+        $transaction = $transaction = $this->getActiveTransaction();
+        if (!$transaction) {
+            $this->get('session')->getFlashBag()->add('error', "Aucune transaction en cours");
+            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+        } else {
+            
             $this->get('session')->getFlashBag()->add('success', "Le transaction a été retrouvé - elle est supprimé");
             $em = $this->getDoctrine()->getManager();
-            $em->remove($transss);
-            $em->remove($transss->getPayment());
+            $em->remove($transaction);
+            $em->remove($transaction->getPayment());
             $em->flush();
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         }
