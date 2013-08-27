@@ -59,7 +59,7 @@ class Payment
     }
 
     /**
-     * Get valid
+     * Is valid
      *
      * @return boolean 
      */
