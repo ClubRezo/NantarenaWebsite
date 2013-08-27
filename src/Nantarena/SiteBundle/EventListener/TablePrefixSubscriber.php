@@ -25,7 +25,7 @@ class TablePrefixSubscriber implements EventSubscriber
         $classMetadata = $args->getClassMetadata();
 
         if (!empty($this->prefix)) {
-            if($this->prefix != substr($classMetadata->getTableName(), 0, strlen($this->prefix)))
+            if (0 !== strpos($classMetadata->getTableName(), $this->prefix))
             {
                 $classMetadata->setPrimaryTable(array('name' => $this->prefix . $classMetadata->getTableName()));
             }

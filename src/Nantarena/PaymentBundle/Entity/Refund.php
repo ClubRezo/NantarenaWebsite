@@ -39,6 +39,12 @@ class Refund
      */
     private $valid;
 
+    /**
+     * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     */
+    protected $description;
+
 
     /**
      * Get id
