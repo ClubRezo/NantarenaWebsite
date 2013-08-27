@@ -124,4 +124,27 @@ class Refund
     {
         return $this->user;
     }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Refund
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 }
