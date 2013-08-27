@@ -58,6 +58,16 @@ class Payment
         $this->transactions = new ArrayCollection();
     }
 
+    /**
+     * Get valid
+     *
+     * @return boolean 
+     */
+    public function isValid()
+    {
+        return $this->valid;
+    }
+
 
     /**
      * Get id

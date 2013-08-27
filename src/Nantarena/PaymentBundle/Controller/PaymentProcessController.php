@@ -37,7 +37,7 @@ use Nantarena\PaymentBundle\Form\Model\Payment as PaymentModel;
 class PaymentProcessController extends Controller
 {
 	/**
-     * Si la personne n'a pas déjà payé
+     * Première page
      * Affichage du formulaire des choix de paiement
      * Création d'une transaction et d'un paiement en BDD
      *
@@ -46,14 +46,12 @@ class PaymentProcessController extends Controller
      */
     public function createAction(Event $event, Request $request)
     {
-        // Get user
-        $user = $this->getUser();
-
         // Check if a transaction is running and delete it if possible
         $result = $this->cleanPaypalTransaction($event);
         if (!$result) {
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         }
+        $user = $this->getUser();
 
         // Get associated entry
         $entry = null;
@@ -73,8 +71,8 @@ class PaymentProcessController extends Controller
             $now = new \DateTime();
             $total = $entry->getEntryType()->getPrice();
 
-            $entity_payment = new PaypalPayment();
-            $entity_payment
+            $paypalPayment = new PaypalPayment();
+            $paypalPayment
                 ->setUser($user)
                 ->setAmount($total)
                 ->setValid(false)
@@ -82,27 +80,27 @@ class PaymentProcessController extends Controller
             ;
 
             if ($total <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
-                $entity_payment
+                $paypalPayment
                     ->setState('-')
                     ->setPaymentID('-')
                     ->setPayerId('-')
                 ;
             }
 
-            $ent_trans = new Transaction();
-            $ent_trans
+            $transaction = new Transaction();
+            $transaction
                 ->setPrice($entry->getEntryType()->getPrice())
                 ->setUser($user)
                 ->setEvent($event)
-                ->setPayment($entity_payment)
+                ->setPayment($paypalPayment)
             ;
 
             $em = $this->getDoctrine()->getManager();
             $em->getConnection()->beginTransaction(); // suspend auto-commit
             try {
                 // look and work
-                $em->persist($ent_trans);
-                $em->persist($entity_payment);
+                $em->persist($transaction);
+                $em->persist($paypalPayment);
 
                 $em->flush();
                 $em->getConnection()->commit();
@@ -113,7 +111,9 @@ class PaymentProcessController extends Controller
                 $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
             }
 
-            $this->get('session')->getFlashBag()->add('success', "Une nouvelle transaction a été créée");
+            $this->get('session')->getFlashBag()->add('success', 'Une nouvelle transaction a été créée');
+
+            // Jump to success controller if payment is lower than minimal allowed paypal payment
             if ($total > $this->container->getParameter('nantarena_payment.payment_min_euro')) {
                 return $this->redirect($this->generateUrl('nantarena_payment_paymentprocess_paypalpreconnection', 
                     array('slug' => $event->getSlug())));
@@ -131,26 +131,17 @@ class PaymentProcessController extends Controller
 
 
     /**
+     * Deuxième page
+     * Explication du fonctionnement et bouton de connexion à paypal
+     *
      * @Route("/{slug}/paypal-pre-connection", name="nantarena_payment_paymentprocess_paypalpreconnection")
      * @Template()
      */
     public function paypalPreConnectionAction(Event $event)
     {
-        $transaction = $this->getActivePaypalTransaction($event);
+        $transaction = $this->getTransactionStepOne($event);
         if (!$transaction) {
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        } else {
-            $paypalpayment = $this->getPaypalPayment($transaction);
-            if (!empty($paypalpayment->getPaymentId())
-                || !empty($paypalpayment->getState())
-                || !empty($paypalpayment->getPayerId())) {
-                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
-            if ($paypalpayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
-                $this->get('session')->getFlashBag()->add('error', 'Le montant est trop petit pour paypal');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
         }
 
         return array(
@@ -160,28 +151,20 @@ class PaymentProcessController extends Controller
 
 
     /**
+     * Troisième page (site externe)
+     * Connexion à paypal
+     * paramétrage de la requête paypal
+     *
      * @Route("/{slug}/paypal-connection", name="nantarena_payment_paypalpayment_paypalconnection")
-     * @Template()
      */
     public function paypalConnectionAction(Event $event)
     {
-        $user = $this->getUser();
-        $transaction = $this->getActivePaypalTransaction($event);
+        $transaction = $this->getTransactionStepOne($event);
         if (!$transaction) {
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        } else {
-            $paypalpayment = $this->getPaypalPayment($transaction);
-            if (!empty($paypalpayment->getPaymentId())
-                || !empty($paypalpayment->getState())
-                || !empty($paypalpayment->getPayerId())) {
-                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
-            if ($paypalpayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
-                 $this->get('session')->getFlashBag()->add('error', 'Le montant est trop petit pour paypal');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
         }
+        $user = $this->getUser();
+        $paypalPayment = $transaction->getPayment();
 
         // get associated entry
         $entry = null;
@@ -199,16 +182,17 @@ class PaymentProcessController extends Controller
             $total = $transaction->getPayment()->getAmount();
 
             $item = $paypal->createItem($entry->getEntryType()->getName(), 1, $transaction->getPrice());
-            $item_array = array($item);
+            $items = array($item);
 
             $payment = $paypal->paypalPaymentApproval(
                 $total,
-                "Paiement de l'entrée à l'évènement ".$event->getName(),
-                $item_array,
+                'Paiement de l\'entrée à l\'évènement '.$event->getName(),
+                $items,
                 $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', 
-                    array('State' => 'success', 'slug' => $event->getSlug()), true),
+                    array('state' => 'success', 'slug' => $event->getSlug()), true),
                 $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', 
-                    array('State' => 'cancel', 'slug' => $event->getSlug()), true));
+                    array('state' => 'cancel', 'slug' => $event->getSlug()), true)
+            );
         
             // Retrieve paypal url
             $redirectUrl = $paypal->getPaymentLink($payment);
@@ -216,8 +200,8 @@ class PaymentProcessController extends Controller
             // Save state
             try {
                 $em = $this->getDoctrine()->getManager();
-                $paypalpayment->setPaymentID($payment->getId());
-                $paypalpayment->setState($payment->getState());
+                $paypalPayment->setPaymentID($payment->getId());
+                $paypalPayment->setState($payment->getState());
                 $em->flush();
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
@@ -227,7 +211,7 @@ class PaymentProcessController extends Controller
             if (!empty($redirectUrl)) {
                 return $this->redirect($redirectUrl);
             } else {
-                $this->get('session')->getFlashBag()->add('error', "Quelque chose ne s'est pas bien passé");
+                $this->get('session')->getFlashBag()->add('error', 'Quelque chose ne s\'est pas bien passé');
                 return $this->redirect($this->generateUrl('nantarena_user_profile'));
             }
 
@@ -238,39 +222,28 @@ class PaymentProcessController extends Controller
             $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         }
-
-        return array();
     }
 
 
     /**
-     * @Route("/{slug}/paypal-return", name="nantarena_payment_paypalpayment_paypalreturn")
+     * Controller de retour paypal
+     * redirige vers success ou cancel
+     *
+     * @Route("/{slug}/paypal-return/{state}", name="nantarena_payment_paypalpayment_paypalreturn")
      */
-    public function paypalReturnAction(Event $event, Request $request)
+    public function paypalReturnAction(Event $event, $state, Request $request)
     {
-        $transaction = $this->getActivePaypalTransaction($event);
+        $transaction = $this->getTransactionStepTwo($event);
         if (!$transaction) {
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        } else {
-            $paypalpayment = $this->getPaypalPayment($transaction);
-            if (empty($paypalpayment->getPaymentId())
-                || empty($paypalpayment->getState())
-                || !empty($paypalpayment->getPayerId())) {
-
-                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
-            if ($paypalpayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
-                 $this->get('session')->getFlashBag()->add('error', 'Le montant est trop petit pour paypal');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
         }
+        $paypalPayment = $transaction->getPayment();
 
-        if ($request->query->get('State') === 'success') {
+        if ($state === 'success') {
             // Save state
             try {
                 $em = $this->getDoctrine()->getManager();
-                $paypalpayment->setPayerId($request->query->get('PayerID'));
+                $paypalPayment->setPayerId($request->query->get('PayerID'));
                 $em->flush();
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
@@ -278,9 +251,9 @@ class PaymentProcessController extends Controller
             }
 
             return $this->redirect($this->generateUrl('nantarena_payment_paypalpayment_success', array('slug' => $event->getSlug())));
-        } elseif ($request->query->get('State') === 'cancel') {
+        } elseif ($state === 'cancel') {
             
-            $this->removePayment($paypalpayment);
+            $this->removePayment($paypalPayment);
 
             $this->get('session')->getFlashBag()->add('error', "La transaction a été annulée");
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
@@ -290,24 +263,18 @@ class PaymentProcessController extends Controller
         }
     }
 
-
      /**
+     * Quatrième page
+     * Récapitulatif de la commande
+     *
      * @Route("/{slug}/success", name="nantarena_payment_paypalpayment_success")
      * @Template()
      */
     public function successAction(Event $event)
     {
-        $transaction = $this->getActivePaypalTransaction($event);
+        $transaction = $this->getTransactionStepThree($event);
         if (!$transaction) {
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        } else {
-            $paypalpayment = $this->getPaypalPayment($transaction);
-            if (empty($paypalpayment->getPaymentId())
-                || empty($paypalpayment->getState())
-                || empty($paypalpayment->getPayerId())) {
-                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
         }
 
         return array(
@@ -317,25 +284,20 @@ class PaymentProcessController extends Controller
 
 
     /**
+     * Validation du paiement
+     *
      * @Route("/{slug}/pay", name="nantarena_payment_paypalpayment_pay")
      */
     public function payAction(Event $event)
     {
-        $transaction = $this->getActivePaypalTransaction($event);
+        $transaction = $this->getTransactionStepThree($event);
         if (!$transaction) {
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        } else {
-            $paypalpayment = $this->getPaypalPayment($transaction);
-            if (empty($paypalpayment->getPaymentId())
-                || empty($paypalpayment->getState())
-                || empty($paypalpayment->getPayerId())) {
-                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
         }
+        $paypalPayment = $transaction->getPayment();
 
         try {
-            if ($paypalpayment->getAmount() > $this->container->getParameter('nantarena_payment.payment_min_euro')) {
+            if ($paypalPayment->getAmount() > $this->container->getParameter('nantarena_payment.payment_min_euro')) {
                 // Execution du paiement
                 $paypal = $this->get('nantarena_payment.paypal_service');
                 $payment = $paypal->executePayment(
@@ -344,11 +306,11 @@ class PaymentProcessController extends Controller
                 );
             }
 
-            $this->get('session')->getFlashBag()->add('success', "Le paiement s'est bien déroulé - Merci");
             try {
                 $em = $this->getDoctrine()->getManager();
-                $transaction->getPayment()->setValid(True);
+                $transaction->getPayment()->setValid(true);
                 $em->flush();
+                $this->get('session')->getFlashBag()->add('success', 'Le paiement s\'est bien déroulé - Merci');
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
                 return $this->redirect($this->generateUrl('nantarena_user_profile'));
@@ -366,6 +328,8 @@ class PaymentProcessController extends Controller
     }
 
     /**
+     * Annulation du paiement
+     *
      * @Route("/{slug}/clean", name="nantarena_payment_paypalpayment_clean")
      */
     public function cleanAction(Event $event)
@@ -374,16 +338,91 @@ class PaymentProcessController extends Controller
         if (!$transaction) {
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         } else {
-            $paypalpayment = $this->getPaypalPayment($transaction);
+            $paypalPayment = $transaction->getPayment();
             
-            $this->removePayment($paypalpayment);
+            $this->removePayment($paypalPayment);
 
             $this->get('session')->getFlashBag()->add('error', "La transaction a été annulée");
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         }
     }
 
+    /**
+     * Procédure de vérification
+     * pour la première étape
+     */
+    private function getTransactionStepOne($event)
+    {
+        $transaction = $this->getActivePaypalTransaction($event);
+        if (!$transaction) {
+            return null;
+        } else {
+            $paypalPayment = $transaction->getPayment();
+            if (!empty($paypalPayment->getPaymentId())
+                || !empty($paypalPayment->getState())
+                || !empty($paypalPayment->getPayerId())) {
+                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                return null;
+            } elseif ($paypalPayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
+                $this->get('session')->getFlashBag()->add('error', 'Le montant est trop petit pour paypal');
+                return null;
+            } else {
+                return $transaction;
+            }
+        }
+    }
 
+    /**
+     * Procédure de vérification
+     * pour la deuxième étape
+     */
+    private function getTransactionStepTwo($event)
+    {
+        $transaction = $this->getActivePaypalTransaction($event);
+        if (!$transaction) {
+            return null;
+        } else {
+            $paypalPayment = $transaction->getPayment();
+            if (empty($paypalPayment->getPaymentId())
+                || empty($paypalPayment->getState())
+                || !empty($paypalPayment->getPayerId())) {
+                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                return null;
+            } elseif ($paypalPayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
+                 $this->get('session')->getFlashBag()->add('error', 'Le montant est trop petit pour paypal');
+                return null;
+            } else {
+                return $transaction;
+            }
+        }
+    }
+
+    /**
+     * Procédure de vérification
+     * pour la troisième étape
+     */
+    private function getTransactionStepThree($event)
+    {
+        $transaction = $this->getActivePaypalTransaction($event);
+        if (!$transaction) {
+            return null;
+        } else {
+            $paypalPayment = $transaction->getPayment();
+            if (empty($paypalPayment->getPaymentId())
+                || empty($paypalPayment->getState())
+                || empty($paypalPayment->getPayerId())) {
+                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                return null;
+            } else {
+                return $transaction;
+            }
+        }
+    }
+
+    /**
+     * Procédure de vérification
+     * Récupérer en toute sécurité la transaction
+     */
     private function getActivePaypalTransaction($event)
     {
         $user = $this->getUser();
@@ -406,12 +445,12 @@ class PaymentProcessController extends Controller
 
         $payment = $transaction->getPayment();
 
-        if ($payment->getValid()) {
+        if ($payment->isValid()) {
             $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà payé');
             return null;
         }
 
-        if (!($payment instanceof PaypalPayment)) {
+        if (!$payment instanceof PaypalPayment) {
             $this->get('session')->getFlashBag()->add('error', 'Un paiement administrateur est en cours pour votre compte');
             return null;
         }
@@ -422,9 +461,9 @@ class PaymentProcessController extends Controller
         }
 
         // check timeout
-        $time_min = $this->container->getParameter('nantarena_payment.payment_timeout');
+        $minTime = $this->container->getParameter('nantarena_payment.payment_timeout');
         $date = new \DateTime();
-        $date->modify('-'.$time_min.' min');
+        $date->modify('-'.$minTime.' min');
         if ($date > $payment->getDate()) {
             $this->get('session')->getFlashBag()->add('error', 'La session est expirée');
 
@@ -440,21 +479,16 @@ class PaymentProcessController extends Controller
             $em->flush();
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
-            return false;
+            return null;
         }
         
         return $transaction;
     }
 
-
-    private function getPaypalPayment($transaction)
-    {
-        $payment = $transaction->getPayment();
-        $paypalpayment = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:PaypalPayment')
-            ->findOneById($transaction->getPayment()->getId());
-        return $paypalpayment;
-    }
-
+    /**
+     * Procédure de vérification et nottoyqge
+     * Si une transaction existe, on la supprime si possible
+     */
     private function cleanPaypalTransaction($event)
     {
         $user = $this->getUser();
@@ -477,26 +511,24 @@ class PaymentProcessController extends Controller
 
         $payment = $transaction->getPayment();
 
-        if ($payment->getValid()) {
+        if ($payment->isValid()) {
             $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà payé');
             return false;
         }
 
-        if (!($payment instanceof PaypalPayment)) {
+        if (!$payment instanceof PaypalPayment) {
             $this->get('session')->getFlashBag()->add('error', 'Un paiement administrateur est en cours pour votre compte');
             return false;
         }
 
-        
-
         if ($payment->getUser() !== $user) {
 
-            $time_min = $this->container->getParameter('nantarena_payment.payment_timeout');
-            $time_secu = $this->container->getParameter('nantarena_payment.payment_delete_security_time');
-            $time_tot = $time_min + $time_secu;
+            $minTime = $this->container->getParameter('nantarena_payment.payment_timeout');
+            $securityTime = $this->container->getParameter('nantarena_payment.payment_delete_security_time');
+            $totalTime = $minTime + $securityTime;
 
             $date = new \DateTime();
-            $date->modify('-'.$time_tot.' min');
+            $date->modify('-'.$totalTime.' min');
             $interval = $payment->getDate()->diff($date);
             $endDate = $interval->format('%i minutes et %s secondes');
 
