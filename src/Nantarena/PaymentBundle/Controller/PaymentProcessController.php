@@ -375,9 +375,12 @@ class PaymentProcessController extends Controller
             return null;
         } else {
             $paypalPayment = $transaction->getPayment();
-            if (!empty($paypalPayment->getPaymentId())
-                || !empty($paypalPayment->getState())
-                || !empty($paypalPayment->getPayerId())) {
+            $paymentId = $paypalPayment->getPaymentId();
+            $paymentStatus = $paypalPayment->getState();
+            $payerId = $paypalPayment->getPayerId();
+            if (!empty($paymentId)
+                || !empty($paymentStatus)
+                || !empty($payerId)) {
                 $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
                 return null;
             } elseif ($paypalPayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
@@ -400,9 +403,12 @@ class PaymentProcessController extends Controller
             return null;
         } else {
             $paypalPayment = $transaction->getPayment();
-            if (empty($paypalPayment->getPaymentId())
-                || empty($paypalPayment->getState())
-                || !empty($paypalPayment->getPayerId())) {
+            $paymentId = $paypalPayment->getPaymentId();
+            $paymentStatus = $paypalPayment->getState();
+            $payerId = $paypalPayment->getPayerId();
+            if (empty($paymentId)
+                || empty($paymentStatus)
+                || !empty($payerId)) {
                 $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
                 return null;
             } elseif ($paypalPayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
@@ -425,9 +431,12 @@ class PaymentProcessController extends Controller
             return null;
         } else {
             $paypalPayment = $transaction->getPayment();
-            if (empty($paypalPayment->getPaymentId())
-                || empty($paypalPayment->getState())
-                || empty($paypalPayment->getPayerId())) {
+            $paymentId = $paypalPayment->getPaymentId();
+            $paymentStatus = $paypalPayment->getState();
+            $payerId = $paypalPayment->getPayerId();
+            if (empty($paymentId)
+                || empty($paymentStatus)
+                || empty($payerId)) {
                 $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
                 return null;
             } else {
