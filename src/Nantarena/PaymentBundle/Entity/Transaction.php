@@ -6,12 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Nantarena\PaymentBundle\Validator\Constraints\OneTransactionConstraint;
 
 /**
  * Transaction
  *
  * @ORM\Table(name="payment_transaction")
  * @ORM\Entity
+ * @OneTransactionConstraint
  */
 class Transaction
 {

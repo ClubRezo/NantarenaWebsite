@@ -22,10 +22,13 @@ use Nantarena\PaymentBundle\Entity\Transaction;
 use Nantarena\PaymentBundle\Form\Type\PaymentType;
 use Nantarena\PaymentBundle\Form\Model\Payment as PaymentModel;
 
+use Nantarena\PaymentBundle\Exception\ConflictException;
+
 
 // https://developer.paypal.com/webapps/developer/docs/integration/admin/manage-apps/
 // https://developer.paypal.com/webapps/developer/docs/classic/lifecycle/goingLive/
 // https://cms.paypal.com/uk/cgi-bin/?cmd=_render-content&content_ID=developer/howto_api_golivechecklist
+
 
 /**
  * Class PaymentProcessController
@@ -47,18 +50,15 @@ class PaymentProcessController extends Controller
     public function createAction(Event $event, Request $request)
     {
         // Check if a transaction is running and delete it if possible
-        $result = $this->cleanPaypalTransaction($event);
-        if (!$result) {
+        if (!$this->cleanPaypalTransaction($event)) {
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         }
         $user = $this->getUser();
 
         // Get associated entry
         $entry = null;
-        if (!$user->hasEntry($event, $entry)) {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.index.flash_error_signup'));
-            return false;
-        }
+        $user->hasEntry($event, $entry);
+
 
         $form = $this->createForm(new PaymentType(), new PaymentModel(), array(
             'action' => $this->get('nantarena_payment.payment_manager')->createPayment($event),
@@ -95,20 +95,37 @@ class PaymentProcessController extends Controller
                 ->setPayment($paypalPayment)
             ;
 
+            $validator = $this->container->get('validator');
+
             $em = $this->getDoctrine()->getManager();
             $em->getConnection()->beginTransaction(); // suspend auto-commit
             try {
-                // look and work
-                $em->persist($transaction);
                 $em->persist($paypalPayment);
-
                 $em->flush();
+
+                $errorList = $validator->validate($transaction);
+                if (count($errorList) > 0) {
+                    foreach ($errorList as $err) {
+                        $this->get('session')->getFlashBag()->add('error', $err->getMessage());
+                    }
+                    
+                    throw new ConflictException('');
+                }
+                $em->persist($transaction);
+                $em->flush();
+
                 $em->getConnection()->commit();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $em->getConnection()->rollback();
                 $em->close();
-                // throw $e;
-                $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
+
+                if ($e instanceof \Exception) {
+                    return $this->redirect($this->generateUrl('nantarena_user_profile'));
+                } else {
+                    // throw $e;
+                    $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD ('.$e->getMessage().')');
+                    return $this->redirect($this->generateUrl('nantarena_user_profile'));
+                }
             }
 
             $this->get('session')->getFlashBag()->add('success', 'Une nouvelle transaction a été créée');
