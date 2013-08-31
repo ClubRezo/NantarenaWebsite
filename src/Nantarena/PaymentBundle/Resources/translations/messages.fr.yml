@@ -5,12 +5,43 @@ payment:
             title: 'Gestion des paiements'
             payment_management: 'Gestion des paiements'
             paypal_management: 'Gestion de paypal'
+            refund_management: 'Liste des remboursements'
         paypal:
             list:
                 title: 'Payment paypal en cours'
         payment:
             list:
                 title: 'Liste des paiements effectués'
+                return: 'Retour sur la liste des paiements'
+            details:
+                title: 'Détail du paiement'
+                return: 'Retour sur la description du paiement'
+                num: 'Paiement n°%num%'
+                user: 'Le paiement à été effectué par %user%'
+                date: 'Le %date%'
+                amount: 'Le montant est de %amount%€'
+                number: 'Le paiement concerne %number% personne(s)'
+                list:
+                    title: 'Liste des transactions associées'
+                    th_user: 'Participant'
+                    th_price: 'Prix'
+        refund:
+            list:
+                title: 'Liste des remboursements effectués'
+            payment:
+                title: 'Rembourser un paiement complet'
+                btn: 'Remboursement paiement'
+            transaction:
+                title: 'Rembourser une partie du paiement'
+                btn: 'Remboursement transaction'
+            form:
+                submit: 'Rembourser'
+                description: 'Explication'
+            flash:
+                pay_refund: 'Lepayment est remboursé'
+                no_pay: 'Pas de paiement correspondant'
+                no_trans: 'Pas de transaction correspondante'
+                is_refund: 'Le remboursement de la transation à déjà été fait'
     index:
         title: 'Sélection des options de paiement'
         event: 'Vous allez payer pour l''événement %event%'

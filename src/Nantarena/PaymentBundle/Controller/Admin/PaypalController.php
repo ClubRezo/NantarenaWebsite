@@ -36,8 +36,6 @@ class PaypalController extends Controller
             array('valid' => false)
         );
 
-        $time_min = $this->container->getParameter('nantarena_payment.payment_timeout');
-
         return array('lpaypal' => $lpaypal);
     }
 

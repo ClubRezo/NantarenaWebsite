@@ -20,4 +20,4 @@ parameters:
 
     paypal_clientid:   ~
     paypal_secret:     ~
-    paypal_mode:        sanbox
+    paypal_mode:        sandbox

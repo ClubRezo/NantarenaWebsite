@@ -1,0 +1,16 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'payment.admin.refund.transaction.title'|trans %}
+{% block page_title 'payment.admin.refund.transaction.title'|trans %}
+
+{% block admin_content %}
+    
+    {% embed 'NantarenaPaymentBundle:Form:_refund.html.twig' with {
+        'submit': 'payment.admin.refund.form.submit'|trans
+    } %}{% endembed %}
+
+
+    <p class="text-center">
+        <a href="{{ path('nantarena_admin_payment_details', {'id': transaction.payment.id}) }}">{{ 'payment.admin.payment.details.return'|trans }}</a>
+    </p>
+{% endblock %}
