@@ -135,6 +135,7 @@ class PaypalService
         $transaction = new Transaction();
         $transaction->setAmount($amount);
         $transaction->setDescription($payment_desc);
+        $transaction->setItemList($item_list);
 
         // Redirect urls
         $redirectUrls = new RedirectUrls();

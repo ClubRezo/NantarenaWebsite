@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface
                                     ->end()
                                 ->scalarNode('mode')
                                     ->defaultValue('sandbox')
-                                    ->info('live or sanbox mode')
+                                    ->info('live or sandbox mode')
                                     ->end()
                                 ->scalarNode('log_enable')->defaultValue('true')->end()
                                 ->scalarNode('log_file')->defaultValue('../PayPal.log')->end()

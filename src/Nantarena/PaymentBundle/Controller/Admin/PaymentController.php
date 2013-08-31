@@ -38,6 +38,7 @@ class PaymentController extends Controller
         $lpayment = $repository->findBy(
             array('valid' => true)
         );
+        // TODO get by event only
 
         $time_min = $this->container->getParameter('nantarena_payment.payment_timeout');
 
@@ -50,6 +51,8 @@ class PaymentController extends Controller
      */
     public function detailsAction(Payment $payment)
     {
-        return array();
+        return array(
+            'payment' => $payment
+        );
     }
 }

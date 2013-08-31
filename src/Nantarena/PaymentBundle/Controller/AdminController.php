@@ -22,6 +22,10 @@ class AdminController extends Controller implements DashboardInterface
                     'url' => $this->generateUrl('nantarena_admin_paypal_list'),
                     'role' => 'ROLE_ADMIN'
                 ),
+                $translator->trans('payment.admin.dashboard.refund_management') => array(
+                    'url' => $this->generateUrl('nantarena_admin_refund_list'),
+                    'role' => 'ROLE_ADMIN'
+                ),
             )
         );
     }

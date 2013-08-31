@@ -1,0 +1,56 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'payment.admin.payment.details.title'|trans %}
+{% block page_title 'payment.admin.payment.details.title'|trans %}
+
+{% block admin_content %}
+    <div class="text-align">
+        <p>{{'payment.admin.payment.details.num'|trans({'%num%': payment.id})}}</p>
+        <p>{{'payment.admin.payment.details.user'|trans({'%user%': payment.user.username})}}</p>
+        <p>{{'payment.admin.payment.details.date'|trans({'%date%': payment.date|date("d/m/Y H:i")}) }}</p>
+        <p>{{'payment.admin.payment.details.amount'|trans({'%amount%': payment.amount})}}</p>
+        <p>{{'payment.admin.payment.details.number'|trans({'%number%': payment.transactions|length})}}</p>
+        <p>
+            <a class="btn" href="{{ path('nantarena_admin_refund_payment', {'id': payment.id}) }}">{{ 'payment.admin.refund.payment.btn'|trans }}</a>
+        </p>
+    </div>
+
+    <div>
+        <p><b>{{ 'payment.admin.payment.details.list.title'|trans }}</b></p>
+        <div class="span6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="tiny">#</th>
+                    <th>{{ 'payment.admin.payment.details.list.th_user'|trans }}</th>
+                    <th>{{ 'payment.admin.payment.details.list.th_price'|trans }}</th>
+                    <th></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for transaction in payment.transactions %}
+                    <tr>
+                        <td>{{ transaction.id }}</td>
+                        <td>
+                            {{ transaction.user.username }}
+                        </td>
+                        <td>
+                            {{ transaction.price }}
+                        </td>
+                        <td>
+                            <a class="btn" href="{{ path('nantarena_admin_refund_transaction', {'id': transaction.id}) }}">{{ 'payment.admin.refund.transaction.btn'|trans }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="pagination pagination-centered"><ul></ul></div>
+            <p class="text-center">
+                <a href="{{ path('nantarena_admin_payment_list') }}">{{ 'payment.admin.payment.list.return'|trans }}</a>
+            </p>
+        </div>
+    </div>
+
+{% endblock %}

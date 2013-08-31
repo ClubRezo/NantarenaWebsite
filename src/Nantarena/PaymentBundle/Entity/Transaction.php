@@ -56,7 +56,7 @@ class Transaction
     /**
     * @ORM\ManyToOne(
     *   targetEntity="Nantarena\PaymentBundle\Entity\Refund")
-    * @ORM\JoinColumn(name="refund_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+    * @ORM\JoinColumn(name="refund_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
     */
     private $refund;
     
