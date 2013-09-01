@@ -25,6 +25,7 @@ payment:
                     title: 'Liste des transactions associées'
                     th_user: 'Participant'
                     th_price: 'Prix'
+                    th_refund: 'Info remboursement'
         refund:
             list:
                 title: 'Liste des remboursements effectués'

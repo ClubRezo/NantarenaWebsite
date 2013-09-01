@@ -59,6 +59,21 @@ class Transaction
     * @ORM\JoinColumn(name="refund_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
     */
     private $refund;
+
+    /**
+     * Is refund
+     *
+     * @return boolean 
+     */
+    public function isRefund()
+    {
+        $refund = $this->refund;
+        if (!empty($refund) and $refund->isValid()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     
 
     /**

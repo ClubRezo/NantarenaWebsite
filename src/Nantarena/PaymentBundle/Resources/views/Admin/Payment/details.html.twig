@@ -10,9 +10,11 @@
         <p>{{'payment.admin.payment.details.date'|trans({'%date%': payment.date|date("d/m/Y H:i")}) }}</p>
         <p>{{'payment.admin.payment.details.amount'|trans({'%amount%': payment.amount})}}</p>
         <p>{{'payment.admin.payment.details.number'|trans({'%number%': payment.transactions|length})}}</p>
-        <p>
-            <a class="btn" href="{{ path('nantarena_admin_refund_payment', {'id': payment.id}) }}">{{ 'payment.admin.refund.payment.btn'|trans }}</a>
-        </p>
+        {% if not payment.isrefund %}
+            <p>
+                <a class="btn" href="{{ path('nantarena_admin_refund_payment', {'id': payment.id}) }}">{{ 'payment.admin.refund.payment.btn'|trans }}</a>
+            </p>
+        {% endif %}
     </div>
 
     <div>
@@ -24,6 +26,7 @@
                     <th class="tiny">#</th>
                     <th>{{ 'payment.admin.payment.details.list.th_user'|trans }}</th>
                     <th>{{ 'payment.admin.payment.details.list.th_price'|trans }}</th>
+                    <th>{{ 'payment.admin.payment.details.list.th_refund'|trans }}</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -39,7 +42,16 @@
                             {{ transaction.price }}
                         </td>
                         <td>
+                            {% if transaction.refund %}
+                                {{ transaction.refund.description }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not transaction.isrefund %}
                             <a class="btn" href="{{ path('nantarena_admin_refund_transaction', {'id': transaction.id}) }}">{{ 'payment.admin.refund.transaction.btn'|trans }}</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
