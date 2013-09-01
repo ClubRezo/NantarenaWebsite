@@ -19,7 +19,11 @@
 
             <tbody>
             {% for payment in lpayment %}
+                {% if payment.isrefund %}
+                <tr class="error">
+                {% else %}
                 <tr>
+                {% endif %}
                     <td>{{ payment.id }}</td>
                     <td>
                         {{ payment.user.username }}

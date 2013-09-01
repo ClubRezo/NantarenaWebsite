@@ -68,6 +68,22 @@ class Payment
         return $this->valid;
     }
 
+    /**
+     * Is refund
+     *
+     * @return boolean 
+     */
+    public function isRefund()
+    {
+        $toReturn = true;
+        foreach ($this->transactions as $transaction) {
+            if (!$transaction->isRefund()) {
+                $toReturn = false;
+                break;
+            }
+        }
+        return $toReturn;
+    }
 
     /**
      * Get id

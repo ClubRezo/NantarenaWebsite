@@ -45,6 +45,15 @@ class Refund
      */
     protected $description;
 
+    /**
+     * Is valid
+     *
+     * @return boolean 
+     */
+    public function isValid()
+    {
+        return $this->valid;
+    }
 
     /**
      * Get id
