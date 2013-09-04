@@ -24,3 +24,14 @@ event:
     user:
         invalid: 'Le membre n''existe pas'
         already: 'Le membre est déjà inscrit à l''évènement'
+        notyet: 'Le membre n''existe pas ou n''est pas inscrit à l''évènement'
+
+    teams:
+        creator: 'Le créateur de l''équipe doit être un membre de l''équipe'
+        members:
+            empty: 'Vous devez ajouter au moins un membre dans l''équipe'
+            same: 'Vous avez ajouté plusieurs fois le même membre'
+
+        unique:
+            name: 'Une équipe de même nom existe déjà pour cet évènement'
+            tag: 'Une équipe de même tag existe déjà pour cet évènement'

@@ -6,12 +6,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Nantarena\EventBundle\Validator\Constraints\TeamNameConstraint;
+use Nantarena\EventBundle\Validator\Constraints\TeamTagConstraint;
+use Nantarena\EventBundle\Validator\Constraints\TeamCreatorConstraint;
+use Nantarena\EventBundle\Validator\Constraints\TeamMembersConstraint;
+
 
 /**
  * Team
  *
  * @ORM\Table(name="event_team")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Nantarena\EventBundle\Repository\TeamRepository")
+ * @TeamNameConstraint(message="event.teams.unique.name")
+ * @TeamTagConstraint(message="event.teams.unique.tag")
+ * @TeamCreatorConstraint(message="event.teams.creator")
  */
 class Team
 {
@@ -72,6 +80,10 @@ class Team
     /**
      * @ORM\ManyToMany(targetEntity="Nantarena\UserBundle\Entity\User")
      * @ORM\JoinTable(name="event_team_members")
+     * @TeamMembersConstraint(
+     *      emptyMessage="event.teams.members.empty",
+     *      sameMessage="event.teams.members.same"
+     * )
      */
     private $members;
 
@@ -250,9 +262,10 @@ class Team
      * @param \Nantarena\UserBundle\Entity\User $members
      * @return Team
      */
-    public function addMember(\Nantarena\UserBundle\Entity\User $members)
+    public function addMember($members)
     {
-        $this->members[] = $members;
+        if (null !== $members)
+            $this->members[] = $members;
     
         return $this;
     }
@@ -331,5 +344,11 @@ class Team
     public function getEvent()
     {
         return $this->event;
+    }
+
+    public function isValid()
+    {
+        # TODO
+        return false;
     }
 }

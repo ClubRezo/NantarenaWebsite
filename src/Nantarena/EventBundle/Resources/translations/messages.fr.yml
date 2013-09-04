@@ -4,6 +4,7 @@ event:
             entries_management: 'Gestion des inscriptions'
             events_management: 'Gestion des évènements'
             games_management: 'Gestion des jeux'
+            teams_management: 'Gestion des équipes'
             title: 'Gestion des évènements'
 
         entries:
@@ -85,6 +86,32 @@ event:
                 empty: 'Aucun jeu n''est encore défini'
                 title: 'Liste des jeux'
 
+        teams:
+            back: 'Retour à la liste'
+            create:
+                title: 'Ajouter une nouvelle équipe'
+                flash_error: 'Erreur lors de la création de l''équipe'
+                flash_success: 'La nouvelle équipe a été créée avec succès'
+                submit: Créer
+
+            edit:
+                flash_error: 'Erreur lors de la modification de l''équipe'
+                flash_success: 'L''équipe a été modifiée avec succès'
+                submit: Modifier
+                title: 'Modifier une équipe'
+
+            delete:
+                flash_error: 'Erreur lors de la suppression de l''équipe'
+                flash_success: 'L''équipe a été supprimée avec succès'
+                info: 'Toutes les données liées à cette équipe seront également supprimées'
+                title: 'Suppression d''une équipe'
+                warning: 'Vous êtes sur le point de supprimer une équipe.'
+
+            list:
+                empty: 'Aucune équipe ne correspond aux critères'
+                title: 'Liste des équipes'
+                yes: 'oui'
+
     cancel:
         back: 'Revenir sur la page précédente'
 
@@ -120,11 +147,27 @@ event:
             entries: Inscriptions
             infos: 'Informations générales'
             tournaments: Tournois
+            members: Composition
 
         game:
             name: Nom
             platform: Plate-forme
             team_capacity: Joueurs/équipe
+
+        team:
+            name: Nom
+            tag: Tag
+            logo: Logo
+            website: Site web
+            desc: Description
+            members: Composition
+            creator: 'Chef d''équipe'
+            tournaments: Tournois
+            valid: Validée
+            members:
+                list: Composition
+                name: Nom du membre
+                add: Ajouter un membre
 
         tournament:
             admin: Responsable
@@ -132,6 +175,9 @@ event:
             game: Jeu
             maxTeams: 'Nombre d''équipes maximal'
             startDate: 'Début du tournoi'
+            field:
+                name: '%name% (%nb% équipes)'
+                none: 'Aucun'
 
         tournaments:
             add: 'Ajouter un tournoi'

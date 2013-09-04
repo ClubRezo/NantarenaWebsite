@@ -23,10 +23,8 @@ class UserEntryConstraintValidator extends ConstraintValidator
     {
         $registeredUsers = $this->em->getRepository('NantarenaUserBundle:User')->findRegisteredEvent($constraint->getEvent());
 
-        foreach ($registeredUsers as $user) {
-            if ($value === $user) {
-                $this->context->addViolation($this->translator->trans($constraint->alreadyRegistered, array(), 'validators'));
-            }
+        if (in_array($value, $registeredUsers)) {
+            $this->context->addViolation($this->translator->trans($constraint->alreadyRegistered, array(), 'validators'));
         }
     }
 }

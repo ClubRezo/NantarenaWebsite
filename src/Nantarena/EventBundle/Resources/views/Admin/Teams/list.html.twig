@@ -1,0 +1,114 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'event.admin.teams.list.title'|trans %}
+{% block page_title 'event.admin.teams.list.title'|trans %}
+
+{% block admin_content %}
+
+    <div class="text-center">
+        {{ form_start(form) }}
+        {{ form_widget(form.event, {'attr': {'onchange':'this.form.submit()'} }) }}
+        {{ form_end(form) }}
+    </div>
+
+    <div class="text-center">
+        <a class="btn" href="{{ path('nantarena_event_admin_teams_create', {
+            'slug': event.slug
+        }) }}">
+            {{ 'event.admin.teams.create.title'|trans }}
+        </a>
+    </div>
+
+    <table class="table sortable filterable" data-sort="1" data-perpage="50">
+        <thead>
+            <tr>
+                <th class="tiny" data-filter="ignore">#</th>
+                <th>{{ 'event.form.team.name'|trans }}</th>
+                <th data-filter="select">{{ 'event.form.team.logo'|trans }}</th>
+                <th data-filter="select">{{ 'event.form.team.website'|trans }}</th>
+                <th data-filter="select">{{ 'event.form.team.desc'|trans }}</th>
+                <th>{{ 'event.form.team.members.list'|trans }}</th>
+                <th>{{ 'event.form.team.tournaments'|trans }}</th>
+                <th data-filter="select">{{ 'event.form.team.valid'|trans }}</th>
+                <th class="mini"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for team in teams %}
+                <tr>
+                    <td>{{ team.id }}</td>
+                    <td>
+                        <a href="#">
+                            <abbr title="[{{ team.tag }}]" data-placement="right">
+                                {{ team.name }}
+                            </abbr>
+                        </a>
+                    </td>
+                    <td>
+                        {% if team.logo is not empty %}
+                            {{ 'event.admin.teams.list.yes'|trans }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if team.website is not empty %}
+                            {{ 'event.admin.teams.list.yes'|trans }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if team.desc is not empty %}
+                            {{ 'event.admin.teams.list.yes'|trans }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% for member in team.members %}
+                            {{ member.username }}
+                            {% if not loop.last %}<br />{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for tournament in team.tournaments %}
+                            {{ tournament.game.name }}
+                            {% if not loop.last %}<br />{% endif %}
+                        {% else %}
+                            --
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if team.valid %}
+                            oui
+                        {% else %}
+                            non
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('nantarena_event_admin_teams_edit', {'id': team.id}) }}">
+                            <i class="icon-wrench"></i>
+                        </a>
+                        &nbsp;&nbsp;
+                        <a href="{{ path('nantarena_event_admin_teams_delete', {'id': team.id}) }}">
+                            <i class="icon-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+        <tbody class="empty">
+            <tr>
+                <td colspan="10">
+                    <p class="text-center">{{ 'event.admin.teams.list.empty'|trans }}</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination pagination-centered"><ul></ul></div>
+
+{% endblock %}

@@ -211,8 +211,16 @@ class Tournament
      *
      * @return boolean 
      */
-    public function getExclusive()
+    public function isExclusive()
     {
         return $this->exclusive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getGame()->getName();
     }
 }

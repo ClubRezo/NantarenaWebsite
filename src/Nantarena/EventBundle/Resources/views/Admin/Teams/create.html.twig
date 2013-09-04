@@ -1,0 +1,17 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'event.admin.teams.create.title'|trans %}
+{% block page_title 'event.admin.teams.create.title'|trans %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@NantarenaSiteBundle/Resources/public/js/form/collection.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block admin_content %}
+    {% embed 'NantarenaEventBundle:Admin/Teams:_form.html.twig' with {
+        'submit': 'event.admin.teams.create.submit'|trans
+    } %}{% endembed %}
+{% endblock %}
