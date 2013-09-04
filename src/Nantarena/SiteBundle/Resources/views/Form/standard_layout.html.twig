@@ -15,7 +15,11 @@
     {% spaceless %}
         <div {{ block('widget_container_attributes') }}>
             {% for child in form %}
-                <label class="checkbox">
+                {% if multiple %}
+                    <label class="checkbox">
+                {% else %}
+                    <label class="radio">
+                {% endif %}
                     {{ form_widget(child) }}
                     {{ child.vars.label }}
                 </label>
@@ -112,6 +116,8 @@
             {% set prototype_html = '<tr>' %}
             {% for widget in prototype %}
                 {% set prototype_html = prototype_html ~ '<td>' ~ form_widget(widget) ~ '</td>' %}
+            {% else %}
+                {% set prototype_html = prototype_html ~ '<td>' ~ form_widget(prototype) ~ '</td>' %}
             {% endfor %}
             {% if form.vars.allow_delete %}
                 {% set prototype_html = prototype_html ~ '<td style="padding-top: 12px;"><a href="#" class="collection_delete"><i class="icon-trash"></i></a></td>' %}
@@ -132,6 +138,12 @@
                             {{ labels[field.vars.name] }}
                         {% endif %}
                     </th>
+                {% else %}
+                    <th>
+                        {% if labels is defined and labels is not iterable %}
+                            {{ labels }}
+                        {% endif %}
+                    </th>
                 {% endfor %}
                 {% if form.vars.allow_delete %}
                     <th></th>
@@ -144,6 +156,11 @@
                         <td>
                             {{ form_widget(widget) }}
                             {{ form_errors(widget) }}
+                        </td>
+                    {% else %}
+                        <td>
+                            {{ form_widget(field) }}
+                            {{ form_errors(field) }}
                         </td>
                     {% endfor %}
 
