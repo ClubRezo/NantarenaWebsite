@@ -208,7 +208,7 @@ event:
             no_next: 'Vous n''avez pas prévu de participer à de futurs évènements.'
             old_events: 'Mes précédents évènements'
             payment: Paiement
-            team: Equipe
+            team: Equipes
             tournament: Tournois
             type: Type
 

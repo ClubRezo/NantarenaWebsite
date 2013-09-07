@@ -2,6 +2,7 @@
 
 namespace Nantarena\EventBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -107,5 +108,40 @@ class Entry
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeams()
+    {
+        if (null !== $this->user) {
+            $teams = $this->getUser()->getTeams();
+
+            /** @var Team $team */
+            foreach ($teams as $key => $team) {
+                if ($team->getEvent() !== $this->getEntryType()->getEvent())
+                    unset($teams[$key]);
+            }
+
+            return $teams;
+        }
+
+        return null;
+    }
+
+    public function getTournaments()
+    {
+        $teams = $this->getTeams();
+        $tournaments = new ArrayCollection();
+
+        /** @var Team $team */
+        foreach ($teams as $team) {
+            foreach($team->getTournaments() as $tournament) {
+                $tournaments->add($tournament);
+            }
+        }
+
+        return $tournaments;
     }
 }

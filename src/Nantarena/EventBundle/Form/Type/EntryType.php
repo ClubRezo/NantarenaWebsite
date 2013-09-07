@@ -7,6 +7,8 @@ use Nantarena\EventBundle\Validator\Constraints\UserEntryConstraint;
 use Nantarena\SiteBundle\Form\Field\TypeaheadField;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class EntryType extends AbstractType

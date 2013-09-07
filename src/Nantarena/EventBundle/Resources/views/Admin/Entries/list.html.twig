@@ -48,9 +48,29 @@
                         {% endif %}
                     </td>
                     <td>{{ entry.registrationDate|date("d/m/Y H:i") }}</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>Paypal</td>
+                    <td>
+                        {% for team in entry.teams %}
+                            <a href="#">
+                                <abbr title="[{{ team.tag }}]" data-placement="right">
+                                    {{ team.name }}
+                                </abbr>
+                            </a>
+                            {% if not loop.last %}<br />{% endif %}
+                        {% else %}
+                            --
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for tournament in entry.tournaments %}
+                            {{ tournament.game.name }}
+                            {% if not loop.last %}<br />{% endif %}
+                        {% else %}
+                            --
+                        {% endfor %}
+                    </td>
+                    <td>
+                        TODO
+                    </td>
                     <td>
                         <a href="{{ path('nantarena_event_admin_entries_edit', {
                             'slug': event.slug,

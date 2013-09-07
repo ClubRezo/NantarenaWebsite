@@ -78,7 +78,7 @@ class Team
     private $creator;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Nantarena\UserBundle\Entity\User")
+     * @ORM\ManyToMany(targetEntity="Nantarena\UserBundle\Entity\User", inversedBy="teams")
      * @ORM\JoinTable(name="event_team_members")
      * @TeamMembersConstraint(
      *      emptyMessage="event.teams.members.empty",

@@ -97,6 +97,7 @@ class EntriesController extends Controller
         return array(
             'event' => $event,
             'form' => $form->createView(),
+            'teams' => array()
         );
     }
 
@@ -108,6 +109,7 @@ class EntriesController extends Controller
      */
     public function editAction(Request $request, Event $event, User $user)
     {
+        /** @var Entry $entry */
         $entry = $this->getDoctrine()->getRepository('NantarenaEventBundle:Entry')->findByEventAndUser($event, $user);
 
         if (null === $entry)
@@ -131,6 +133,7 @@ class EntriesController extends Controller
 
             try {
                 $em = $this->getDoctrine()->getManager();
+
                 $em->persist($entry);
                 $em->flush();
 
@@ -147,6 +150,7 @@ class EntriesController extends Controller
         return array(
             'event' => $event,
             'form' => $form->createView(),
+            'teams' => $entry->getTeams()
         );
     }
 
