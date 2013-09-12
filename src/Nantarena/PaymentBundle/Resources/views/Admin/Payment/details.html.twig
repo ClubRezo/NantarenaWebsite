@@ -8,7 +8,7 @@
         <p>{{'payment.admin.payment.details.num'|trans({'%num%': payment.id})}}</p>
         <p>{{'payment.admin.payment.details.user'|trans({'%user%': payment.user.username})}}</p>
         <p>{{'payment.admin.payment.details.date'|trans({'%date%': payment.date|date("d/m/Y H:i")}) }}</p>
-        <p>{{'payment.admin.payment.details.amount'|trans({'%amount%': payment.amount})}}</p>
+        <p>{{'payment.admin.payment.details.amount'|trans({'%amount%': payment.getamount})}}</p>
         <p>{{'payment.admin.payment.details.number'|trans({'%number%': payment.transactions|length})}}</p>
         {% if not payment.isrefund %}
             <p>

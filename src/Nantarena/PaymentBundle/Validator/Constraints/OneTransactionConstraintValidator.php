@@ -22,8 +22,7 @@ class OneTransactionConstraintValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $repository = $this->em->getRepository('NantarenaPaymentBundle:Transaction');
-        $transaction = $repository->findOneBy(array('user' => $value->getUser(), 
-            'event' => $value->getEvent(), 'refund' => null));
+        $transaction = $repository->findOneByEventAndUser($value->getEvent(), $value->getUser());
 
         if ($transaction) {
             $this->context->addViolation($constraint->message, array('%person%' => $value->getUser()->getUsername()));

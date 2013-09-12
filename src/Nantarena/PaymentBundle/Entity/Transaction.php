@@ -12,7 +12,7 @@ use Nantarena\PaymentBundle\Validator\Constraints\OneTransactionConstraint;
  * Transaction
  *
  * @ORM\Table(name="payment_transaction")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Nantarena\PaymentBundle\Repository\TransactionRepository")
  * @OneTransactionConstraint
  */
 class Transaction
@@ -75,6 +75,19 @@ class Transaction
         }
     }
     
+    /**
+     * getEntry
+     *
+     * @return boolean 
+     */
+    public function getEntry()
+    {
+        $entry = null;
+
+        $this->user->hasEntry($this->event, $entry);
+
+        return $entry;
+    }
 
     /**
      * Get id

@@ -16,6 +16,12 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Api\Payment;
 use PayPal\Api\PaymentExecution;
 
+use PayPal\Exception\PPConnectionException;
+use PayPal\Exception\PPConfigurationException;
+use PayPal\Exception\PPInvalidCredentialException;
+use PayPal\Exception\PPMissingCredentialException;
+use PayPal\Exception\PPTransformerException;
+
 
 class PaypalService
 {
@@ -195,6 +201,35 @@ class PaypalService
     }
 
 
+    /**
+     * handle paypal exception
+     * @param string $errorJson
+     * @return string
+     */
+    function ApiErrorHandle(\Exception $ex) {
+
+        $msg = '';
+
+        if ($ex instanceof PPConnectionException) {
+            $msg .= 'Connection Error';
+        } elseif ($ex instanceof PPConfigurationException) {
+            $msg .= 'Configuration Error';
+        } elseif ($ex instanceof PPInvalidCredentialException || $ex instanceof PPMissingCredentialException) {
+            $msg .= 'Credentials Error';
+        } elseif ($ex instanceof PPTransformerException) {
+            $msg .= 'Transformer Error';
+        }
+
+        if (!empty($msg)) {
+            $msg = 'paypal exception - '.$msg;
+
+            $details = $this->ApiErrorMessage($ex);
+            // TODO LOG
+        }
+
+        return $msg;
+    }
+
 
     /**
      * Utility function to pretty print API error data
@@ -214,6 +249,31 @@ class PaypalService
                 $msg .= "<li>" . $detail['field'] . " : " . $detail['issue'] . "</li>";
             }
             $msg .= "</ul>";
+        }
+        if($msg == '') {
+            $msg = $errorJson;
+        }
+        return $msg;
+    }
+
+    /**
+     * Utility function to pretty print API error data
+     * @param string $errorJson
+     * @return string
+     */
+    function ApiErrorMessage($errorJson) {
+        $msg = '';
+        
+        $data = json_decode($errorJson, true);
+        if(isset($data['name']) && isset($data['message'])) {
+            $msg .= $data['name'] . " : " .  $data['message'] . " -- ";
+        }
+        if(isset($data['details'])) {
+            $msg .= "details :";
+            foreach($data['details'] as $detail) {
+                $msg .= "" . $detail['field'] . " : " . $detail['issue'] . " - ";
+            }
+            $msg .= "";
         }
         if($msg == '') {
             $msg = $errorJson;

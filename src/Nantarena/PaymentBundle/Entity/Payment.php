@@ -38,12 +38,6 @@ class Payment
     private $date;
 
     /**
-     * @ORM\Column(name="price", type="decimal", precision=5, scale=2)
-     * @Assert\GreaterThanOrEqual(value=0)
-     */
-    private $amount;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $valid;
@@ -86,6 +80,18 @@ class Payment
     }
 
     /**
+     * Get amount
+     */
+    public function getAmount()
+    {
+        $total = 0;
+        foreach ($this->transactions as $transaction) {
+            $total += $transaction->getPrice();
+        }
+        return $total;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -116,29 +122,6 @@ class Payment
     public function getDate()
     {
         return $this->date;
-    }
-
-    /**
-     * Set amount
-     *
-     * @param string $amount
-     * @return Payment
-     */
-    public function setAmount($amount)
-    {
-        $this->amount = $amount;
-    
-        return $this;
-    }
-
-    /**
-     * Get amount
-     *
-     * @return string 
-     */
-    public function getAmount()
-    {
-        return $this->amount;
     }
 
     /**
