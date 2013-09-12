@@ -39,6 +39,12 @@ class LoadContactCategoryData extends AbstractFixture
             ->setTag('FORUM');
         $manager->persist($cat);
 
+        $cat = new Category();
+        $cat
+            ->setName('Erreur de paiement')
+            ->setTag('PAIEMENT');
+        $manager->persist($cat);
+
         $manager->flush();
     }
 }

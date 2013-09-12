@@ -2,6 +2,8 @@
     {{ form_start(form) }}
         {{ form_errors(form) }}
 
+        {{ form_row(form.partners, {'label': 'Liste de vos coéquipiers'|trans|colon}) }}
+
         {{ form_row(form.submit, {'label': submit}) }}
     {{ form_end(form) }}
 </div>

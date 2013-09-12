@@ -121,7 +121,7 @@ nantarena_payment:
             clientid: %paypal_clientid%
             secret: %paypal_secret%
         service:
-            http_connection_timeout: 30
+            http_connection_timeout: 60
             http_retry: 1
             http_proxy: ~
 
