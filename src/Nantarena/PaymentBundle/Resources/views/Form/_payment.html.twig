@@ -2,7 +2,36 @@
     {{ form_start(form) }}
         {{ form_errors(form) }}
 
-        {{ form_row(form.partners, {'label': 'Liste de vos coéquipiers'|trans|colon}) }}
+        <h2>{{ 'payment.payment_process.create.place.title'|trans }}</h2>
+        <p class="muted text-center">
+            <small>{{ 'payment.payment_process.create.place.desc'|trans }}</small>
+        </p>
+        <p>
+            {{ 'payment.payment_process.create.place.event'|trans({'%event%': entry.entryType.event.name})|raw }} <br>
+            {{ 'payment.payment_process.create.place.status'|trans({'%status%': entry.entryType.name})|raw }} <br>
+            {{ 'payment.payment_process.create.place.prix'|trans({'%prix%': entry.entryType.price})|raw }}
+        </p>
+
+        <h2>{{ 'payment.payment_process.create.option.title'|trans }}</h2>
+        <p class="muted text-center">
+            <small>{{ 'payment.payment_process.create.option.desc'|trans }}</small>
+        </p>
+        <p class="text-center text-warning" >
+                {{ 'payment.payment_process.create.option.no_coupon'|trans }}
+            </p>
+
+        <h2>{{ 'payment.payment_process.create.patners.title'|trans }}</h2>
+        <p class="muted text-center">
+            <small>{{ 'payment.payment_process.create.patners.desc'|trans }}</small>
+        </p>
+
+        {% if is_partner %}
+            {{ form_row(form.partners, {'label': 'payment.payment_process.create.patners.label'|trans|colon}) }}
+        {% else %}
+            <p class="text-center text-warning" >
+                {{ 'payment.payment_process.create.patners.no_partner'|trans }}
+            </p>
+        {% endif %}
 
         {{ form_row(form.submit, {'label': submit}) }}
     {{ form_end(form) }}
