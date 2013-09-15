@@ -13,12 +13,16 @@ class PaymentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        if (!empty($options['partnerList'])) {
+            $builder
+                ->add('partners', 'choice', array(
+                    'choice_list' => $options['partnerList'],
+                    'expanded' => true,
+                    'multiple'  => true,
+                ));
+        }
+        
         $builder
-            ->add('partners', 'choice', array(
-                'choices'   => $options['userList'],
-                'expanded' => true,
-                'multiple'  => true,
-            ))
             ->add('submit', 'submit')
         ;
     }
@@ -27,7 +31,7 @@ class PaymentType extends AbstractType
     {
         $resolver
             ->setRequired(array(
-                'userList'
+                'partnerList'
             ))
         ;
     }

@@ -1,35 +1,69 @@
 {% extends 'NantarenaPaymentBundle::PaymentProcess/layout.html.twig' %}
 
-{% block title 'payment.success.title'|trans %}
+{% block title 'payment.payment_process.success.title'|trans %}
 
-{% block page_title 'payment.success.title'|trans %}
+{% block page_title 'payment.payment_process.success.title'|trans %}
+
+{% block step_pos'payment.payment_process.bar.success.pos'|trans %}
+{% block step_desc 'payment.payment_process.bar.success.desc'|trans %}
 
 {% block payment_process %}
 
-	<h2>Voici le dernier récapitulatif</h2>
-
-	<p>
-		{{'payment.index.event'|trans({'%event%': trans.event.name})}}
-	</p>
-	<p>
-		Le prix de votre place est de {{trans.price}}€
-	</p>
-
-	<p>La confirmation entraînera l'exécution du paiement</p>
-	<p>Le prix total est : {{trans.payment.amount}}€</p>
+    <h2>{{ 'payment.payment_process.success.event'|trans({'%event%': trans.event.name}) }}</h2>
 
 
-	<div class="text-center">
-		<p>
-            <a class="btn btn-primary" href="{{ path('nantarena_payment_paypalpayment_pay', {'slug': trans.event.slug}) }}">
-                Confirmer et payer
-            </a>
-        </p>
-		<p>
-            <a class="btn btn-danger" href="{{ path('nantarena_payment_paypalpayment_clean', {'slug': trans.event.slug}) }}">
-                Annuler
-            </a>
-        </p>
-	</div>
+    <p><strong>{{ 'payment.payment_process.success.num'|trans({'%num%': trans.payment.id}) }}</strong></p>
+
+    <div class="span12">
+
+        <table class="table" data-sort="1" data-perpage="50">
+            <thead>
+            <tr>
+                <th>{{ 'payment.payment_process.success.table.name'|trans }}</th>
+                <th>{{ 'payment.payment_process.success.table.status'|trans }}</th>
+                <th>{{ 'payment.payment_process.success.table.price'|trans }}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for ptransaction in payment.transactions %}
+                {% if ptransaction.id == trans.id %}
+                <tr class="success">
+                {% else %}
+                <tr>
+                {% endif %}
+                    <td>{{ ptransaction.user.username }}</td>
+                    <td>
+                        status
+                    </td>
+                    <td>
+                        {{ ptransaction.price }}€
+                    </td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td colspan="2">
+                        <strong>{{ 'payment.payment_process.success.table.total'|trans }}</strong>
+                    </td>
+                    <td>
+                        <strong>{{ trans.payment.getamount|number_format(2, '.', ',') }}€</strong>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <p>
+                <a class="btn btn-primary" href="{{ path('nantarena_payment_paypalpayment_pay', {'slug': trans.event.slug}) }}">
+                    {{ 'payment.payment_process.success.button'|trans }}
+                </a>
+            </p>
+            <p>
+                <a class="btn btn-danger" href="{{ path('nantarena_payment_paypalpayment_clean', {'slug': trans.event.slug}) }}">
+                    {{ 'payment.payment_process.cancel'|trans }}
+                </a>
+            </p>
+        </div>
+    </div>
 
 {% endblock %}

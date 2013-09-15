@@ -107,7 +107,7 @@ class Transaction
      */
     public function setPrice($price)
     {
-        $this->price = $price;
+        $this->price = round($price, 2);
     
         return $this;
     }

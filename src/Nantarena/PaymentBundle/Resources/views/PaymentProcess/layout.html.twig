@@ -3,8 +3,10 @@
 {% block body %}
     {% include 'NantarenaSiteBundle::_flashbag.html.twig' %}
     <div class="text-center">
-        <p>Avancement</p>
-        <p>Start -----------------------> End</p>
+        <div class="progress">
+            <div class="bar" style="width: {% block step_pos %}0{% endblock %}%;"></div>
+        </div>
+            {% block step_desc %}{% endblock %}
         <hr/>
     </div>
     {% block payment_process %}

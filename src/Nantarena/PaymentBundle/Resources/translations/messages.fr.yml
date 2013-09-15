@@ -39,19 +39,74 @@ payment:
                 submit: 'Rembourser'
                 description: 'Explication'
             flash:
-                pay_refund: 'Lepayment est remboursé'
+                pay_refund: 'Le paiement est remboursé'
                 no_pay: 'Pas de paiement correspondant'
                 no_trans: 'Pas de transaction correspondante'
                 is_refund: 'Le remboursement de la transation à déjà été fait'
+
+    payment_process:
+        bar:
+            create:
+                pos: '33'
+                desc: 'Étape 1 sur 3'
+            paypal:
+                pos: '66'
+                desc: 'Étape 2 sur 3'
+            success:
+                pos: '100'
+                desc: 'Étape 3 sur 3'
+        cancel: 'Annuler'
+        create:
+            title: 'Sélection de vos options de paiement'
+            explain:
+                title: 'Explications et recommandations'
+                content: >
+                    <ul>
+                        <li>Ce système de paiement fonctionne entièrement avec Paypal</li>
+                        <li>Aucune information bancaire utilisée n'est enregistrée sur notre site</li>
+                        <li class="text-warning" >Le paiement par carte bancaire s'effectue à travers le système paypal</li>
+                        <li>SVP, n'utilisez pas les flèches de navigation où vous recommencerez la procédure à zéro</li>
+                        <li>Si vous avez fait une erreur, vous devez annuler la procédure en cours</li>
+                        <li>Une fois le paiment effectué, votre compte sera automatiquement mis à jour</li>
+                    </ul>
+            place:
+                title: 'Votre place'
+                desc: 'C''est votre entré pour notre évènement'
+                event: 'Vous allez payer pour l''événement <strong>%event%</strong>'
+                status: 'Vous avez le status <strong>%status%</strong>.'
+                prix: 'Le prix est de <strong>%prix%€</strong>.'
+            option:
+                title: 'Vos coupons de réduction'
+                desc: 'Vous pouvez sélectionner 1 coupon personnel ou global'
+                no_coupon: 'Aucun coupon de réduction n''est disponible'
+            patners:
+                title: 'Payer pour vos coéquipiers'
+                desc: 'Les coéquipiers pour qui vous payez ne pourront pas utiliser leurs coupons'
+                label: 'Coéquipier(s)'
+                no_partner: 'Pas de partenaires non payés'
+            form:
+                submit: 'Valider le formulaire'
+        paypal:
+            title: 'Accès à Paypal'
+            explain: >
+                    <ul>
+                        <li>Cette étape n'entraîne pas de paiement, elle nous donne votre accord effectuer le paiement</li>
+                        <li>Un descriptif détaillé vous sera présenté avant de payer</li>
+                    </ul>
+            button: 'Accès à Paypal'
+        success:
+            title: 'Récapitulatif de la commande'
+            event: 'Événement : %event%'
+            button: 'Confirmer et payer'
+            num: 'Paiement n°%num%'
+            table:
+                total: 'Total'
+                name: 'Nom'
+                status: 'Status'
+                price: 'Prix'
+
+
     index:
-        title: 'Sélection des options de paiement'
-        event: 'Vous allez payer pour l''événement %event%'
-        status: 'Vous avez le status %status%.'
-        prix: 'Le prix est de %prix%€.'
         flash_error_connection: 'Vous devez être connecté'
         flash_error_signup: 'Vous n''êtes pas inscrit à cet événement !'
         flash_error_running: 'La transaction en cours a été supprimé !'
-    payment:
-        title: 'Choisir son moyen de paiement'
-    success:
-        title: 'Récapitulatif de la commande'

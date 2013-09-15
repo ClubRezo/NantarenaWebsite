@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="method", type="string")
- * @ORM\DiscriminatorMap({"classic" = "Payment", "paypal" = "PaypalPayment"})
+ * @ORM\DiscriminatorMap({"classic" = "Payment", "paypal" = "PaypalPayment", "cash" = "CashPayment", "adaptative" = "AdaptativePayment"})
  * @ORM\Table(name="payment_payment")
  */
 class Payment
@@ -84,11 +84,11 @@ class Payment
      */
     public function getAmount()
     {
-        $total = 0;
+        $total = 0.00;
         foreach ($this->transactions as $transaction) {
             $total += $transaction->getPrice();
         }
-        return $total;
+        return round($total, 2);
     }
 
     /**

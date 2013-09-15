@@ -24,6 +24,7 @@ use Nantarena\PaymentBundle\Form\Model\Payment as PaymentModel;
 
 use Nantarena\PaymentBundle\Exception\ConflictException;
 
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 
 // https://developer.paypal.com/webapps/developer/docs/integration/admin/manage-apps/
 // https://developer.paypal.com/webapps/developer/docs/classic/lifecycle/goingLive/
@@ -59,25 +60,52 @@ class PaymentProcessController extends Controller
         $entry = null;
         $user->hasEntry($event, $entry);
 
+        // Get active transaction
+        $repository = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:Transaction');
+
         // Get partners
         $userList = array();
+        $userLabel = array();
         foreach ($user->getTeams() as $team) {
             if ($team->getEvent() === $event) {
                 foreach ($team->getMembers() as $member) {
                     if ($member !== $user) {
                         if (!in_array($member, $userList)) {
-                            array_push($userList, $member);
+
+                            $partnerEntry = null;
+                            $member->hasEntry($event, $partnerEntry);
+
+                            if ($partnerEntry) {
+
+                                $validTransaction = $repository->findValidPayment($partnerEntry);
+
+                                if (!$validTransaction) {
+                                    $label = $member->getUsername() . ' - ' . $partnerEntry->getEntryType()->getName() . ' - ' . $partnerEntry->getEntryType()->getPrice() . '€';
+                                    array_push($userList, $member);
+                                    array_push($userLabel, $label);
+                                }
+                            }
                         }
                     }
                 }
             }
         }
 
+        if (count($userList) > 0) {
+            $userAndLabel = new ChoiceList($userList, $userLabel, array());
+            $isPartner = true;
+        } else {
+            $userAndLabel = null;
+            $isPartner = false;
+        }
+
+        
+
         $model = new PaymentModel();
         $form = $this->createForm(new PaymentType(), $model, array(
             'action' => $this->get('nantarena_payment.payment_manager')->createPayment($event),
             'method' => 'POST',
-            'userList' => $userList,
+            'partnerList' => $userAndLabel
         ));
 
         $form->handleRequest($request);
@@ -111,11 +139,11 @@ class PaymentProcessController extends Controller
             foreach ($model->getPartners() as $partner) {
                 $entry = null;
                 $partner->hasEntry($event, $entry);
-                if ($enry) {
+                if ($entry) {
                     $transaction = new Transaction();
                     $transaction
                         ->setPrice($entry->getEntryType()->getPrice())
-                        ->setUser($user)
+                        ->setUser($partner)
                         ->setEvent($event)
                         ->setPayment($paypalPayment)
                     ;
@@ -126,7 +154,7 @@ class PaymentProcessController extends Controller
 
 
             // jump paypal system if the amout is too low
-            $total = 0;
+            $total = 0.00;
             foreach ($allTransactions as $transaction) {
                 $total += $transaction->getPrice();
             }
@@ -175,7 +203,7 @@ class PaymentProcessController extends Controller
                 }
             }
 
-            $this->get('session')->getFlashBag()->add('success', 'Une nouvelle transaction a été créée');
+            // $this->get('session')->getFlashBag()->add('success', 'Une nouvelle transaction a été créée');
 
             // Jump to success controller if payment is lower than minimal allowed paypal payment
             if ($total > $this->container->getParameter('nantarena_payment.payment_min_euro')) {
@@ -189,6 +217,7 @@ class PaymentProcessController extends Controller
         return array(
             'entry' => $entry,
             'form' => $form->createView(),
+            'is_partner' => $isPartner,
         );
     }
 
@@ -350,6 +379,7 @@ class PaymentProcessController extends Controller
 
         return array(
             'trans' => $transaction,
+            'payment' => $transaction->getPayment()
         );
     }
 
@@ -569,6 +599,9 @@ class PaymentProcessController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
             return null;
         }
+
+        // Manage session
+        $this->get('session')->set('payProcess', false);
         
         return $transaction;
     }
@@ -591,7 +624,7 @@ class PaymentProcessController extends Controller
         // Check session
         $session = $this->get('session');
         if ($session->has('payProcess') && $session->get('payProcess')) {
-            $this->get('session')->getFlashBag()->add('error', 'Paiement en cours sur votre compte.');
+            $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà un paiement en cours sur votre compte.');
             return false;
         }
         $session->set('payProcess', false);
@@ -634,7 +667,7 @@ class PaymentProcessController extends Controller
 
                 return false;
             } else {
-                $this->get('session')->getFlashBag()->add('error', 'Votre coéquipier '.$payment->getUser()->getUsername().' avait commencé une transaction pour vous.');
+                // $this->get('session')->getFlashBag()->add('error', 'Votre coéquipier '.$payment->getUser()->getUsername().' avait commencé une transaction pour vous.');
             }
         }
 
@@ -644,7 +677,7 @@ class PaymentProcessController extends Controller
             return false;
         }
         
-        $this->get('session')->getFlashBag()->add('success', 'La transaction non finie a été supprimée');
+        // $this->get('session')->getFlashBag()->add('success', 'La transaction non finie a été supprimée');
         return true;
     }
 
