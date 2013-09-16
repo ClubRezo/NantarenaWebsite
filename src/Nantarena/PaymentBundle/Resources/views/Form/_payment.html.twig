@@ -6,11 +6,28 @@
         <p class="muted text-center">
             <small>{{ 'payment.payment_process.create.place.desc'|trans }}</small>
         </p>
-        <p>
-            {{ 'payment.payment_process.create.place.event'|trans({'%event%': entry.entryType.event.name})|raw }} <br>
-            {{ 'payment.payment_process.create.place.status'|trans({'%status%': entry.entryType.name})|raw }} <br>
-            {{ 'payment.payment_process.create.place.prix'|trans({'%prix%': entry.entryType.price})|raw }}
-        </p>
+
+        <table class="table" data-sort="1" data-perpage="50">
+            <thead>
+            <tr>
+                <th>{{ 'payment.payment_process.create.place.event'|trans }}</th>
+                <th>{{ 'payment.payment_process.create.place.status'|trans }}</th>
+                <th>{{ 'payment.payment_process.create.place.price'|trans }}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>{{ entry.entryType.event.name }}</td>
+                    <td>
+                        {{ entry.entryType.name }}
+                    </td>
+                    <td>
+                        {{ entry.entryType.price }}€
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <h2>{{ 'payment.payment_process.create.option.title'|trans }}</h2>
         <p class="muted text-center">
