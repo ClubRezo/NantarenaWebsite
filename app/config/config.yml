@@ -137,4 +137,4 @@ nantarena_payment:
             log_enable: true
             log_file: %kernel.root_dir%/logs/PayPal.log
             # FINE(max), INFO, WARN or ERROR(min)
-            log_level: FINE
+            log_level: INFO

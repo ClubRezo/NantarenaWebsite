@@ -66,19 +66,21 @@ class PaymentProcessController extends Controller
         // Get partners
         $userList = array();
         $userLabel = array();
+        // Get all user teams
         foreach ($user->getTeams() as $team) {
+            // in the current event
             if ($team->getEvent() === $event) {
+                // for each person
                 foreach ($team->getMembers() as $member) {
                     if ($member !== $user) {
                         if (!in_array($member, $userList)) {
-
+                            // Get entry
                             $partnerEntry = null;
                             $member->hasEntry($event, $partnerEntry);
 
                             if ($partnerEntry) {
-
+                                // Check payment
                                 $validTransaction = $repository->findValidPayment($partnerEntry);
-
                                 if (!$validTransaction) {
                                     $label = $member->getUsername() . ' - ' . $partnerEntry->getEntryType()->getName() . ' - ' . $partnerEntry->getEntryType()->getPrice() . '€';
                                     array_push($userList, $member);
@@ -91,6 +93,7 @@ class PaymentProcessController extends Controller
             }
         }
 
+        // Create the choice list interface
         if (count($userList) > 0) {
             $userAndLabel = new ChoiceList($userList, $userLabel, array());
             $isPartner = true;
@@ -98,8 +101,6 @@ class PaymentProcessController extends Controller
             $userAndLabel = null;
             $isPartner = false;
         }
-
-        
 
         $model = new PaymentModel();
         $form = $this->createForm(new PaymentType(), $model, array(
@@ -110,8 +111,10 @@ class PaymentProcessController extends Controller
 
         $form->handleRequest($request);
 
+
         if ($form->isValid()) {
 
+            // Payment and transaction creation
             $now = new \DateTime();
 
             $paypalPayment = new PaypalPayment();
@@ -134,23 +137,25 @@ class PaymentProcessController extends Controller
             ;
             array_push($allTransactions, $transaction);
 
-
             // partners transaction
-            foreach ($model->getPartners() as $partner) {
-                $entry = null;
-                $partner->hasEntry($event, $entry);
-                if ($entry) {
-                    $transaction = new Transaction();
-                    $transaction
-                        ->setPrice($entry->getEntryType()->getPrice())
-                        ->setUser($partner)
-                        ->setEvent($event)
-                        ->setPayment($paypalPayment)
-                    ;
-                    array_push($allTransactions, $transaction);
+            $listPartners = $model->getPartners();
+            if (!empty($listPartners)) {
+                foreach ($model->getPartners() as $partner) {
+                    $entry = null;
+                    $partner->hasEntry($event, $entry);
+                    if ($entry) {
+                        $transaction = new Transaction();
+                        $transaction
+                            ->setPrice($entry->getEntryType()->getPrice())
+                            ->setUser($partner)
+                            ->setEvent($event)
+                            ->setPayment($paypalPayment)
+                        ;
+                        array_push($allTransactions, $transaction);
+                    }
                 }
             }
-
+            
             // jump paypal system if the amout is too low
             $total = 0.00;
             foreach ($allTransactions as $transaction) {
@@ -164,6 +169,7 @@ class PaymentProcessController extends Controller
                 ;
             }
 
+            // Push in Database
             $validator = $this->container->get('validator');
 
             $em = $this->getDoctrine()->getManager();
@@ -402,6 +408,8 @@ class PaymentProcessController extends Controller
                 $paypalPayment->setState($payment->getState());
             }
 
+            $this->get('logger')->info('PAYPAL : ' . $this->getUser()->getUsername() . ' pays ' . strval($transaction->getPayment()->getAmount()) . '€ for ' . strval(count($transaction->getPayment()->getTransactions())) . ' people');
+
             $em = $this->getDoctrine()->getManager();
             $paypalPayment->setValid(true);
             $em->flush();
@@ -538,9 +546,6 @@ class PaymentProcessController extends Controller
             return null;
         }
 
-        // $this->get('logger')->info('');
-        // $this->get('logger')->err('');
-
         $repository = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:Transaction');
         $transaction = $repository->findOneByEntry($entry);
 
@@ -606,7 +611,7 @@ class PaymentProcessController extends Controller
         // Get associated entry
         $entry = null;
         if (!$user->hasEntry($event, $entry)) {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.index.flash_error_signup'));
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.event_signup'));
             return false;
         }
 

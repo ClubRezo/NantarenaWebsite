@@ -120,9 +120,3 @@ payment:
             time_error: 'Un paiement est en cours, si cette erreur apparait encore dans 15 min, contactez un admin'
             coop: 'Votre coéquipier %user% est en train de payer votre place.'
             time: 'Sa session expire dans %min% minutes et %sec% secondes'
-
-
-    index:
-        flash_error_connection: 'Vous devez être connecté'
-        flash_error_signup: 'Vous n''êtes pas inscrit à cet événement !'
-        flash_error_running: 'La transaction en cours a été supprimé !'

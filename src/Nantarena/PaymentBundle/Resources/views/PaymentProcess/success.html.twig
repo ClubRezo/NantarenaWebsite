@@ -34,7 +34,11 @@
                 {% endif %}
                     <td>{{ ptransaction.user.username }}</td>
                     <td>
-                        status
+                        {% if ptransaction.getentry is empty %}
+                        -
+                        {% else %}
+                        {{ ptransaction.getentry.entrytype.name }}
+                        {% endif %}
                     </td>
                     <td>
                         {{ ptransaction.price }}€
