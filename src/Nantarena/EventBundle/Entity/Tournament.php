@@ -67,6 +67,10 @@ class Tournament
      */
     private $exclusive;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Nantarena\EventBundle\Entity\Team", mappedBy="tournaments")
+     */
+    private $teams;
 
     /**
      * Get id

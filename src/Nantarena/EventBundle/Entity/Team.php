@@ -10,6 +10,7 @@ use Nantarena\EventBundle\Validator\Constraints\TeamNameConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamTagConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamCreatorConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamMembersConstraint;
+use Nantarena\EventBundle\Validator\Constraints\TeamMembersTournamentsConstraint;
 
 
 /**
@@ -20,6 +21,7 @@ use Nantarena\EventBundle\Validator\Constraints\TeamMembersConstraint;
  * @TeamNameConstraint(message="event.teams.unique.name")
  * @TeamTagConstraint(message="event.teams.unique.tag")
  * @TeamCreatorConstraint(message="event.teams.creator")
+ * @TeamMembersTournamentsConstraint(message="event.teams.members.tournaments")
  */
 class Team
 {
@@ -88,7 +90,7 @@ class Team
     private $members;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Nantarena\EventBundle\Entity\Tournament")
+     * @ORM\ManyToMany(targetEntity="Nantarena\EventBundle\Entity\Tournament", inversedBy="teams")
      * @ORM\JoinTable(name="event_team_tournaments")
      */
     private $tournaments;
