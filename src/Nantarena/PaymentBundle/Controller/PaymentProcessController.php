@@ -151,8 +151,6 @@ class PaymentProcessController extends Controller
                 }
             }
 
-
-
             // jump paypal system if the amout is too low
             $total = 0.00;
             foreach ($allTransactions as $transaction) {
@@ -165,8 +163,6 @@ class PaymentProcessController extends Controller
                     ->setPayerId('-')
                 ;
             }
-
-
 
             $validator = $this->container->get('validator');
 
@@ -198,12 +194,12 @@ class PaymentProcessController extends Controller
                     return $this->redirect($this->generateUrl('nantarena_user_profile'));
                 } else {
                     // throw $e;
-                    $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD ('.$e->getMessage().')');
+                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
                     return $this->redirect($this->generateUrl('nantarena_user_profile'));
                 }
             }
 
-            // $this->get('session')->getFlashBag()->add('success', 'Une nouvelle transaction a été créée');
+            // New transaction have been created
 
             // Jump to success controller if payment is lower than minimal allowed paypal payment
             if ($total > $this->container->getParameter('nantarena_payment.payment_min_euro')) {
@@ -261,11 +257,7 @@ class PaymentProcessController extends Controller
         // get associated entry
         $entry = null;
         $event = $transaction->getEvent();
-        if (!$user->hasEntry($event, $entry))
-        {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.index.flash_error_signup'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
-        }
+        $user->hasEntry($event, $entry);
 
         try {
             // Create paypal payment approval system
@@ -280,11 +272,9 @@ class PaymentProcessController extends Controller
                 array_push($items, $item);
             }
 
-            
-
             $payment = $paypal->paypalPaymentApproval(
                 $total,
-                'Paiement de l\'entrée à l\'évènement '.$event->getName(),
+                $event->getName(),
                 $items,
                 $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', 
                     array('state' => 'success', 'slug' => $event->getSlug()), true),
@@ -301,22 +291,23 @@ class PaymentProcessController extends Controller
                 $paypalPayment->setPaymentID($payment->getId());
                 $paypalPayment->setState($payment->getState());
                 $em->flush();
-            } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
-            }
 
-            if (!empty($redirectUrl)) {
-                return $this->redirect($redirectUrl);
-            } else {
-                $this->get('session')->getFlashBag()->add('error', 'Quelque chose ne s\'est pas bien passé');
+                if (!empty($redirectUrl)) {
+                    return $this->redirect($redirectUrl);
+                } else {
+                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
+                    return $this->redirect($this->generateUrl('nantarena_user_profile'));
+                }
+
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
                 return $this->redirect($this->generateUrl('nantarena_user_profile'));
             }
 
         } catch (\Exception $ex) {
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
-                $this->get('session')->getFlashBag()->add('error', 'Un problème a été renconté avec paypal (' . $res . ')');
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
@@ -346,7 +337,7 @@ class PaymentProcessController extends Controller
                 $paypalPayment->setPayerId($request->query->get('PayerID'));
                 $em->flush();
             } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
                 return $this->redirect($this->generateUrl('nantarena_user_profile'));
             }
 
@@ -355,10 +346,10 @@ class PaymentProcessController extends Controller
             
             $this->removePayment($paypalPayment);
 
-            $this->get('session')->getFlashBag()->add('error', "La transaction a été annulée");
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.cancel'));
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', "Un problème est survenu");
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         }
     }
@@ -411,16 +402,15 @@ class PaymentProcessController extends Controller
                 $paypalPayment->setState($payment->getState());
             }
 
-
             $em = $this->getDoctrine()->getManager();
             $paypalPayment->setValid(true);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Le paiement s\'est bien déroulé - Merci');
+            $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.payment_process.message.payment'));
 
         } catch (\Exception $ex) {
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
-                $this->get('session')->getFlashBag()->add('error', 'Un problème a été renconté avec paypal (' . $res . ')');
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
@@ -447,7 +437,7 @@ class PaymentProcessController extends Controller
             
             $this->removePayment($paypalPayment);
 
-            $this->get('session')->getFlashBag()->add('error', "La transaction a été annulée");
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.cancel'));
             return $this->redirect($this->generateUrl('nantarena_user_profile'));
         }
     }
@@ -469,10 +459,10 @@ class PaymentProcessController extends Controller
             if (!empty($paymentId)
                 || !empty($paymentStatus)
                 || !empty($payerId)) {
-                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.bad_step'));
                 return null;
             } elseif ($paypalPayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
-                $this->get('session')->getFlashBag()->add('error', 'Le montant est trop petit pour paypal');
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.small_amount'));
                 return null;
             } else {
                 return $transaction;
@@ -497,10 +487,10 @@ class PaymentProcessController extends Controller
             if (empty($paymentId)
                 || empty($paymentStatus)
                 || !empty($payerId)) {
-                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.bad_step'));
                 return null;
             } elseif ($paypalPayment->getAmount() <= $this->container->getParameter('nantarena_payment.payment_min_euro')) {
-                 $this->get('session')->getFlashBag()->add('error', 'Le montant est trop petit pour paypal');
+                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.small_amount'));
                 return null;
             } else {
                 return $transaction;
@@ -525,7 +515,7 @@ class PaymentProcessController extends Controller
             if (empty($paymentId)
                 || empty($paymentStatus)
                 || empty($payerId)) {
-                $this->get('session')->getFlashBag()->add('error', 'Les informations enregistrées ne correspondent pas à l\'étape de la procédure');
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.bad_step'));
                 return null;
             } else {
                 return $transaction;
@@ -544,37 +534,35 @@ class PaymentProcessController extends Controller
         // Get associated entry
         $entry = null;
         if (!$user->hasEntry($event, $entry)) {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.index.flash_error_signup'));
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.event_signup'));
             return null;
         }
 
-        // $logger = $this->get('logger');
-        // $logger->info('');
-        // $logger->err('');
+        // $this->get('logger')->info('');
+        // $this->get('logger')->err('');
 
         $repository = $this->getDoctrine()->getRepository('NantarenaPaymentBundle:Transaction');
-
         $transaction = $repository->findOneByEntry($entry);
 
         if (!$transaction) {
-            $this->get('session')->getFlashBag()->add('error', 'Auncune transaction en cours');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
             return null;
         }
 
         $payment = $transaction->getPayment();
 
         if ($payment->isValid()) {
-            $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà payé');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.payed'));
             return null;
         }
 
         if (!$payment instanceof PaypalPayment) {
-            $this->get('session')->getFlashBag()->add('error', 'Un paiement administrateur est en cours pour votre compte');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.pay_admin'));
             return null;
         }
 
         if ($payment->getUser() !== $user) {
-            $this->get('session')->getFlashBag()->add('error', 'Votre coéquipier '.$payment->getUser()->getUsername().' est en train de payer votre place.');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.coop', array('%user%' => $payment->getUser()->getUsername())));
             return null;
         }
 
@@ -583,7 +571,7 @@ class PaymentProcessController extends Controller
         $date = new \DateTime();
         $date->modify('-'.$minTime.' min');
         if ($date > $payment->getDate()) {
-            $this->get('session')->getFlashBag()->add('error', 'La session est expirée');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.expired'));
 
             $this->removePayment($payment);
             return null;
@@ -596,7 +584,7 @@ class PaymentProcessController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->flush();
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
             return null;
         }
 
@@ -605,6 +593,7 @@ class PaymentProcessController extends Controller
         
         return $transaction;
     }
+
 
     /**
      * Procédure de vérification et nottoyqge
@@ -624,7 +613,7 @@ class PaymentProcessController extends Controller
         // Check session
         $session = $this->get('session');
         if ($session->has('payProcess') && $session->get('payProcess')) {
-            $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà un paiement en cours sur votre compte.');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.pay_running'));
             return false;
         }
         $session->set('payProcess', false);
@@ -641,12 +630,12 @@ class PaymentProcessController extends Controller
         $payment = $transaction->getPayment();
 
         if ($payment->isValid()) {
-            $this->get('session')->getFlashBag()->add('error', 'Vous avez déjà payé');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.payed'));
             return false;
         }
 
         if (!$payment instanceof PaypalPayment) {
-            $this->get('session')->getFlashBag()->add('error', 'Un paiement administrateur est en cours pour votre compte');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.pay_admin'));
             return false;
         }
 
@@ -659,28 +648,26 @@ class PaymentProcessController extends Controller
             $date = new \DateTime();
             $date->modify('-'.$totalTime.' min');
             $interval = $payment->getDate()->diff($date);
-            $endDate = $interval->format('%i minutes et %s secondes');
+            $endDateMin = $interval->format('%i');
+            $endDateSec = $interval->format('%s');
 
             if ($date < $payment->getDate()) {
-                $this->get('session')->getFlashBag()->add('error', 'Votre coéquipier '.$payment->getUser()->getUsername().' est en train de payer votre place.');
-                $this->get('session')->getFlashBag()->add('error', 'Sa session expire dans '.$endDate);
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.coop', array('%user%' => $payment->getUser()->getUsername())));
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.time', array('%min%' => $endDateMin, '%sec%' => $endDateSec)));
 
                 return false;
-            } else {
-                // $this->get('session')->getFlashBag()->add('error', 'Votre coéquipier '.$payment->getUser()->getUsername().' avait commencé une transaction pour vous.');
             }
         }
 
         // clean transaction
         if (!$this->removePayment($payment)) {
-            $this->get('session')->getFlashBag()->add('error', 'Un paiement est en cours, si cette erreur apparait encore dans 15 min, contactez un admin');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.time_error'));
             return false;
         }
         
-        // $this->get('session')->getFlashBag()->add('success', 'La transaction non finie a été supprimée');
+        // Old transaction have been deleted
         return true;
     }
-
 
     private function removePayment(Payment $payment)
     {
@@ -692,7 +679,7 @@ class PaymentProcessController extends Controller
                 return true;
             }
         } catch (\Exception $e) {
-            $this->get('session')->getFlashBag()->add('error', 'Erreur de requête BDD');
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
         }
         return false;
     }

@@ -71,10 +71,10 @@ payment:
                     </ul>
             place:
                 title: 'Votre place'
-                desc: 'C''est votre entré pour notre évènement'
-                event: 'Vous allez payer pour l''événement <strong>%event%</strong>'
-                status: 'Vous avez le status <strong>%status%</strong>.'
-                prix: 'Le prix est de <strong>%prix%€</strong>.'
+                desc: 'C''est votre entré pour notre événement'
+                event: 'L''événement'
+                status: 'Votre status'
+                price: 'Le prix'
             option:
                 title: 'Vos coupons de réduction'
                 desc: 'Vous pouvez sélectionner 1 coupon personnel ou global'
@@ -90,7 +90,8 @@ payment:
             title: 'Accès à Paypal'
             explain: >
                     <ul>
-                        <li>Cette étape n'entraîne pas de paiement, elle nous donne votre accord effectuer le paiement</li>
+                        <li>La prochaine étape se déroule su Paypal</li>
+                        <li>Vous pourrez payer avec votre compte Paypal ou renseigner les informations pour votre carte bancaire</li>
                         <li>Un descriptif détaillé vous sera présenté avant de payer</li>
                     </ul>
             button: 'Accès à Paypal'
@@ -104,6 +105,21 @@ payment:
                 name: 'Nom'
                 status: 'Status'
                 price: 'Prix'
+        message:
+            base_error: 'Une erreur s''est produite durant la procédure'
+            event_signup: 'Vous n''êtes pas inscrit à cet événement'
+            paypal: 'Un problème a été rencontré avec Paypal'
+            cancel: 'La transaction a été supprimée'
+            payment: 'Le paiement s''est bien déroulé - Merci'
+            small_amount: 'Le montant est trop petit pour paypal'
+            bad_step: 'Oups ! Vous n''êtes pas sur la bonne étape'
+            payed: 'Vous avez déjà payé !'
+            pay_running: 'Vous avez déjà un paiement en cours sur votre compte'
+            pay_admin: 'Un paiement administrateur est en cours pour votre compte'
+            expired: 'La session est expirée'
+            time_error: 'Un paiement est en cours, si cette erreur apparait encore dans 15 min, contactez un admin'
+            coop: 'Votre coéquipier %user% est en train de payer votre place.'
+            time: 'Sa session expire dans %min% minutes et %sec% secondes'
 
 
     index:
