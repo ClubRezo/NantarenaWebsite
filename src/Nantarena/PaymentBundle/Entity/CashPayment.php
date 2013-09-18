@@ -15,7 +15,7 @@ class CashPayment extends Payment
 {
    /**
      * @ORM\ManyToOne(targetEntity="Nantarena\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="admin_id", referencedColumnName="id", nullable=true)
      */
     private $admin;
 

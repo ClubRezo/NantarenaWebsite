@@ -55,8 +55,9 @@ class Transaction
 
     /**
     * @ORM\ManyToOne(
-    *   targetEntity="Nantarena\PaymentBundle\Entity\Refund")
-    * @ORM\JoinColumn(name="refund_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+    *   targetEntity="Nantarena\PaymentBundle\Entity\Refund",
+    *   inversedBy="transactions")
+    * @ORM\JoinColumn(name="refund_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
     */
     private $refund;
 
@@ -66,6 +67,21 @@ class Transaction
      * @return boolean 
      */
     public function isRefund()
+    {
+        $refund = $this->refund;
+        if (!empty($refund)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * isValidRefund
+     *
+     * @return boolean 
+     */
+    public function isValidRefund()
     {
         $refund = $this->refund;
         if (!empty($refund) and $refund->isValid()) {

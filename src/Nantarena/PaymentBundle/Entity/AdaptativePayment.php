@@ -11,14 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  */
-class AdaptativePayment extends Payment
+class AdaptativePayment extends CashPayment
 {
-    /**
-     * @ORM\ManyToOne(targetEntity="Nantarena\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
-    private $admin;
-
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
@@ -46,28 +40,5 @@ class AdaptativePayment extends Payment
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set admin
-     *
-     * @param \Nantarena\UserBundle\Entity\User $admin
-     * @return AdaptativePayment
-     */
-    public function setAdmin(\Nantarena\UserBundle\Entity\User $admin)
-    {
-        $this->admin = $admin;
-    
-        return $this;
-    }
-
-    /**
-     * Get admin
-     *
-     * @return \Nantarena\UserBundle\Entity\User 
-     */
-    public function getAdmin()
-    {
-        return $this->admin;
     }
 }

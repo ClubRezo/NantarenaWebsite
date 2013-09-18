@@ -3,6 +3,7 @@
         {{ form_errors(form) }}
 
         {{ form_row(form.description, {'label': 'payment.admin.refund.form.description'|trans|colon}) }}
+        {{ form_row(form.valid, {'label': 'payment.admin.refund.form.valid'|trans|colon}) }}
 
         {{ form_row(form.submit, {'label': submit}) }}
     {{ form_end(form) }}

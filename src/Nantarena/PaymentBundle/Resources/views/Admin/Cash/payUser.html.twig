@@ -1,0 +1,15 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'payment.admin.payment.details.title'|trans %}
+{% block page_title 'payment.admin.payment.details.title'|trans %}
+
+{% block admin_content %}
+    <div class="text-align">
+        {% if user %}
+            {{ user.username }}
+        {% else %}
+            Aucun utilisateur sélectionné
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -133,11 +133,64 @@ class RefundController extends Controller
                     array('id' => $transaction->getPayment()->getId())));
         }
 
-
         return array(
             'transaction' => $transaction,
             'form' => $form->createView(),
         );
+    }
+
+    /**
+     * @Route("/modify/{id}", name="nantarena_admin_refund_modify")
+     * @Template()
+     */
+    public function modifyAction(Refund $refund, Request $request)
+    {
+        $form = $this->createForm(new RefundType(), $refund, array(
+            'action' => $this->generateUrl('nantarena_admin_refund_modify', array('id'=> $refund->getId())),
+            'method' => 'POST',
+        ));
+
+        $res = $refund->getPayment();
+        if (!empty($res)) {
+            $payId = $res->getId();
+        } else {
+            return array();
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.admin.refund.flash.modify_refund'));
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_details', array('id' => $payId)));
+        }
+
+        return array(
+            'id_payment' => $payId,
+            'form' => $form->createView()
+        );
+    }
+
+    /**
+     * @Route("/validate/{id}", name="nantarena_admin_refund_validate")
+     */
+    public function validateAction(Refund $refund)
+    {
+        $res = $refund->getPayment();
+        if (!empty($res)) {
+            $payId = $res->getId();
+        } else {
+            return array();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $refund->setValid(true);
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.admin.refund.flash.validate_refund'));
+        return $this->redirect($this->generateUrl('nantarena_admin_payment_details', array('id' => $payId)));
     }
 
 }

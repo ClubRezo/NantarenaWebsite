@@ -18,6 +18,10 @@ class AdminController extends Controller implements DashboardInterface
                     'url' => $this->generateUrl('nantarena_admin_payment_list'),
                     'role' => 'ROLE_ADMIN'
                 ),
+                $translator->trans('payment.admin.dashboard.transaction_management') => array(
+                    'url' => $this->generateUrl('nantarena_admin_transaction_list'),
+                    'role' => 'ROLE_ADMIN'
+                ),
                 $translator->trans('payment.admin.dashboard.paypal_management') => array(
                     'url' => $this->generateUrl('nantarena_admin_paypal_list'),
                     'role' => 'ROLE_ADMIN'

@@ -199,7 +199,7 @@ class PaymentProcessController extends Controller
                 if ($e instanceof ConflictException) {
                     return $this->redirect($this->generateUrl('nantarena_user_profile'));
                 } else {
-                    // throw $e;
+                    throw $e;
                     $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
                     return $this->redirect($this->generateUrl('nantarena_user_profile'));
                 }

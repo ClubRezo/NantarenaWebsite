@@ -3,8 +3,10 @@ payment:
     admin:
         dashboard:
             title: 'Gestion des paiements'
-            payment_management: 'Gestion des paiements'
-            paypal_management: 'Gestion de paypal'
+            payment_management: 'Liste des paiements'
+            transaction_management: 'Liste des transactions'
+            user_management: 'Liste des participants à un événement'
+            paypal_management: 'Gestion des transactions temporaires paypal'
             refund_management: 'Liste des remboursements'
         paypal:
             list:
@@ -13,17 +15,19 @@ payment:
             list:
                 title: 'Liste des paiements effectués'
                 return: 'Retour sur la liste des paiements'
+                return_trans: 'Retour sur la liste des transactions'
             details:
                 title: 'Détail du paiement'
                 return: 'Retour sur la description du paiement'
-                num: 'Paiement n°%num%'
-                user: 'Le paiement à été effectué par %user%'
-                date: 'Le %date%'
-                amount: 'Le montant est de %amount%€'
-                number: 'Le paiement concerne %number% personne(s)'
+                num: 'Paiement n°<strong>%num%</strong>'
+                user: 'Le paiement à été effectué par <strong>%user%</strong>'
+                date: 'Le <strong>%date%</strong>'
+                amount: 'Le montant est de <strong>%amount%€</strong>'
+                number: 'Le paiement concerne <strong>%number%</strong> personne(s)'
                 list:
                     title: 'Liste des transactions associées'
                     th_user: 'Participant'
+                    th_status: 'Status'
                     th_price: 'Prix'
                     th_refund: 'Info remboursement'
         refund:
@@ -31,15 +35,20 @@ payment:
                 title: 'Liste des remboursements effectués'
             payment:
                 title: 'Rembourser un paiement complet'
-                btn: 'Remboursement paiement'
+                btn: 'Remboursement complet du paiement'
             transaction:
                 title: 'Rembourser une partie du paiement'
-                btn: 'Remboursement transaction'
+                btn: 'Remboursement'
             form:
                 submit: 'Rembourser'
                 description: 'Explication'
+                valid: 'Validé'
+            modify:
+                submit: 'Modifier'
             flash:
                 pay_refund: 'Le paiement est remboursé'
+                modify_refund: 'Le remboursement a été modifié'
+                validate_refund: 'Le remboursement à été validé'
                 no_pay: 'Pas de paiement correspondant'
                 no_trans: 'Pas de transaction correspondante'
                 is_refund: 'Le remboursement de la transation à déjà été fait'
@@ -71,7 +80,7 @@ payment:
                     </ul>
             place:
                 title: 'Votre place'
-                desc: 'C''est votre entré pour notre événement'
+                desc: 'C''est votre entrée pour notre événement'
                 event: 'L''événement'
                 status: 'Votre status'
                 price: 'Le prix'
@@ -85,7 +94,7 @@ payment:
                 label: 'Coéquipier(s)'
                 no_partner: 'Pas de partenaires non payés'
             form:
-                submit: 'Valider le formulaire'
+                submit: 'Continuer'
         paypal:
             title: 'Accès à Paypal'
             explain: >
