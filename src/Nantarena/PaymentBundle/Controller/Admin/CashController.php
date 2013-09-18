@@ -30,11 +30,13 @@ use Nantarena\UserBundle\Entity\User;
 class CashController extends Controller
 {
     /**
-     * @Route("/list", name="nantarena_admin_payment_list")
+     * @Route("/user/{id}", name="nantarena_admin_cashpayment_user")
      * @Template()
      */
     public function payUserAction(User $user)
     {
-        return array();
+        return array(
+        	'user' => $user,
+        );
     }
 }

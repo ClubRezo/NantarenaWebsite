@@ -58,4 +58,18 @@ class TransactionRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findValidPaymentTransactionByEvent(Event $event)
+    {
+        $qb = $this->createQueryBuilder('t');
+        return $qb
+            ->join('t.payment', 'p')
+            ->addSelect('p')
+            ->where('t.event = :event')
+            ->andWhere($qb->expr()->eq('p.valid', true))
+            ->setParameter('event', $event)
+            ->orderBy('p.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

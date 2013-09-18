@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Payment
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Nantarena\PaymentBundle\Repository\PaymentRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="method", type="string")
  * @ORM\DiscriminatorMap({"classic" = "Payment", "paypal" = "PaypalPayment", "cash" = "CashPayment", "adaptative" = "AdaptativePayment"})
@@ -67,11 +67,11 @@ class Payment
      *
      * @return boolean 
      */
-    public function isRefund()
+    public function isValidRefund()
     {
         $toReturn = true;
         foreach ($this->transactions as $transaction) {
-            if (!$transaction->isRefund()) {
+            if (!$transaction->isValidRefund()) {
                 $toReturn = false;
                 break;
             }
@@ -90,6 +90,39 @@ class Payment
         }
         return round($total, 2);
     }
+
+    // "paypal" = "PaypalPayment", "cash" = "CashPayment", "adaptative" = "AdaptativePayment"})
+
+    /**
+     * Is Paypal
+     *
+     * @return boolean 
+     */
+    public function isPaypal()
+    {
+        return $this instanceof PaypalPayment;
+    }
+
+    /**
+     * Is Cash
+     *
+     * @return boolean 
+     */
+    public function isCash()
+    {
+        return $this instanceof CashPayment;
+    }
+
+    /**
+     * Is Adaptative
+     *
+     * @return boolean 
+     */
+    public function isAdaptative()
+    {
+        return $this instanceof AdaptativePayment;
+    }
+
 
     /**
      * Get id

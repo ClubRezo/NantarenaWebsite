@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Refund
  *
@@ -46,6 +48,16 @@ class Refund
     protected $description;
 
     /**
+     * @ORM\OneToMany(targetEntity="Nantarena\PaymentBundle\Entity\Transaction", mappedBy="refund", cascade={"persist"})
+     */
+    private $transactions;
+
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
+    }
+
+    /**
      * Is valid
      *
      * @return boolean 
@@ -53,6 +65,23 @@ class Refund
     public function isValid()
     {
         return $this->valid;
+    }
+
+    /**
+     * Get payment
+     *
+     * @return \Nantarena\PaymentBundle\Entity\Payment 
+     */
+    public function getPayment()
+    {
+        if (count($this->transactions) > 0) {
+            foreach ($this->transactions as $transaction) {
+                return $transaction->getPayment();
+            }
+        } else {
+            return null;
+        }
+        return $this->id;
     }
 
     /**
@@ -155,5 +184,38 @@ class Refund
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Add transactions
+     *
+     * @param \Nantarena\PaymentBundle\Entity\Transaction $transactions
+     * @return Refund
+     */
+    public function addTransaction(\Nantarena\PaymentBundle\Entity\Transaction $transactions)
+    {
+        $this->transactions[] = $transactions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove transactions
+     *
+     * @param \Nantarena\PaymentBundle\Entity\Transaction $transactions
+     */
+    public function removeTransaction(\Nantarena\PaymentBundle\Entity\Transaction $transactions)
+    {
+        $this->transactions->removeElement($transactions);
+    }
+
+    /**
+     * Get transactions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
     }
 }

@@ -12,6 +12,9 @@ class RefundType extends AbstractType
     {
         $builder
             ->add('description', 'textarea')
+            ->add('valid', 'checkbox', array(
+                'required'  => false,
+            ))
             ->add('submit', 'submit')
         ;
     }

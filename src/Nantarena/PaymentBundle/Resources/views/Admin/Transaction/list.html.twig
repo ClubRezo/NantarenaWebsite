@@ -1,0 +1,85 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'payment.admin.payment.list.title'|trans %}
+{% block page_title 'payment.admin.payment.list.title'|trans %}
+
+{% block admin_content %}
+
+
+
+    <div class="text-center">
+        {{ form_start(form) }}
+        {{ form_widget(form.event, {'attr': {'onchange':'this.form.submit()'} }) }}
+        {{ form_end(form) }}
+    </div>
+
+    <div class="span10">
+        <table class="table sortable filterable" data-perpage="50">
+            <thead>
+            <tr>
+                <th data-filter="ignore" class="tiny">#</th>
+                <th>Place</th>
+                <th data-filter="date">Date</th>
+                <th>Prix</th>
+                <th>Status</th>
+                <th>Méthode</th>
+                <th class="mini"></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for transaction in ltransaction %}
+                {% if transaction.refund %}
+                    {% if transaction.refund.valid %}
+                    <tr class="error">
+                    {% else %}
+                    <tr class="warning">
+                    {% endif %}
+                {% else %}
+                <tr>
+                {% endif %}
+                    <td>{{ transaction.id }}</td>
+                    <td>
+                        {{ transaction.user.username }}
+                    </td>
+                    <td>
+                        {{ transaction.payment.date|date("d/m/Y H:i") }}
+                    </td>
+                    <td>
+                        {{ transaction.price|number_format(2, '.', ',') }}€
+                    </td>
+                    <td>
+                        {{ transaction.getentry.entrytype.name }}
+                    </td>
+                    <td>
+                        {% if transaction.payment.isPaypal %}
+                        paypal
+                        {% elseif transaction.payment.isCash %}
+                        liquide
+                        {% elseif transaction.payment.isAdaptative %}
+                        liquide
+                        {% else %}
+                        classique
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('nantarena_admin_payment_details', {'id': transaction.payment. id}) }}">
+                            <i class="icon-eye-open"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+            <tbody class="empty">
+                <tr>
+                    <td colspan="10">
+                        <p class="text-center">Aucun paiement</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination pagination-centered"><ul></ul></div>
+    </div>
+{% endblock %}
