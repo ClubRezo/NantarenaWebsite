@@ -53,12 +53,26 @@
                     </td>
                     <td>{{ entry.entryType.name }}</td>
                     <td>
-                        {#TODO#}
-                        {#<a href="#">Créer une équipe</a><br />#}
-                        {#<a href="#">Rejoindre une équipe</a><br />#}
+                        {% for team in entry.teams %}
+                            <a href="#">
+                                <abbr title="[{{ team.tag }}]" data-placement="right">
+                                    {{ team.name }}
+                                </abbr>
+                            </a>
+                            {% if not loop.last %}<br />{% endif %}
+                        {% else %}
+                            <a href="#">Créer une équipe</a>
+                            <br />
+                            <a href="#">Rejoindre une équipe</a>
+                        {% endfor %}
                     </td>
                     <td>
-                        {#TODO#}--
+                        {% for tournament in entry.tournaments %}
+                            {{ tournament.game.name }}
+                            {% if not loop.last %}<br />{% endif %}
+                        {% else %}
+                            --
+                        {% endfor %}
                     </td>
                     <td>
                         {#TODO#}<a href="#" class="btn btn-success">Payer</a>
@@ -105,21 +119,25 @@
                         </td>
                         <td>{{ entry.entryType.name }}</td>
                         <td>
-                            {# TODO #} {# <a href="#" class="ppover"#}
-                               {#data-html="true"#}
-                               {#data-title="<strong>Equipe *</strong>"#}
-                               {#data-content="#}
-                                {#<strong>Manager :</strong> *<br />#}
-                                {#<strong>Joueurs :</strong>#}
-                                {#<ul>#}
-                                    {#<li>*</li>#}
-                                    {#<li>*</li>#}
-                                {#</ul>#}
-                           {#">#}
-                                {#Jabbawockeez#}
-                            {#</a>#}
+                            {% for team in entry.teams %}
+                                <a href="#">
+                                    <abbr title="[{{ team.tag }}]" data-placement="right">
+                                        {{ team.name }}
+                                    </abbr>
+                                </a>
+                                {% if not loop.last %}<br />{% endif %}
+                            {% else %}
+                                --
+                            {% endfor %}
                         </td>
-                        <td>{# TODO #} {# League of Legends (3) #}</td>
+                        <td>
+                            {% for tournament in entry.tournaments %}
+                                {{ tournament.game.name }}
+                                {% if not loop.last %}<br />{% endif %}
+                            {% else %}
+                                --
+                            {% endfor %}
+                        </td>
                         <td>
                             {# TODO
                             <abbr title="le 10/03/2013 - 18€ - Par * - Pour *, * et vous" data-placement="right">#}
