@@ -22,12 +22,12 @@ use Nantarena\PaymentBundle\Form\Type\RefundType;
  *
  * @package Nantarena\PaymentBundle\Controller\Admin
  *
- * @Route("/admin/refund")
+ * @Route("/admin/payment/refund")
  */
 class RefundController extends Controller
 {
     /**
-     * @Route("/list", name="nantarena_admin_refund_list")
+     * @Route("/list", name="nantarena_admin_payment_refund_list")
      * @Template()
      */
     public function listAction()
@@ -41,14 +41,14 @@ class RefundController extends Controller
     }
 
     /**
-     * @Route("/payment/{id}", name="nantarena_admin_refund_payment")
+     * @Route("/payment/{id}", name="nantarena_admin_payment_refund_payment")
      * @Template()
      */
     public function paymentAction(Payment $payment, Request $request)
     {
         if (!$payment) {
             $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.admin.refund.flash.no_pay'));
-            return $this->redirect($this->generateUrl('nantarena_admin_payment_list'));
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_refund_list'));
         }
 
         $refund = new Refund();
@@ -59,7 +59,7 @@ class RefundController extends Controller
         ;
 
         $form = $this->createForm(new RefundType(), $refund, array(
-            'action' => $this->generateUrl('nantarena_admin_refund_payment', array('id'=> $payment->getId())),
+            'action' => $this->generateUrl('nantarena_admin_payment_refund_payment', array('id'=> $payment->getId())),
             'method' => 'POST',
         ));
 
@@ -78,7 +78,7 @@ class RefundController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.admin.refund.flash.pay_refund'));
-            return $this->redirect($this->generateUrl('nantarena_admin_payment_details', 
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_payment_details', 
                     array('id' => $payment->getId())));
         }
 
@@ -89,20 +89,20 @@ class RefundController extends Controller
     }
 
     /**
-     * @Route("/transaction/{id}", name="nantarena_admin_refund_transaction")
+     * @Route("/transaction/{id}", name="nantarena_admin_payment_refund_transaction")
      * @Template()
      */
     public function transactionAction(Transaction $transaction, Request $request)
     {
         if (!$transaction) {
             $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.admin.refund.flash.no_trans'));
-            return $this->redirect($this->generateUrl('nantarena_admin_payment_list'));
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_payment_list'));
         }
 
         $currRefund = $transaction->getRefund();
         if (!empty($currRefund)) {
              $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.admin.refund.flash.is_refund'));
-            return $this->redirect($this->generateUrl('nantarena_admin_payment_details', 
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_payment_details', 
                     array('id' => $transaction->getPayment()->getId())));
         }
 
@@ -114,7 +114,7 @@ class RefundController extends Controller
         ;
 
         $form = $this->createForm(new RefundType(), $refund, array(
-            'action' => $this->generateUrl('nantarena_admin_refund_transaction', array('id'=> $transaction->getId())),
+            'action' => $this->generateUrl('nantarena_admin_payment_refund_transaction', array('id'=> $transaction->getId())),
             'method' => 'POST',
         ));
 
@@ -129,7 +129,7 @@ class RefundController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.admin.refund.flash.pay_refund'));
-            return $this->redirect($this->generateUrl('nantarena_admin_payment_details', 
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_payment_details', 
                     array('id' => $transaction->getPayment()->getId())));
         }
 
@@ -140,13 +140,13 @@ class RefundController extends Controller
     }
 
     /**
-     * @Route("/modify/{id}", name="nantarena_admin_refund_modify")
+     * @Route("/modify/{id}", name="nantarena_admin_payment_refund_modify")
      * @Template()
      */
     public function modifyAction(Refund $refund, Request $request)
     {
         $form = $this->createForm(new RefundType(), $refund, array(
-            'action' => $this->generateUrl('nantarena_admin_refund_modify', array('id'=> $refund->getId())),
+            'action' => $this->generateUrl('nantarena_admin_payment_refund_modify', array('id'=> $refund->getId())),
             'method' => 'POST',
         ));
 
@@ -164,7 +164,7 @@ class RefundController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.admin.refund.flash.modify_refund'));
-            return $this->redirect($this->generateUrl('nantarena_admin_payment_details', array('id' => $payId)));
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_payment_details', array('id' => $payId)));
         }
 
         return array(
@@ -174,7 +174,7 @@ class RefundController extends Controller
     }
 
     /**
-     * @Route("/validate/{id}", name="nantarena_admin_refund_validate")
+     * @Route("/validate/{id}", name="nantarena_admin_payment_refund_validate")
      */
     public function validateAction(Refund $refund)
     {
@@ -190,7 +190,7 @@ class RefundController extends Controller
         $em->flush();
 
         $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.admin.refund.flash.validate_refund'));
-        return $this->redirect($this->generateUrl('nantarena_admin_payment_details', array('id' => $payId)));
+        return $this->redirect($this->generateUrl('nantarena_admin_payment_payment_details', array('id' => $payId)));
     }
 
 }

@@ -6,7 +6,7 @@
 {% block admin_content %}
 	<div class="span10">
         <div class="text-center">
-            <a class="btn" href="{{ path('nantarena_admin_paypal_clean') }}">Nettoyage temps expiré</a>
+            <a class="btn" href="{{ path('nantarena_admin_payment_paypal_clean') }}">Nettoyage temps expiré</a>
         </div>
 
         <table class="table sortable filterable" data-sort="2" data-perpage="50">
@@ -38,7 +38,7 @@
                         {{ paypal.transactions|length }}
                     </td>
                     <td>
-						<a href="{{ path('nantarena_admin_payment_details', {'id': paypal.id}) }}">
+						<a href="{{ path('nantarena_admin_payment_payment_details', {'id': paypal.id}) }}">
                             <i class="icon-eye-open"></i>
                         </a>
                     </td>

@@ -13,7 +13,7 @@
         {% if not payment.isValidRefund %}
         <div class="text-center">
             <p>
-                <a class="btn" href="{{ path('nantarena_admin_refund_payment', {'id': payment.id}) }}">{{ 'payment.admin.refund.payment.btn'|trans }}</a>
+                <a class="btn" href="{{ path('nantarena_admin_payment_refund_payment', {'id': payment.id}) }}">{{ 'payment.admin.refund.payment.btn'|trans }}</a>
             </p>
         </div>
         {% endif %}
@@ -68,16 +68,16 @@
                         </td>
                         <td>
                             {% if transaction.refund %}
-                                <a href="{{ path('nantarena_admin_refund_modify', {'id': transaction.refund.id}) }}">
+                                <a href="{{ path('nantarena_admin_payment_refund_modify', {'id': transaction.refund.id}) }}">
                                     <i class="icon-wrench"></i>
                                 </a>
                                 {% if not transaction.refund.valid %}
-                                    <a href="{{ path('nantarena_admin_refund_validate', {'id': transaction.refund.id}) }}">
+                                    <a href="{{ path('nantarena_admin_payment_refund_validate', {'id': transaction.refund.id}) }}">
                                         <i class="icon-ok"></i>
                                     </a>
                                 {% endif %}
                             {% else %}
-                                <a href="{{ path('nantarena_admin_refund_transaction', {'id': transaction.id}) }}">
+                                <a href="{{ path('nantarena_admin_payment_refund_transaction', {'id': transaction.id}) }}">
                                     <i class="icon-download-alt"></i>{{ 'payment.admin.refund.transaction.btn'|trans }}
                                 </a>
                             {% endif %}
@@ -89,10 +89,10 @@
 
             <div class="pagination pagination-centered"><ul></ul></div>
             <p class="text-center">
-                <a href="{{ path('nantarena_admin_payment_list') }}">{{ 'payment.admin.payment.list.return'|trans }}</a>
+                <a href="{{ path('nantarena_admin_payment_payment_list') }}">{{ 'payment.admin.payment.list.return'|trans }}</a>
             </p>
             <p class="text-center">
-                <a href="{{ path('nantarena_admin_transaction_list') }}">{{ 'payment.admin.payment.list.return_trans'|trans }}</a>
+                <a href="{{ path('nantarena_admin_payment_transaction_list') }}">{{ 'payment.admin.payment.list.return_trans'|trans }}</a>
             </p>
         </div>
     </div>

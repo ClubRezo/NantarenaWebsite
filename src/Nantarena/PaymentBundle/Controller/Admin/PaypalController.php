@@ -20,12 +20,12 @@ use Nantarena\PaymentBundle\Entity\PaypalPayment;
  *
  * @package Nantarena\PaymentBundle\Controller\Admin
  *
- * @Route("/admin/paypal")
+ * @Route("/admin/payment/paypal")
  */
 class PaypalController extends Controller
 {
     /**
-     * @Route("/list", name="nantarena_admin_paypal_list")
+     * @Route("/list", name="nantarena_admin_payment_paypal_list")
      * @Template()
      */
     public function listAction()
@@ -40,7 +40,7 @@ class PaypalController extends Controller
     }
 
     /**
-     * @Route("/clean-outdated", name="nantarena_admin_paypal_clean")
+     * @Route("/clean-outdated", name="nantarena_admin_payment_paypal_clean")
      */
     public function cleanOutdatedAction()
     {
