@@ -25,12 +25,12 @@ use Nantarena\UserBundle\Entity\User;
  *
  * @package Nantarena\PaymentBundle\Controller\Admin
  *
- * @Route("/admin/cash")
+ * @Route("/admin/payment/cash")
  */
 class CashController extends Controller
 {
     /**
-     * @Route("/user/{id}", name="nantarena_admin_cashpayment_user")
+     * @Route("/user/{id}", name="nantarena_admin_payment_cash_user")
      * @Template()
      */
     public function payUserAction(User $user)

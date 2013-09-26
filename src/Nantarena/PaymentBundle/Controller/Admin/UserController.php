@@ -15,20 +15,22 @@ use Nantarena\EventBundle\Entity\Event;
 use Nantarena\EventBundle\Entity\Entry;
 
 use Nantarena\PaymentBundle\Entity\Payment;
-use Nantarena\PaymentBundle\Entity\Transaction;
+use Nantarena\PaymentBundle\Entity\CashPayment;
+
+use Nantarena\UserBundle\Entity\User;
 
 
 /**
- * Class TransactionController
+ * Class UserController
  *
  * @package Nantarena\PaymentBundle\Controller\Admin
  *
- * @Route("/admin/payment/transaction")
+ * @Route("/admin/payment/user")
  */
-class TransactionController extends Controller
+class UserController extends Controller
 {
     /**
-     * @Route("/list/{slug}", name="nantarena_admin_payment_transaction_list", defaults={"slug" = null})
+     * @Route("/list", name="nantarena_admin_payment_user_list")
      * @Template()
      */
     public function listAction(Request $request, Event $event = null)
@@ -42,18 +44,17 @@ class TransactionController extends Controller
 
         if ($form->isValid()) {
             $e = $form->get('event')->getData();
-            return $this->redirect($this->generateUrl('nantarena_admin_payment_transaction_list', array(
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_user_list', array(
                 'slug' => $e->getSlug()
             )));
         }
 
-
         $repository = $this->getDoctrine()
-            ->getRepository('NantarenaPaymentBundle:Transaction');
-        $ltransaction = $repository->findValidPaymentTransactionByEvent($event);
+            ->getRepository('NantarenaUserBundle:User');
+        $luser = $repository->findRegisteredEvent($event);
 
         return array(
-            'ltransaction' => $ltransaction,
+            'luser' => $luser,
             'event' => $event,
             'form' => $form->createView()
         );

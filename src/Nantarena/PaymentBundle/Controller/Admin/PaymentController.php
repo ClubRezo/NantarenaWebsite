@@ -22,12 +22,12 @@ use Nantarena\PaymentBundle\Entity\PaypalPayment;
  *
  * @package Nantarena\PaymentBundle\Controller\Admin
  *
- * @Route("/admin/payment")
+ * @Route("/admin/payment/payment")
  */
 class PaymentController extends Controller
 {
     /**
-     * @Route("/list/{slug}", name="nantarena_admin_payment_list", defaults={"slug" = null})
+     * @Route("/list/{slug}", name="nantarena_admin_payment_payment_list", defaults={"slug" = null})
      * @Template()
      */
     public function listAction(Request $request, Event $event = null)
@@ -41,7 +41,7 @@ class PaymentController extends Controller
 
         if ($form->isValid()) {
             $e = $form->get('event')->getData();
-            return $this->redirect($this->generateUrl('nantarena_admin_payment_list', array(
+            return $this->redirect($this->generateUrl('nantarena_admin_payment_payment_list', array(
                 'slug' => $e->getSlug()
             )));
         }
@@ -59,7 +59,7 @@ class PaymentController extends Controller
     }
 
      /**
-     * @Route("/details/{id}", name="nantarena_admin_payment_details")
+     * @Route("/details/{id}", name="nantarena_admin_payment_payment_details")
      * @Template()
      */
     public function detailsAction(Payment $payment)

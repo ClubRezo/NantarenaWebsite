@@ -1,7 +1,7 @@
 {% extends 'NantarenaAdminBundle::layout.html.twig' %}
 
-{% block title 'payment.admin.payment.list.title'|trans %}
-{% block page_title 'payment.admin.payment.list.title'|trans %}
+{% block title 'payment.admin.transaction.title'|trans %}
+{% block page_title 'payment.admin.transaction.title'|trans %}
 
 {% block admin_content %}
 
@@ -63,7 +63,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('nantarena_admin_payment_details', {'id': transaction.payment. id}) }}">
+                        <a href="{{ path('nantarena_admin_payment_payment_details', {'id': transaction.payment. id}) }}">
                             <i class="icon-eye-open"></i>
                         </a>
                     </td>

@@ -52,6 +52,12 @@ payment:
                 no_pay: 'Pas de paiement correspondant'
                 no_trans: 'Pas de transaction correspondante'
                 is_refund: 'Le remboursement de la transation à déjà été fait'
+        user:
+            title: 'Liste des participants'
+        cash:
+            title: 'Paiement en liquide'
+        transaction:
+            title: 'Liste des transactions'
 
     payment_process:
         bar:
