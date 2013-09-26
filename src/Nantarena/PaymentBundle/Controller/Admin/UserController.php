@@ -30,7 +30,7 @@ use Nantarena\UserBundle\Entity\User;
 class UserController extends Controller
 {
     /**
-     * @Route("/list", name="nantarena_admin_payment_user_list")
+     * @Route("/list/{slug}", name="nantarena_admin_payment_user_list", defaults={"slug" = null})
      * @Template()
      */
     public function listAction(Request $request, Event $event = null)
