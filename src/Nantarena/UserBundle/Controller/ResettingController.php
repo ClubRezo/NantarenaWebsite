@@ -26,12 +26,12 @@ class ResettingController extends BaseController
         return parent::sendEmailAction($request);
     }
 
-    public function checkEmailAction()
+    public function checkEmailAction(Request $request)
     {
         if (null !== ($response = $this->anonymousOnlyFilter()))
             return $response;
 
-        return parent::checkEmailAction();
+        return parent::checkEmailAction($request);
     }
 
     public function resetAction(Request $request, $token)
