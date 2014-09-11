@@ -24,7 +24,7 @@
         <div class="row-fluid">
         {% if event.cover is not null %}
             <div class="span6 cover">
-                <img src="{{ imageLink(event.cover) }}" alt="{{ event.show.cover }}"/>
+                <img src="{{ imageLink(event.cover) }}" alt="{{ 'event.show.cover'|trans }}"/>
             </div>
             <div class="span6">
         {% else %}
