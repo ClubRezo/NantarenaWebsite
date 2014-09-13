@@ -5,7 +5,6 @@ namespace Nantarena\EventBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nantarena\EventBundle\Validator\Constraints\TeamNameConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamTagConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamCreatorConstraint;
@@ -90,16 +89,9 @@ class Team
     private $members;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Nantarena\EventBundle\Entity\Tournament", inversedBy="teams")
-     * @ORM\JoinTable(name="event_team_tournaments")
+     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Tournament", inversedBy="teams")
      */
-    private $tournaments;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Event")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", nullable=false)
-     */
-    private $event;
+    private $tournament;
 
     /**
      * Constructor
@@ -107,7 +99,6 @@ class Team
     public function __construct()
     {
         $this->members = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tournaments = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -293,64 +284,26 @@ class Team
     }
 
     /**
-     * Add tournaments
+     * get tournament
      *
-     * @param \Nantarena\EventBundle\Entity\Tournament $tournaments
+     * @return mixed
+     */
+    public function getTournament()
+    {
+        return $this->tournament;
+    }
+
+    /**
+     * Set tournament
+     *
+     * @param mixed $tournament
      * @return Team
      */
-    public function addTournament(\Nantarena\EventBundle\Entity\Tournament $tournaments)
+    public function setTournament(\Nantarena\EventBundle\Entity\Tournament $tournament)
     {
-        $this->tournaments[] = $tournaments;
-    
+        $this->tournament = $tournament;
+
         return $this;
     }
 
-    /**
-     * Remove tournaments
-     *
-     * @param \Nantarena\EventBundle\Entity\Tournament $tournaments
-     */
-    public function removeTournament(\Nantarena\EventBundle\Entity\Tournament $tournaments)
-    {
-        $this->tournaments->removeElement($tournaments);
-    }
-
-    /**
-     * Get tournaments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTournaments()
-    {
-        return $this->tournaments;
-    }
-
-    /**
-     * Set event
-     *
-     * @param \Nantarena\EventBundle\Entity\Event $event
-     * @return Team
-     */
-    public function setEvent(\Nantarena\EventBundle\Entity\Event $event)
-    {
-        $this->event = $event;
-    
-        return $this;
-    }
-
-    /**
-     * Get event
-     *
-     * @return \Nantarena\EventBundle\Entity\Event 
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    public function isValid()
-    {
-        # TODO
-        return false;
-    }
 }
