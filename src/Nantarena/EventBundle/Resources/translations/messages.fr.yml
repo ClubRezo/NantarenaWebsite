@@ -148,6 +148,7 @@ event:
             infos: 'Informations générales'
             tournaments: Tournois
             members: Composition
+            event: Evènement
 
         game:
             name: Nom
@@ -171,7 +172,8 @@ event:
 
         tournament:
             admin: Responsable
-            exclusive: 'Exclusif'
+            professional: Pro
+            price: Prix
             game: Jeu
             maxTeams: 'Nombre d''équipes maximal'
             startDate: 'Début du tournoi'

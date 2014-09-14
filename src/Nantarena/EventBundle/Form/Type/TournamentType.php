@@ -16,6 +16,17 @@ class TournamentType extends AbstractType
                 'class' => 'NantarenaEventBundle:Game',
                 'property' => 'name',
             ))
+            ->add('professional', 'checkbox', array(
+                'required' => false
+            ))
+            ->add('price', 'money')
+            ->add('maxTeams', 'integer', array(
+                'attr' => array('min' => 2)
+            ))
+            ->add('startDate', 'datetime', array(
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy HH:mm'
+            ))
             ->add('admin', 'entity', array(
                 'class' => 'NantarenaUserBundle:User',
                 'property' => 'username',
@@ -25,16 +36,6 @@ class TournamentType extends AbstractType
                         ->where('g.roles LIKE :role')
                         ->setParameter('role', '%ROLE_EVENT_TOURNAMENTS_MANAGER%');
                 },
-                'required' => false
-            ))
-            ->add('maxTeams', 'integer', array(
-                'attr' => array('min' => 2)
-            ))
-            ->add('startDate', 'datetime', array(
-                'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy HH:mm'
-            ))
-            ->add('exclusive', 'checkbox', array(
                 'required' => false
             ))
         ;

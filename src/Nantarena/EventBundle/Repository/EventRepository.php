@@ -15,8 +15,6 @@ class EventRepository extends EntityRepository
     public function findWithAll($id)
     {
         return $this->createQueryBuilder('e')
-            ->join('e.entryTypes', 'et')
-            ->addSelect('et')
             ->leftJoin('e.tournaments', 'to')
             ->addSelect('to')
             ->leftJoin('to.game', 'g')
@@ -36,8 +34,6 @@ class EventRepository extends EntityRepository
     public function findOneShow($slug)
     {
         return $this->createQueryBuilder('e')
-            ->join('e.entryTypes', 'et')
-            ->addSelect('et')
             ->leftJoin('e.tournaments', 'to')
             ->addSelect('to')
             ->leftJoin('to.game', 'g')
