@@ -79,8 +79,8 @@
                     </li>
                     <li>
                         <strong>Tarif :</strong>
-                        {% set minPrice = event.entryTypes|min('price').price %}
-                        {% set maxPrice = event.entryTypes|max('price').price %}
+                        {% set minPrice = event.tournaments|min('price').price %}
+                        {% set maxPrice = event.tournaments|max('price').price %}
 
                         {% if minPrice == maxPrice %}
                             {{ 'event.show.price.one'|trans({
@@ -120,6 +120,7 @@
                 <header>
                     <h3>
                         {{ tournament.game.name }}
+                        {% if tournament.professional %} {{ 'event.show.tournament.pro'|trans }} {% endif %}
                         <span>
                             {{ 'event.show.tournament.format'|trans({
                                 '%nb%': tournament.game.teamCapacity

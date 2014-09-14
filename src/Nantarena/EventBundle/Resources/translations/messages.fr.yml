@@ -241,6 +241,7 @@ event:
             capacity: '%capacity% équipes'
             format: '%nb%v%nb%'
             start: 'Début du tournoi'
+            pro: '(tournoi pro)'
 
             teams:
                 hide: 'Cacher les équipes'
