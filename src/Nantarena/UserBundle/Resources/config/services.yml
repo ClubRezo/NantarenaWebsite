@@ -13,7 +13,7 @@ services:
 
     nantarena_user.profile_listener:
         class: Nantarena\UserBundle\EventListener\ProfileListener
-        arguments: [@router]
+        arguments: [@router, @session, @validator, @translator]
         tags:
             - { name: kernel.event_subscriber }
 

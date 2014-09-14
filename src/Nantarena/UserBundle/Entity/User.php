@@ -54,6 +54,7 @@ class User extends BaseUser
      * @var \DateTime
      * @ORM\Column(type="datetime", name="birthdate", nullable=true)
      * @Assert\DateTime(groups={"identity"})
+     * @Assert\NotBlank(groups={"identity"})
      */
     protected $birthdate;
 
