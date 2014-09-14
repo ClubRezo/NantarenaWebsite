@@ -124,11 +124,6 @@ event:
         title: 'Annuler votre participation à l''évènement'
 
     form:
-        entrytype:
-            add: 'Ajouter un type d''inscription'
-            name: 'Type d''inscription'
-            price: Prix
-
         event:
             autorization: 'Autorisation parentale'
             autorization_empty: 'Aucune autorisation fournie'
@@ -186,7 +181,7 @@ event:
 
     participate:
         autorization: 'Vous serez mineur au moment de l''évènement. Une<br /><a href="%link%">autorisation</a><br />signée de la part de vos représentants légaux est <strong>obligatoire</strong> et vous sera<br />demandée à votre arrivée.'
-        choose: 'Veuillez choisir votre type d''inscription'
+        choose: 'Veuillez choisir votre tournoi'
 
         confirm:
             many: Choisir
@@ -210,8 +205,8 @@ event:
             no_next: 'Vous n''avez pas prévu de participer à de futurs évènements.'
             old_events: 'Mes précédents évènements'
             payment: Paiement
-            team: Equipes
-            tournament: Tournois
+            team: Equipe
+            tournament: Tournoi
             type: Type
 
     show:

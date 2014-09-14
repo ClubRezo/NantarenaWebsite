@@ -119,8 +119,8 @@ class EventController extends Controller
         // Creating the form
         $form = $this->createFormBuilder();
         
-        foreach($event->getEntryTypes() as $type) {
-            $form->add('entrytype-'.$type->getId(), 'submit');
+        foreach($event->getTournaments() as $tournament) {
+            $form->add('tournament-'.$tournament->getId(), 'submit');
         }
 
         $form = $form
@@ -131,11 +131,11 @@ class EventController extends Controller
         // Process the registration
         if ($form->isValid()) {
 
-            foreach($event->getEntryTypes() as $type) {
-                if ($form->get('entrytype-'.$type->getId())->isClicked()) {
+            foreach($event->getTournaments() as $tournament) {
+                if ($form->get('tournament-'.$tournament->getId())->isClicked()) {
 
                     $entry = new Entry();
-                    $entry->setEntryType($type);
+                    $entry->setTournament($tournament);
                     $user->addEntry($entry);
 
                     $em->persist($entry);

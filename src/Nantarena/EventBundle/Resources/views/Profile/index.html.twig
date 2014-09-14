@@ -2,7 +2,7 @@
 {% set oldEntries = [] %}
 
 {% for entry in entries %}
-    {% if date(entry.entryType.event.endDate) > date() %}
+    {% if date(entry.tournament.event.endDate) > date() %}
         {% set nextEntries = nextEntries|merge([entry]) %}
     {% else %}
         {% set oldEntries = oldEntries|merge([entry]) %}
@@ -34,9 +34,8 @@
                 <thead>
                 <tr>
                     <th>{{ 'event.profile.index.event'|trans }}</th>
-                    <th>{{ 'event.profile.index.type'|trans }}</th>
-                    <th>{{ 'event.profile.index.team'|trans }}</th>
                     <th>{{ 'event.profile.index.tournament'|trans }}</th>
+                    <th>{{ 'event.profile.index.team'|trans }}</th>
                     <th>{{ 'event.profile.index.payment'|trans }}</th>
                     <th class="tiny"></th>
                 </tr>
@@ -47,39 +46,33 @@
 
                 <tr>
                     <td>
-                        <a href="{{ path('nantarena_event_show', {'slug': entry.entryType.event.slug}) }}">
-                            {{ entry.entryType.event.name }}
+                        <a href="{{ path('nantarena_event_show', {'slug': entry.tournament.event.slug}) }}">
+                            {{ entry.tournament.event.name }}
                         </a>
                     </td>
-                    <td>{{ entry.entryType.name }}</td>
                     <td>
-                        {% for team in entry.teams %}
+                        {{ entry.tournament.game.name }}
+                        {% if entry.tournament.professional %} {{ 'event.show.tournament.pro'|trans }} {% endif %}
+                    </td>
+                    <td>
+                        {% if entry.team is not empty %}
                             <a href="#">
                                 <abbr title="[{{ team.tag }}]" data-placement="right">
                                     {{ team.name }}
                                 </abbr>
                             </a>
-                            {% if not loop.last %}<br />{% endif %}
                         {% else %}
                             <a href="#">Créer une équipe</a>
                             <br />
                             <a href="#">Rejoindre une équipe</a>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for tournament in entry.tournaments %}
-                            {{ tournament.game.name }}
-                            {% if not loop.last %}<br />{% endif %}
-                        {% else %}
-                            --
-                        {% endfor %}
+                        {% endif %}
                     </td>
                     <td>
                         {#TODO#}<a href="#" class="btn btn-success">Payer</a>
                     </td>
                     <td>
                         {#TODO: Check if the user has not paid #}
-                        <a href="{{ path('nantarena_event_cancel', {'slug': entry.entryType.event.slug}) }}">Se désinscrire</a>
+                        <a href="{{ path('nantarena_event_cancel', {'slug': entry.tournament.event.slug}) }}">Se désinscrire</a>
                     </td>
                 </tr>
 
@@ -102,7 +95,6 @@
                     <thead>
                     <tr>
                         <th>{{ 'event.profile.index.event'|trans }}</th>
-                        <th>{{ 'event.profile.index.type'|trans }}</th>
                         <th>{{ 'event.profile.index.team'|trans }}</th>
                         <th>{{ 'event.profile.index.tournament'|trans }}</th>
                         <th>{{ 'event.profile.index.payment'|trans }}</th>
@@ -113,30 +105,23 @@
             {% endif %}
                     <tr>
                         <td>
-                            <a href="{{ path('nantarena_event_show', {'slug': entry.entryType.event.slug}) }}">
-                                {{ entry.entryType.event.name }}
+                            <a href="{{ path('nantarena_event_show', {'slug': entry.tournament.event.slug}) }}">
+                                {{ entry.tournament.event.name }}
                             </a>
                         </td>
-                        <td>{{ entry.entryType.name }}</td>
                         <td>
-                            {% for team in entry.teams %}
+                            {{ entry.tournament.game.name }}
+                        </td>
+                        <td>
+                            {% if entry.team is not empty %}
                                 <a href="#">
                                     <abbr title="[{{ team.tag }}]" data-placement="right">
                                         {{ team.name }}
                                     </abbr>
                                 </a>
-                                {% if not loop.last %}<br />{% endif %}
                             {% else %}
                                 --
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for tournament in entry.tournaments %}
-                                {{ tournament.game.name }}
-                                {% if not loop.last %}<br />{% endif %}
-                            {% else %}
-                                --
-                            {% endfor %}
+                            {% endif %}
                         </td>
                         <td>
                             {# TODO
