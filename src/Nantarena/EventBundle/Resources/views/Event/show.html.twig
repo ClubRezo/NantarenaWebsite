@@ -119,8 +119,7 @@
             <section class="tournament">
                 <header>
                     <h3>
-                        {{ tournament.game.name }}
-                        {% if tournament.professional %} {{ 'event.show.tournament.pro'|trans }} {% endif %}
+                        {{ tournament.name }}
                         <span>
                             {{ 'event.show.tournament.format'|trans({
                                 '%nb%': tournament.game.teamCapacity

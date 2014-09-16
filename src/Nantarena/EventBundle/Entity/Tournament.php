@@ -255,6 +255,12 @@ class Tournament
      */
     public function getName()
     {
-        return $this->getGame()->getName();
+        $name = $this->getGame()->getName();
+
+        if ($this->isProfessional()) {
+            $name .= ' (tournoi pro)';
+        }
+
+        return $name;
     }
 }

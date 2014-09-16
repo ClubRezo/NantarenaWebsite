@@ -51,8 +51,7 @@
                         </a>
                     </td>
                     <td>
-                        {{ entry.tournament.game.name }}
-                        {% if entry.tournament.professional %} {{ 'event.show.tournament.pro'|trans }} {% endif %}
+                        {{ entry.tournament.name }}
                     </td>
                     <td>
                         {% if entry.team is not empty %}
