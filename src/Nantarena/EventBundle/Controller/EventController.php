@@ -209,6 +209,8 @@ class EventController extends Controller
         );
     }
 
+
+
     /**
      * Creates a form to delete an Entry entity by id.
      *

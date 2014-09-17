@@ -15,7 +15,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Entry
 {
     /**
-    * @ORM\Id()
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
     * @ORM\ManyToOne(
     *   targetEntity="Nantarena\EventBundle\Entity\Tournament")
     * @ORM\JoinColumn(name="event_tournament_id", referencedColumnName="id", nullable=false)
@@ -23,7 +31,6 @@ class Entry
     private $tournament;
 
     /**
-     * @ORM\Id()
      * @ORM\ManyToOne(
      *      targetEntity="Nantarena\UserBundle\Entity\User",
      *      inversedBy="entries")
@@ -32,7 +39,7 @@ class Entry
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Team")
+     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Team", inversedBy="members")
      */
     private $team;
 

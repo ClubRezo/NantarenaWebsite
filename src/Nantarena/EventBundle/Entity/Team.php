@@ -73,14 +73,13 @@ class Team
     private $desc;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Nantarena\UserBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="Nantarena\EventBundle\Entity\Entry")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=false)
      */
     private $creator;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Nantarena\UserBundle\Entity\User", inversedBy="teams")
-     * @ORM\JoinTable(name="event_team_members")
+     * @ORM\OneToMany(targetEntity="Nantarena\EventBundle\Entity\Entry", mappedBy="team")
      * @TeamMembersConstraint(
      *      emptyMessage="event.teams.members.empty",
      *      sameMessage="event.teams.members.same"
@@ -229,10 +228,10 @@ class Team
     /**
      * Set creator
      *
-     * @param \Nantarena\UserBundle\Entity\User $creator
+     * @param \Nantarena\EventBundle\Entity\Entry $creator
      * @return Team
      */
-    public function setCreator(\Nantarena\UserBundle\Entity\User $creator)
+    public function setCreator(\Nantarena\EventBundle\Entity\Entry $creator)
     {
         $this->creator = $creator;
     
@@ -242,7 +241,7 @@ class Team
     /**
      * Get creator
      *
-     * @return \Nantarena\UserBundle\Entity\User 
+     * @return \Nantarena\EventBundle\Entity\Entry
      */
     public function getCreator()
     {
@@ -252,7 +251,7 @@ class Team
     /**
      * Add members
      *
-     * @param \Nantarena\UserBundle\Entity\User $members
+     * @param \Nantarena\EventBundle\Entity\Entry $members
      * @return Team
      */
     public function addMember($members)
@@ -266,9 +265,9 @@ class Team
     /**
      * Remove members
      *
-     * @param \Nantarena\UserBundle\Entity\User $members
+     * @param \Nantarena\EventBundle\Entity\Entry $members
      */
-    public function removeMember(\Nantarena\UserBundle\Entity\User $members)
+    public function removeMember(\Nantarena\EventBundle\Entity\Entry $members)
     {
         $this->members->removeElement($members);
     }
