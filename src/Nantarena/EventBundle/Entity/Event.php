@@ -7,7 +7,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nantarena\EventBundle\Validator\Constraints\DatesConstraint;
-use Nantarena\EventBundle\Validator\Constraints\EntryTypesConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TournamentsConstraint;
 use Nantarena\SiteBundle\Validator\Constraints\ResourceConstraint;
 
@@ -157,7 +156,7 @@ class Event
      * Set name
      *
      * @param string $name
-     * @return EntryType
+     * @return Event
      */
     public function setName($name)
     {

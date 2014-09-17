@@ -6,7 +6,6 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Nantarena\EventBundle\Entity\Event;
-use Nantarena\EventBundle\Entity\EntryType;
 use Nantarena\EventBundle\Entity\Tournament;
 
 class LoadEventData extends AbstractFixture implements OrderedFixtureInterface

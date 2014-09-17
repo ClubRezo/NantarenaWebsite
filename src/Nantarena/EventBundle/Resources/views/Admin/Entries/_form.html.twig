@@ -9,30 +9,8 @@
             'invalid_message': 'event.user.invalid'|trans({}, 'validators')
         }) }}
 
-        {{ form_row(form.entryType, {'label': 'event.form.entrytype.name'|trans|colon}) }}
-
-        {% for team in teams %}
-            {% if loop.first %}
-                <div class="control-group">
-                    <label class="control-label">{{ 'event.profile.index.team'|trans|colon }}</label>
-                    <div class="controls">
-                        <ul class="unstyled">
-            {% endif %}
-                            <li>
-                                <a href="#">
-                                    {{ team.name }}
-                                </a>
-                                &nbsp;&nbsp;
-                                <a href="{{ path('nantarena_event_admin_teams_edit', {'id': team.id}) }}">
-                                    <i class="icon-wrench"></i>
-                                </a>
-                            </li>
-            {% if loop.last %}
-                        </ul>
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
+        {{ form_row(form.tournament, {'label': 'event.form.team.tournament'|trans|colon}) }}
+        {{ form_row(form.team, {'label': 'event.form.fieldset.team'|trans|colon}) }}
 
         {{ form_row(form.submit, {'label': submit}) }}
     {{ form_end(form) }}

@@ -129,7 +129,7 @@ class Entry
      * @param mixed $team
      * @return Entry
      */
-    public function setTeam(\Nantarena\EventBundle\Entity\Team $team)
+    public function setTeam($team)
     {
         $this->team = $team;
 

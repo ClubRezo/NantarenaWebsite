@@ -19,7 +19,7 @@ class TeamType extends AbstractType
             'query_builder' => function(EntityRepository $er) use ($options) {
                 return $er->createQueryBuilder('u')
                     ->leftJoin('u.entries', 'ee')
-                    ->leftJoin('ee.entryType', 'et')
+                    ->leftJoin('ee.tournament', 'et')
                     ->where('et.event = :event')
                     ->setParameter('event', $options['event']);
             }

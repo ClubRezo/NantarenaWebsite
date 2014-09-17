@@ -9,10 +9,6 @@ event:
         eventRegistrationDates: 'La phase d''inscription doit se terminer avant le début de l''évènement'
         registrationDates: 'La date de début des inscription doit être antérieure à sa date de fin'
 
-    entrytypes:
-        empty: 'Vous devez ajouter au moins un type d''inscription pour l''évènement'
-        same: 'Vous avez ajouté plus d''une fois le même type d''inscription'
-
     rules:
         size: 'Le fichier choisi pour le règlement est trop volumineux'
         type: 'Le règlement doit être un fichier PDF'

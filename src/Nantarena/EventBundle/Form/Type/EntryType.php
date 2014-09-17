@@ -34,12 +34,23 @@ class EntryType extends AbstractType
                 'disabled' => true,
                 'data' => $options['event']->getName()
             ))
-            ->add('entryType', 'entity', array(
-                'class' => 'NantarenaEventBundle:EntryType',
+            ->add('tournament', 'entity', array(
+                'class' => 'NantarenaEventBundle:Tournament',
                 'property' => 'name',
                 'query_builder' => function(EntityRepository $er) use ($options) {
-                    return $er->createQueryBuilder('et')
-                        ->where('et.event = :event')
+                    return $er->createQueryBuilder('t')
+                        ->where('t.event = :event')
+                        ->setParameter('event', $options['event']);
+                }
+            ))
+            ->add('team', 'entity', array(
+                'class' => 'NantarenaEventBundle:Team',
+                'property' => 'name',
+                'required' => false,
+                'query_builder' => function(EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('t')
+                        ->join('t.tournament', 'to')
+                        ->where('to.event = :event')
                         ->setParameter('event', $options['event']);
                 }
             ))
