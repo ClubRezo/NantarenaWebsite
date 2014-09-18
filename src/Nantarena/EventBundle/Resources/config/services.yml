@@ -27,9 +27,3 @@ services:
         arguments: [@doctrine.orm.entity_manager]
         tags:
             - { name: validator.constraint_validator, alias: team_members_tournaments_constraint }
-
-    nantarena_event.tournaments_field:
-        class: Nantarena\EventBundle\Form\Field\TournamentsField
-        arguments: [@doctrine.orm.entity_manager, @translator]
-        tags:
-            - { name: form.type, alias: tournaments }

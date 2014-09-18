@@ -141,10 +141,9 @@ event:
         fieldset:
             entries: Inscriptions
             infos: 'Informations générales'
-            tournaments: Tournois
-            members: Composition
             event: Evènement
             team: Equipe
+            other: 'Informations complémentaires'
 
         game:
             name: Nom
@@ -157,7 +156,6 @@ event:
             logo: Logo
             website: Site web
             desc: Description
-            members: Composition
             creator: 'Chef d''équipe'
             tournament: Tournoi
             valid: Validée

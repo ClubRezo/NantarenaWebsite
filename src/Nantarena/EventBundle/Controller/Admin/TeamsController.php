@@ -65,7 +65,6 @@ class TeamsController extends Controller
     public function createAction(Request $request, Event $event)
     {
         $team = new Team();
-        $team->setEvent($event);
 
         $form = $this->createForm(new TeamType(), $team, array(
             'action' => $this->generateUrl('nantarena_event_admin_teams_create', array(
@@ -114,7 +113,7 @@ class TeamsController extends Controller
                 'id' => $team->getId()
             )),
             'method' => 'POST',
-            'event' => $team->getEvent()
+            'event' => $team->getTournament()->getEvent()
         ));
 
         $form->handleRequest($request);
@@ -131,7 +130,7 @@ class TeamsController extends Controller
 
                 $flashbag->add('success', $translator->trans('event.admin.teams.edit.flash_success'));
                 return $this->redirect($this->generateUrl('nantarena_event_admin_teams', array(
-                    'slug' => $team->getEvent()->getSlug()
+                    'slug' => $team->getTournament()->getEvent()->getSlug()
                 )));
 
             } catch (ORMException $e) {
@@ -140,7 +139,7 @@ class TeamsController extends Controller
         }
 
         return array(
-            'event' => $team->getEvent(),
+            'event' => $team->getTournament()->getEvent(),
             'form' => $form->createView(),
         );
     }

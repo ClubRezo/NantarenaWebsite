@@ -21,11 +21,11 @@ class TeamRepository extends EntityRepository
             ->addSelect('c')
             ->join('t.members', 'm')
             ->addSelect('m')
-            ->leftJoin('t.tournaments', 'to')
+            ->leftJoin('t.tournament', 'to')
             ->addSelect('to')
             ->leftJoin('to.game', 'g')
             ->addSelect('g')
-            ->where('t.event = :event')
+            ->where('to.event = :event')
             ->setParameter('event', $event)
             ->getQuery()
             ->getResult();

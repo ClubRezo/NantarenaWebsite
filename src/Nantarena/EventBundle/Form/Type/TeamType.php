@@ -42,9 +42,14 @@ class TeamType extends AbstractType
             ->add('desc', 'textarea', array(
                 'required' => false
             ))
-            ->add('tournaments', 'tournaments', array(
-                'event' => $options['event'],
-                'label' => false
+            ->add('tournament', 'entity', array(
+                'class' => 'NantarenaEventBundle:Tournament',
+                'property' => 'name',
+                'query_builder' => function(EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('t')
+                        ->where('t.event = :event')
+                        ->setParameter('event', $options['event']);
+                }
             ))
             ->add('members', 'collection', array(
                 'type' => new TypeaheadField(),

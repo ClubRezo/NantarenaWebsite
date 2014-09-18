@@ -20,11 +20,12 @@ class TeamTagConstraintValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         $teams = $this->em->getRepository('NantarenaEventBundle:Team')->createQueryBuilder('t')
+            ->join('t.tournament', 'to')
             ->where('t.tag = :tag')
-            ->andWhere('t.event = :event')
+            ->andWhere('to.event = :event')
             ->andWhere('t.id <> :id')
             ->setParameter('tag', $value->getTag())
-            ->setParameter('event', $value->getEvent())
+            ->setParameter('event', $value->getTournament()->getEvent())
             ->setParameter('id', $value->getId())
             ->getQuery()
             ->getResult();

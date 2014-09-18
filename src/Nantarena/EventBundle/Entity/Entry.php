@@ -4,6 +4,7 @@ namespace Nantarena\EventBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Nantarena\EventBundle\Validator\Constraints\UserEntryConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
