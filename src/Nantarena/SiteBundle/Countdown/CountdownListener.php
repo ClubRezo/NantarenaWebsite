@@ -29,7 +29,7 @@ class CountdownListener
             return;
         }
 
-        $remainingDays = $this->endDate->diff(new \Datetime())->format('%d');
+        $remainingDays = (new \Datetime())->diff($this->endDate)->format("%r%a");
 
         if ($remainingDays <= 0) {
             return; // Si date dépassée, on ne fait rien

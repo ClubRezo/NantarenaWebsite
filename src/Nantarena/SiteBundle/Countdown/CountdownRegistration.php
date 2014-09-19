@@ -11,13 +11,13 @@ class CountdownRegistration
   {
     $content = $response->getContent();
 
-    $html = '<p>J-'.(int) $remainingDays.' avant l\'ouverture des inscriptions !</a>';
+    $html = '<p>J-'.(int) $remainingDays.' avant l\'ouverture des inscriptions !</p>';
 
 
 
       $content = preg_replace(
-          '@<div id="Inscriptions">.*?</div>@sU',
-          '<div id="RegistrationCountdown"><ul><li>'.$html.'</li></ul></div>',
+          '@<div class="inscriptions">.*?</div>@sU',
+          '<div class="registrationCountdown"><ul><li>'.$html.'</li></ul></div>',
           $content
       );
 

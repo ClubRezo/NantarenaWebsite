@@ -39,7 +39,6 @@ services:
         tags:
             - { name: twig.extension }
 
-
     nantarena_site.countdown.registration:
             class: Nantarena\SiteBundle\Countdown\CountdownRegistration
 

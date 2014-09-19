@@ -25,7 +25,9 @@
         color: #346CA0;
     }
 
-    #RegistrationCountdown {
+    .registrationCountdown {
+        padding-top: 5px;
+        padding-bottom: 10px;
         text-align: center;
 
     }
