@@ -99,10 +99,11 @@
                 </ul>
             </nav>
 
-            {% block banner %}
-                {{ render(controller('NantarenaBannerBundle:DisplayBanner:index')) }}
-            {% endblock %}
-
+            {% if app.request.attributes.get('_route') == 'nantarena_news_index'%}
+                {% block banner %}
+                    {{ render(controller('NantarenaBannerBundle:DisplayBanner:index')) }}
+                {% endblock %}
+            {% endif %}
         </header>
 
         <div id="content" class="container">
