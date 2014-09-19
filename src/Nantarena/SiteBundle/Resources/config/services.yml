@@ -38,3 +38,13 @@ services:
         arguments: [@nantarena_site.breadcrumb]
         tags:
             - { name: twig.extension }
+
+
+    nantarena_site.countdown.registration:
+            class: Nantarena\SiteBundle\Countdown\CountdownRegistration
+
+    nantarena_site.countdown.listener:
+            class: Nantarena\SiteBundle\Countdown\CountdownListener
+            arguments: [@nantarena_site.countdown.registration,"2014-10-01"]
+            tags:
+                - { name: kernel.event_listener, event: kernel.response, method: processCountdown }

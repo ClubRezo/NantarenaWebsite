@@ -25,6 +25,10 @@
         color: #346CA0;
     }
 
+    #RegistrationCountdown {
+        text-align: center;
+
+    }
 /* Carousel Bootstrap */
     .carousel-fade .carousel-inner .item {
         opacity: 0;
