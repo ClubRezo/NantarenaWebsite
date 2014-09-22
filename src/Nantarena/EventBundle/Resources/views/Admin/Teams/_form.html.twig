@@ -9,12 +9,14 @@
                 {{ form_row(form.event, {'label': 'event.profile.index.event'|trans|colon}) }}
                 {{ form_row(form.name, {'label': 'event.form.team.name'|trans|colon}) }}
                 {{ form_row(form.tournament, {'label': 'event.form.team.tournament'|trans|colon}) }}
-                {{ form_row(form.creator, {'label': 'event.form.team.creator'|trans|colon}) }}
+                {{ form_row(form.creator.user, {'label': 'event.form.team.creator'|trans|colon}) }}
 
-                {% form_theme form.members with 'NantarenaSiteBundle:Form:inline_layout.html.twig' %}
+                {#{% form_theme form.members with 'NantarenaSiteBundle:Form:inline_layout.html.twig' %}#}
                 {{ form_widget(form.members, {
                     'add_text': 'event.form.team.members.add'|trans,
-                    'labels': 'event.form.team.members.list'|trans
+                    'labels': {
+                        'user': 'event.form.team.members.list'|trans
+                    }
                 }) }}
             </fieldset>
         </div>

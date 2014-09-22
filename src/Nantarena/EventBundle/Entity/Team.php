@@ -21,6 +21,11 @@ use Nantarena\EventBundle\Validator\Constraints\TeamMembersTournamentsConstraint
  * @TeamTagConstraint(message="event.teams.unique.tag")
  * @TeamCreatorConstraint(message="event.teams.creator")
  * @TeamMembersTournamentsConstraint(message="event.teams.members.tournaments")
+ * @TeamMembersConstraint(
+ *      emptyMessage="event.teams.members.empty",
+ *      sameMessage="event.teams.members.same",
+ *      alreadyTeam="event.teams.members.already"
+ * )
  */
 class Team
 {
@@ -79,11 +84,7 @@ class Team
     private $creator;
 
     /**
-     * @ORM\OneToMany(targetEntity="Nantarena\EventBundle\Entity\Entry", mappedBy="team")
-     * @TeamMembersConstraint(
-     *      emptyMessage="event.teams.members.empty",
-     *      sameMessage="event.teams.members.same"
-     * )
+     * @ORM\OneToMany(targetEntity="Nantarena\EventBundle\Entity\Entry", mappedBy="team", cascade={"persist"})
      */
     private $members;
 
@@ -256,9 +257,11 @@ class Team
      */
     public function addMember($members)
     {
-        if (null !== $members)
+        if (null !== $members) {
+            $members->setTeam($this);
             $this->members[] = $members;
-    
+        }
+
         return $this;
     }
 
@@ -269,6 +272,7 @@ class Team
      */
     public function removeMember(\Nantarena\EventBundle\Entity\Entry $members)
     {
+        $members->setTeam(null);
         $this->members->removeElement($members);
     }
 

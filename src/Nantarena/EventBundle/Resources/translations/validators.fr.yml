@@ -27,7 +27,8 @@ event:
         members:
             empty: 'Vous devez ajouter au moins un membre dans l''équipe'
             same: 'Vous avez ajouté plusieurs fois le même membre'
-            tournaments: 'Des membres de l''équipe sont déjà inscrits à un autre tournoi'
+            tournaments: 'Des membres de l''équipe sont inscrits à un autre tournoi'
+            already: 'Un membre appartient déjà à une autre équipe'
 
         unique:
             name: 'Une équipe de même nom existe déjà pour cet évènement'

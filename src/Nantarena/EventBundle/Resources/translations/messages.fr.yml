@@ -144,6 +144,7 @@ event:
             event: Evènement
             team: Equipe
             other: 'Informations complémentaires'
+            tournaments: Tournois
 
         game:
             name: Nom

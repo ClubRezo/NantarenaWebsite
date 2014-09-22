@@ -11,29 +11,16 @@ use Doctrine\Common\Util\Debug;
 
 class TeamMembersTournamentsConstraintValidator extends ConstraintValidator
 {
-    private $em;
-
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
     public function validate($value, Constraint $constraint)
     {
-        // Parcourir tous les tournois auxquels les membres de l'équipe participent avec une autre équipe
-        $m_tournaments = $this->em->getRepository('NantarenaEventBundle:Tournament')->createQueryBuilder('t')
-            ->join('t.teams', 'te')
-            ->join('te.members', 'u')
-            ->where('u IN (:members)')
-            ->andWhere('te <> :team')
-            ->setParameter('members', $value->getMembers()->toArray())
-            ->setParameter('team', ($value->getId() === NULL) ? '' : $value)
-            ->getQuery()
-            ->getResult()
-        ;
+        $members = $value->getMembers();
+        $tournament = $value->getTournament();
 
-        if (count($m_tournaments) > 0) {
-            $this->context->addViolation($constraint->message);
+        foreach($members as $member) {
+            if ($member->getTournament()->getId() !== $tournament->getId()) {
+                $this->context->addViolation($constraint->message);
+                break;
+            }
         }
     }
 }

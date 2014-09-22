@@ -2,6 +2,7 @@
 
 namespace Nantarena\EventBundle\Validator\Constraints;
 
+use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Constraint;

@@ -24,6 +24,5 @@ services:
 
     nantarena_event.team_members_tournaments_constraint:
         class: Nantarena\EventBundle\Validator\Constraints\TeamMembersTournamentsConstraintValidator
-        arguments: [@doctrine.orm.entity_manager]
         tags:
             - { name: validator.constraint_validator, alias: team_members_tournaments_constraint }

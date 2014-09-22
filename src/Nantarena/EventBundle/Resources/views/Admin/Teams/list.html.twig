@@ -68,7 +68,7 @@
                     </td>
                     <td>
                         {% for member in team.members %}
-                            {{ member.username }}
+                            {{ member.user.username }}
                             {% if not loop.last %}<br />{% endif %}
                         {% endfor %}
                     </td>

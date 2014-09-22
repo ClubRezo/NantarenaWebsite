@@ -53,6 +53,16 @@ class Entry
     private $registrationDate;
 
     /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set registrationDate
      *
      * @param \DateTime $registrationDate
