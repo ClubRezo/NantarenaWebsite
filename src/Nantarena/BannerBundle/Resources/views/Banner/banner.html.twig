@@ -1,32 +1,41 @@
 <div id="banner">
     <div class="container">
-        <div class="une">
+        {% if slides|length > 0 %}
+            <div class="une">
+                <div class="item">
+                    <span></span>
+                    <div class="une_news">
+                        {% if hnews is not null %} {{hnews.content|raw}} {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="sponsors carousel slide carousel-fade" id="car_sponsors">
+
+                <div class="carousel-inner">
+
+                    {% for slide in slides %}
+                        {% if loop.index0 == num %}
+                        <div class="active item">
+                        {% else %}
+                        <div class="item">
+                        {% endif %}
+                            <span></span>
+                            <div class="sponsor">
+                                {{ slide.content | raw }}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        {% else %}
             <div class="item">
                 <span></span>
                 <div class="une_news">
                     {% if hnews is not null %} {{hnews.content|raw}} {% endif %}
                 </div>
             </div>
-        </div>
-
-        <div class="sponsors carousel slide carousel-fade" id="car_sponsors">
-
-            <div class="carousel-inner">
-
-                {% for slide in slides %}
-                    {% if loop.index0 == num %}
-                    <div class="active item">
-                    {% else %}
-                    <div class="item">
-                    {% endif %}
-                        <span></span>
-                        <div class="sponsor">
-                            {{ slide.content | raw }}
-                        </div>
-                    </div>
-                {% endfor %}
-
-            </div>
-        </div>
+        {% endif %}
     </div>
 </div>
