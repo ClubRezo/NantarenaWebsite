@@ -99,7 +99,7 @@
                 </ul>
             </nav>
 
-            {% if app.request.attributes.get('_route') == 'nantarena_news_index'%}
+            {% if app.request.attributes.get('_route') == 'nantarena_site_home'%}
                 {% block banner %}
                     {{ render(controller('NantarenaBannerBundle:DisplayBanner:index')) }}
                 {% endblock %}
