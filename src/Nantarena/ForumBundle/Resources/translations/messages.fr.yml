@@ -41,7 +41,7 @@ forum:
                 flash_error: 'Le forum n''a pas pu être supprimé'
                 flash_success: 'Forum supprimé avec succès'
                 forum: 'Nouveau forum'
-                info: 'Veuillez déplacer les topics dans un autre forum'
+                info: 'Veuillez déplacer les fils de discussion dans un autre forum'
                 title: 'Supprimer %name%'
                 warning: 'Attention, le forum sera définitivement supprimé'
 
@@ -59,7 +59,7 @@ forum:
         last_by: 'Par %username%'
         no_activity: 'Aucune activité'
         no_results: 'Aucun forum'
-        threads: Topics
+        threads: Fils de discussion
         title: 'Catégorie « %category% »'
 
     entity:
@@ -104,15 +104,15 @@ forum:
 
         thread:
             create:
-                submit: 'Créer le topic'
+                submit: 'Créer le fil de discussion'
 
             move:
-                submit: 'Déplacer le topic'
+                submit: 'Déplacer le fil de discussion'
 
     forum:
         activity: 'Derniers messages'
         last_by: 'Par %username%'
-        no_results: 'Aucun topic'
+        no_results: 'Aucun fil de discussion'
         posts: Réponses
         title: 'Forum « %forum% »'
 
@@ -120,7 +120,7 @@ forum:
         activity: 'Derniers messages'
         last_by: 'Par %username%'
         no_activity: 'Aucune activité'
-        threads: Topics
+        threads: Fils de discussion
         title: 'Index du forum'
         unreads: 'Consulter les messages non lus'
 
@@ -148,19 +148,19 @@ forum:
             unlock: Déverrouiller
 
         create:
-            flash_success: 'Topic créé avec succès'
-            title: 'Créer un nouveau topic'
+            flash_success: 'Fil de discussion créé avec succès'
+            title: 'Créer un nouveau fil de discussion'
 
         delete:
-            flash_success: 'Le topic a été supprimé avec succès'
+            flash_success: 'Le fil de discussion a été supprimé avec succès'
 
         lock:
-            lock_success: 'Le topic a été verrouillé, seul les modérateurs peuvent y répondre'
-            unlock_success: 'Le topic a été déverrouillé'
+            lock_success: 'Le fil de discussion a été verrouillé, seul les modérateurs peuvent y répondre'
+            unlock_success: 'Le fil de discussion a été déverrouillé'
 
         move:
-            flash_error: 'Impossible de déplacer le topic'
-            flash_success: 'Déplacement du topic effectué avec succès'
+            flash_error: 'Impossible de déplacer le fil de discussion'
+            flash_success: 'Déplacement du fil de discussion effectué avec succès'
             title: 'Déplacement de « %thread% »'
 
         quick_reply: 'Réponse rapide ...'
@@ -174,21 +174,21 @@ forum:
         show:
             edited: 'Dernière modification le %date%'
             locked: 'Sujet verrouillé'
-            title: 'Topic « %thread% »'
+            title: 'Fil de discussion « %thread% »'
 
     unreads:
         activity: 'Derniers messages'
         back: 'Retour au forum'
         last_by: 'Par %username%'
-        no_results: 'Aucun topic non lu trouvé'
+        no_results: 'Aucun fil de discussion non lu trouvé'
         posts: Réponses
-        threads: Topics
-        title: 'Topics non lus'
+        threads: Fil de discussion
+        title: 'Fils de discussion non lus'
 
     widget:
         recent:
             in: ' &raquo; %forum%'
             infos: 'Par %author% le %date%'
-            no_results: 'Aucun topic récent'
-            title: 'Derniers topics sur le forum'
+            no_results: 'Aucun fil de discussion récent'
+            title: 'Derniers messages sur le forum'
             unreads: 'Consulter les messages non lus'
