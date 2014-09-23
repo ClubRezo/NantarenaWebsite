@@ -19,13 +19,15 @@
         {#</p>#}
 
         {% if nextEvent is not null and not app.user.hasEntry(nextEvent) %}
-        <p class="alert text-center">
-            {{ 'event.profile.index.next_event'|trans({
-                '%name%': nextEvent.name,
-                '%date%': nextEvent.startDate|localizeddate('full', 'none'),
-                '%link%': path('nantarena_event_show', {'slug': nextEvent.slug})
-            })|raw }}
-        </p>
+            {% if event.startRegistrationDate|date('Y-m-d') < "now"|date('Y-m-d') and event.endRegistrationDate|date('Y-m-d') > "now"|date('Y-m-d') %}
+                <p class="alert text-center">
+                    {{ 'event.profile.index.next_event'|trans({
+                        '%name%': nextEvent.name,
+                        '%date%': nextEvent.startDate|localizeddate('full', 'none'),
+                        '%link%': path('nantarena_event_show', {'slug': nextEvent.slug})
+                    })|raw }}
+                </p>
+            {% endif %}
         {% endif %}
 
         {% for entry in nextEntries %}
