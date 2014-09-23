@@ -222,6 +222,7 @@ event:
         open_hour: 'Ouverture de la salle'
 
         price:
+            title: 'Tarif :'
             many: 'de %price1% à %price2%€'
             one: '%price%€'
 
