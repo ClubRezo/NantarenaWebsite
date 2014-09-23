@@ -415,16 +415,14 @@
         background-position: -90px 0px;
     }
 
-    #container_footer .contact ul,
-    #container_footer .social ul {
-        padding-top: 10px;
+    #container_footer ul {
+        padding-top: 5px;
     }
 
-    #container_footer .social ul {
+    #container_footer ul {
         padding-left: 30px;
     }
 
-    #container_footer .contact li,
     #container_footer .social li {
         line-height: 25px;
     }
