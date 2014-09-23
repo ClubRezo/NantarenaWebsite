@@ -58,15 +58,15 @@
                             <div class="loginbox">
                                 <form action="{{ path('fos_user_security_check') }}" method="post">
                                     <div class="inputs">
-                                        <p><input type="text" name="_username" required="required" placeholder="{{ 'site.login.pseudo'|trans }}" class="username" /></p>
-                                        <p><input type="password" name="_password" required="required" placeholder="{{ "site.login.password"|trans }}" class="password" /></p>
-                                        <p><a href="{{ path('fos_user_resetting_request') }}">{{ 'site.login.reset'|trans }}</a></p>
+                                        <p><input type="text" name="_username" required="required" tabindex="10" placeholder="{{ 'site.login.pseudo'|trans }}" class="username" /></p>
+                                        <p><input type="password" name="_password" required="required" tabindex="20" placeholder="{{ "site.login.password"|trans }}" class="password" /></p>
+                                        <p><a href="{{ path('fos_user_resetting_request') }}" tabindex="40">{{ 'site.login.reset'|trans }}</a></p>
                                     </div>
                                     <div class="submit">
                                         <input type="checkbox" name="_remember_me" value="on" checked="checked" class="hide" />
                                         <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
                                         {# <input type="hidden" name="_target_path" value="{{ app.request.headers.get('referer') }}" /> #}
-                                        <input type="submit" class="btn" name="_submit" />
+                                        <input type="submit" class="btn" name="_submit" tabindex="30" />
                                     </div>
                                 </form>
                             </div>
