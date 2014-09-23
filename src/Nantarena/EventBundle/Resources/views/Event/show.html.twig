@@ -77,22 +77,24 @@
                             '%value%': event.capacity
                         }) }}
                     </li>
-                    <li>
-                        <strong>Tarif :</strong>
-                        {% set minPrice = event.tournaments|min('price').price %}
-                        {% set maxPrice = event.tournaments|max('price').price %}
+                    {% if event.tournaments|length > 0 %}
+                        <li>
+                            <strong>{{ 'event.show.price.title'|trans }}</strong>
+                            {% set minPrice = event.tournaments|min('price').price %}
+                            {% set maxPrice = event.tournaments|max('price').price %}
 
-                        {% if minPrice == maxPrice %}
-                            {{ 'event.show.price.one'|trans({
-                                '%price%': minPrice
-                            }) }}
-                        {% else %}
-                            {{ 'event.show.price.many'|trans({
-                                '%price1%': minPrice,
-                                '%price2%': maxPrice
-                            }) }}
-                        {% endif %}
-                    </li>
+                            {% if minPrice == maxPrice %}
+                                {{ 'event.show.price.one'|trans({
+                                    '%price%': minPrice
+                                }) }}
+                            {% else %}
+                                {{ 'event.show.price.many'|trans({
+                                    '%price1%': minPrice,
+                                    '%price2%': maxPrice
+                                }) }}
+                            {% endif %}
+                        </li>
+                    {% endif %}
                 </ul>
 
                 <p class="text-center">
