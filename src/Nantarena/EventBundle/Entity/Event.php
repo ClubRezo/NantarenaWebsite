@@ -7,7 +7,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nantarena\EventBundle\Validator\Constraints\DatesConstraint;
-use Nantarena\EventBundle\Validator\Constraints\EntryTypesConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TournamentsConstraint;
 use Nantarena\SiteBundle\Validator\Constraints\ResourceConstraint;
 
@@ -137,18 +136,6 @@ class Event
 
     /**
      * @ORM\OneToMany(
-     *      targetEntity="Nantarena\EventBundle\Entity\EntryType",
-     *      mappedBy="event",
-     *      cascade={"persist", "remove"})
-     * @EntryTypesConstraint(
-     *      emptyMessage="event.entrytypes.empty",
-     *      sameMessage="event.entrytypes.same"
-     * )
-     */
-    private $entryTypes;
-
-    /**
-     * @ORM\OneToMany(
      *      targetEntity="Nantarena\EventBundle\Entity\Tournament",
      *      mappedBy="event",
      *      cascade={"persist", "remove"})
@@ -169,7 +156,7 @@ class Event
      * Set name
      *
      * @param string $name
-     * @return EntryType
+     * @return Event
      */
     public function setName($name)
     {
@@ -309,42 +296,7 @@ class Event
      */
     public function __construct()
     {
-        $this->entryTypes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tournaments = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add entryTypes
-     *
-     * @param \Nantarena\EventBundle\Entity\EntryType $entryType
-     * @return Event
-     */
-    public function addEntryType(\Nantarena\EventBundle\Entity\EntryType $entryType)
-    {
-        $entryType->setEvent($this);
-        $this->entryTypes->add($entryType);
-    
-        return $this;
-    }
-
-    /**
-     * Remove entryTypes
-     *
-     * @param \Nantarena\EventBundle\Entity\EntryType $entryType
-     */
-    public function removeEntryType(\Nantarena\EventBundle\Entity\EntryType $entryType)
-    {
-        $this->entryTypes->removeElement($entryType);
-    }
-
-    /**
-     * Get entryTypes
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getEntryTypes()
-    {
-        return $this->entryTypes;
     }
 
     /**

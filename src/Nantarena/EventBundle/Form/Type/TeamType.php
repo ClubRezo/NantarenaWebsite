@@ -2,6 +2,8 @@
 
 namespace Nantarena\EventBundle\Form\Type;
 
+use Doctrine\Common\Util\Debug;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Nantarena\SiteBundle\Form\Field\TypeaheadField;
 use Symfony\Component\Form\AbstractType;
@@ -12,19 +14,6 @@ class TeamType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $userFieldOptions = array(
-            'class' => 'NantarenaUserBundle:User',
-            'property' => 'username',
-            'invalid_message' => 'event.user.notyet',
-            'query_builder' => function(EntityRepository $er) use ($options) {
-                return $er->createQueryBuilder('u')
-                    ->leftJoin('u.entries', 'ee')
-                    ->leftJoin('ee.entryType', 'et')
-                    ->where('et.event = :event')
-                    ->setParameter('event', $options['event']);
-            }
-        );
-
         $builder
             ->add('event', 'text', array(
                 'mapped' => false,
@@ -42,18 +31,30 @@ class TeamType extends AbstractType
             ->add('desc', 'textarea', array(
                 'required' => false
             ))
-            ->add('tournaments', 'tournaments', array(
-                'event' => $options['event'],
-                'label' => false
+            ->add('tournament', 'entity', array(
+                'class' => 'NantarenaEventBundle:Tournament',
+                'property' => 'name',
+                'query_builder' => function(EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('t')
+                        ->where('t.event = :event')
+                        ->setParameter('event', $options['event']);
+                }
             ))
             ->add('members', 'collection', array(
-                'type' => new TypeaheadField(),
-                'options' => $userFieldOptions,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
+                    'type' => new TeamMemberType(),
+                    'options' => array(
+                        'event' => $options['event'],
+                        'em' => $options['em']
+                    ),
+                    'allow_add' => true,
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                )
+            )
+            ->add('creator', new TeamMemberType(), array(
+                'event' => $options['event'],
+                'em' => $options['em']
             ))
-            ->add('creator', new TypeaheadField(), $userFieldOptions)
             ->add('submit', 'submit')
         ;
     }
@@ -65,8 +66,12 @@ class TeamType extends AbstractType
                 'data_class' => 'Nantarena\EventBundle\Entity\Team',
             ))
             ->setRequired(array(
-                'event'
+                'event',
+                'em'
             ))
+            ->setAllowedTypes(array(
+                'em' => 'Doctrine\Common\Persistence\ObjectManager',
+            ));
         ;
     }
 

@@ -5,7 +5,6 @@ namespace Nantarena\EventBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Tournament
@@ -60,17 +59,25 @@ class Tournament
     private $startDate;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="exclusive", type="boolean")
-     * @Assert\Type(type="boolean")
-     */
-    private $exclusive;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Nantarena\EventBundle\Entity\Team", mappedBy="tournaments")
+     * @ORM\OneToMany(targetEntity="Nantarena\EventBundle\Entity\Team", mappedBy="tournament")
      */
     private $teams;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="price", type="decimal", precision=5, scale=2)
+     * @Assert\GreaterThanOrEqual(value=0)
+     */
+    private $price;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="professional", type="boolean")
+     * @Assert\Type(type="boolean")
+     */
+    private $professional;
 
     /**
      * Get id
@@ -198,26 +205,49 @@ class Tournament
     }
 
     /**
-     * Set exclusive
+     * Set price
      *
-     * @param boolean $exclusive
+     * @param integer $price
      * @return Tournament
      */
-    public function setExclusive($exclusive)
+    public function setPrice($price)
     {
-        $this->exclusive = $exclusive;
-    
+        $this->price = $price;
+
         return $this;
     }
 
     /**
-     * Get exclusive
+     * Get price
      *
-     * @return boolean 
+     * @return integer
      */
-    public function isExclusive()
+    public function getPrice()
     {
-        return $this->exclusive;
+        return $this->price;
+    }
+
+    /**
+     * Set professional
+     *
+     * @param boolean $professional
+     * @return Tournament
+     */
+    public function setProfessional($professional)
+    {
+        $this->professional = $professional;
+
+        return $this;
+    }
+
+    /**
+     * Is professional
+     *
+     * @return boolean
+     */
+    public function isProfessional()
+    {
+        return $this->professional;
     }
 
     /**
@@ -225,6 +255,12 @@ class Tournament
      */
     public function getName()
     {
-        return $this->getGame()->getName();
+        $name = $this->getGame()->getName();
+
+        if ($this->isProfessional()) {
+            $name .= ' (tournoi pro)';
+        }
+
+        return $name;
     }
 }

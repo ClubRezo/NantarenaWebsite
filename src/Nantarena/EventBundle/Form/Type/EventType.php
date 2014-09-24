@@ -35,12 +35,6 @@ class EventType extends AbstractType
             ->add('capacity', 'integer', array(
                 'attr' => array('min' => 1)
             ))
-            ->add('entryTypes', 'collection', array(
-                'type' => new EntryTypeType(),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ))
             ->add('tournaments', 'collection', array(
                 'type' => new TournamentType(),
                 'allow_add' => true,

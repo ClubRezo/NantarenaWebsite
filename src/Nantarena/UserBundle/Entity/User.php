@@ -54,6 +54,7 @@ class User extends BaseUser
      * @var \DateTime
      * @ORM\Column(type="datetime", name="birthdate", nullable=true)
      * @Assert\DateTime(groups={"identity"})
+     * @Assert\NotBlank(groups={"identity"})
      */
     protected $birthdate;
 
@@ -66,18 +67,12 @@ class User extends BaseUser
     protected $entries;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Nantarena\EventBundle\Entity\Team", mappedBy="members")
-     */
-    private $teams;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
         parent::__construct();
         $this->groups = new ArrayCollection();
-        $this->teams = new ArrayCollection();
     }
 
     /**
@@ -264,7 +259,7 @@ class User extends BaseUser
 
         /** @var \Nantarena\EventBundle\Entity\Entry $entry */
         foreach($entries as $entry) {
-            if ($entry->getEntryType()->getEvent() === $event) {
+            if ($entry->getTournament()->getEvent() === $event) {
                 $result = true;
                 $entryResult = $entry;
                 break;
@@ -288,13 +283,4 @@ class User extends BaseUser
         return parent::hasRole($role);
     }
 
-    /**
-     * Get teams
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTeams()
-    {
-        return $this->teams;
-    }
 }

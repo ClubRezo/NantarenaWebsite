@@ -22,11 +22,10 @@
     <table class="table sortable filterable" data-sort="2" data-asc="desc" data-perpage="50">
         <thead>
             <tr>
-                <th data-filter="select">{{ 'event.form.entrytype.name'|trans }}</th>
+                <th data-filter="select">{{ 'event.profile.index.tournament'|trans }}</th>
                 <th>{{ 'user.form.username'|trans }}</th>
                 <th data-filter="date">{{ 'user.admin.users.list.registration_date'|trans }}</th>
                 <th data-filter="select">{{ 'event.profile.index.team'|trans }}</th>
-                <th data-filter="select">{{ 'event.profile.index.tournament'|trans }}</th>
                 <th data-filter="select">{{ 'event.profile.index.payment'|trans }}</th>
                 <th class="mini"></th>
             </tr>
@@ -35,7 +34,9 @@
         <tbody>
             {% for entry in entries %}
                 <tr>
-                    <td>{{ entry.entryType.name }}</td>
+                    <td>
+                        {{ entry.tournament.name }}
+                    </td>
                     <td>
                         {% if entry.user.firstname is not empty %}
                             <abbr title="{{ entry.user.email }} - {{ entry.user.firstname }} {{ entry.user.lastname|upper }}{% if entry.user.birthdate is not empty %} - {{ "now"|date('Y') - entry.user.birthdate|date('Y') }} {{ 'user.form.age'|trans }}{% endif %}" data-placement="right">
@@ -49,24 +50,15 @@
                     </td>
                     <td>{{ entry.registrationDate|date("d/m/Y H:i") }}</td>
                     <td>
-                        {% for team in entry.teams %}
+                        {% if entry.team %}
                             <a href="#">
-                                <abbr title="[{{ team.tag }}]" data-placement="right">
-                                    {{ team.name }}
+                                <abbr title="[{{ entry.team.tag }}]" data-placement="right">
+                                    {{ entry.team.name }}
                                 </abbr>
                             </a>
-                            {% if not loop.last %}<br />{% endif %}
                         {% else %}
                             --
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for tournament in entry.tournaments %}
-                            {{ tournament.game.name }}
-                            {% if not loop.last %}<br />{% endif %}
-                        {% else %}
-                            --
-                        {% endfor %}
+                        {% endif %}
                     </td>
                     <td>
                         TODO

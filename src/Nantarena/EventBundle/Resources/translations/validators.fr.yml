@@ -9,10 +9,6 @@ event:
         eventRegistrationDates: 'La phase d''inscription doit se terminer avant le début de l''évènement'
         registrationDates: 'La date de début des inscription doit être antérieure à sa date de fin'
 
-    entrytypes:
-        empty: 'Vous devez ajouter au moins un type d''inscription pour l''évènement'
-        same: 'Vous avez ajouté plus d''une fois le même type d''inscription'
-
     rules:
         size: 'Le fichier choisi pour le règlement est trop volumineux'
         type: 'Le règlement doit être un fichier PDF'
@@ -31,7 +27,8 @@ event:
         members:
             empty: 'Vous devez ajouter au moins un membre dans l''équipe'
             same: 'Vous avez ajouté plusieurs fois le même membre'
-            tournaments: 'Des membres de l''équipe sont déjà inscrits à un autre tournoi'
+            tournaments: 'Des membres de l''équipe sont inscrits à un autre tournoi'
+            already: 'Un membre appartient déjà à une autre équipe'
 
         unique:
             name: 'Une équipe de même nom existe déjà pour cet évènement'

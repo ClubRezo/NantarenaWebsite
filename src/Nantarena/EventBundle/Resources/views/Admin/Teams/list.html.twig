@@ -28,7 +28,7 @@
                 <th data-filter="select">{{ 'event.form.team.website'|trans }}</th>
                 <th data-filter="select">{{ 'event.form.team.desc'|trans }}</th>
                 <th>{{ 'event.form.team.members.list'|trans }}</th>
-                <th>{{ 'event.form.team.tournaments'|trans }}</th>
+                <th>{{ 'event.form.team.tournament'|trans }}</th>
                 <th data-filter="select">{{ 'event.form.team.valid'|trans }}</th>
                 <th class="mini"></th>
             </tr>
@@ -68,17 +68,12 @@
                     </td>
                     <td>
                         {% for member in team.members %}
-                            {{ member.username }}
+                            {{ member.user.username }}
                             {% if not loop.last %}<br />{% endif %}
                         {% endfor %}
                     </td>
                     <td>
-                        {% for tournament in team.tournaments %}
-                            {{ tournament.game.name }}
-                            {% if not loop.last %}<br />{% endif %}
-                        {% else %}
-                            --
-                        {% endfor %}
+                        {{ team.tournament.name }}
                     </td>
                     <td>
                         {% if team.valid %}

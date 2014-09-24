@@ -96,8 +96,7 @@ class EntriesController extends Controller
 
         return array(
             'event' => $event,
-            'form' => $form->createView(),
-            'teams' => array()
+            'form' => $form->createView()
         );
     }
 
@@ -149,8 +148,7 @@ class EntriesController extends Controller
 
         return array(
             'event' => $event,
-            'form' => $form->createView(),
-            'teams' => $entry->getTeams()
+            'form' => $form->createView()
         );
     }
 

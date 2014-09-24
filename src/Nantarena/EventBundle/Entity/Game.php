@@ -71,7 +71,7 @@ class Game
      * Set name
      *
      * @param string $name
-     * @return EntryType
+     * @return Event
      */
     public function setName($name)
     {

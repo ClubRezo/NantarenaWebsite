@@ -22,7 +22,7 @@
 
     {% block stylesheets %}{% endblock %}
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.png') }}" />
 
     {% javascripts '@NantarenaSiteBundle/Resources/public/js/modernizr/modernizr-2.6.2.min.js' %}
         <script src="{{ asset_url }}"></script>
@@ -30,98 +30,101 @@
 </head>
 
 <body>
-    <header id="top">
-        <div id="container_header" class="container">
-            <div class="logo">
-                <a href="{{ path('nantarena_site_home') }}">
-                    {{ 'site.title'|trans }} <span>{{ 'site.subtitle'|trans }}</span>
-                </a>
+    <div id="wrapper">
+        <header id="top">
+            <div id="container_header" class="container">
+                <div class="logo">
+                    <a href="{{ path('nantarena_site_home') }}">
+                        {{ 'site.title'|trans }} <span>{{ 'site.subtitle'|trans }}</span>
+                    </a>
+                </div>
+                <nav id="header">
+                    <ul>
+                        <li><a href="{{ static_link('informations-pratiques') }}" class="info">{{ 'site.nav.info'|trans }}</a></li>
+                        <li><a href="{{ static_link('ou-sommes-nous') }}" class="plan">{{ 'site.nav.map'|trans }}</a></li>
+                        <li><a href="{{ path('nantarena_forum_default_index') }}" class="forum">{{ 'site.nav.forum'|trans }}</a></li>
+                        <li><a href="{{ path('nantarena_contact') }}" class="contact">{{ 'site.nav.contact'|trans }}</a></li>
+                    </ul>
+                </nav>
             </div>
-            <nav id="header">
-                <ul>
-                    <li><a href="{{ static_link('informations-pratiques') }}" class="info">{{ 'site.nav.info'|trans }}</a></li>
-                    <li><a href="{{ static_link('ou-sommes-nous') }}" class="plan">{{ 'site.nav.map'|trans }}</a></li>
-                    <li><a href="{{ path('nantarena_forum_default_index') }}" class="forum">{{ 'site.nav.forum'|trans }}</a></li>
-                    <li><a href="{{ path('nantarena_contact') }}" class="contact">{{ 'site.nav.contact'|trans }}</a></li>
+
+            <nav id="menu">
+                <ul class="container">
+                    {% include 'NantarenaSiteBundle::_menu.html.twig' %}
+
+                    {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <li class="right js">
+                            <a class="login">{{ 'site.menu.signin'|trans }}</a>
+                            <div class="loginbox">
+                                <form action="{{ path('fos_user_security_check') }}" method="post">
+                                    <div class="inputs">
+                                        <p><input type="text" name="_username" required="required" tabindex="10" placeholder="{{ 'site.login.pseudo'|trans }}" class="username" /></p>
+                                        <p><input type="password" name="_password" required="required" tabindex="20" placeholder="{{ "site.login.password"|trans }}" class="password" /></p>
+                                        <p><a href="{{ path('fos_user_resetting_request') }}" tabindex="40">{{ 'site.login.reset'|trans }}</a></p>
+                                    </div>
+                                    <div class="submit">
+                                        <input type="checkbox" name="_remember_me" value="on" checked="checked" class="hide" />
+                                        <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
+                                        {# <input type="hidden" name="_target_path" value="{{ app.request.headers.get('referer') }}" /> #}
+                                        <input type="submit" class="btn" name="_submit" tabindex="30" />
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                        <li class="right no-js"><a href="{{ path('fos_user_security_login') }}">{{ 'site.menu.signin'|trans }}</a></li>
+
+                        <li class="right"><a href="{{ path('fos_user_registration_register') }}">{{ 'site.menu.signup'|trans }}</a></li>
+                    {% else %}
+                        <li class="right profile">
+                            <a>
+                                <i class="icon-user icon-white"></i>&nbsp;&nbsp;
+                                {{ app.user.username }}
+                            </a>
+                            {#{% if  app.user.getUnreadNotifs() > 0 %}#}
+                                {#<span class="badge"><a href="#">{{ app.user.getUnreadNotifs() }}</a></span>#}
+                            {#{% endif %}#}
+
+                            <ul class="profilebox">
+                                <li><a href="{{ path('nantarena_user_profile') }}">{{ 'site.menu.profile'|trans }}</a></li>
+
+                                {%  if is_granted('ROLE_ADMIN') %}
+                                    <li><a href="{{ path('nantarena_admin_index') }}">{{ 'site.menu.admin'|trans }}</a>
+                                {% endif %}
+
+                                <li><a href="{{ path('fos_user_security_logout') }}">{{ 'site.menu.signout'|trans }}</a></li>
+                            </ul>
+                        </li>
+
+                    {% endif %}
                 </ul>
             </nav>
-        </div>
 
-        <nav id="menu">
-            <ul class="container">
-                {% include 'NantarenaSiteBundle::_menu.html.twig' %}
-
-                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <li class="right js">
-                        <a class="login">{{ 'site.menu.signin'|trans }}</a>
-                        <div class="loginbox">
-                            <form action="{{ path('fos_user_security_check') }}" method="post">
-                                <div class="inputs">
-                                    <p><input type="text" name="_username" required="required" placeholder="{{ 'site.login.pseudo'|trans }}" class="username" /></p>
-                                    <p><input type="password" name="_password" required="required" placeholder="{{ "site.login.password"|trans }}" class="password" /></p>
-                                    <p><a href="{{ path('fos_user_resetting_request') }}">{{ 'site.login.reset'|trans }}</a></p>
-                                </div>
-                                <div class="submit">
-                                    <input type="checkbox" name="_remember_me" value="on" checked="checked" class="hide" />
-                                    <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
-                                    {# <input type="hidden" name="_target_path" value="{{ app.request.headers.get('referer') }}" /> #}
-                                    <input type="submit" class="btn" name="_submit" />
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-                    <li class="right no-js"><a href="{{ path('fos_user_security_login') }}">{{ 'site.menu.signin'|trans }}</a></li>
-
-                    <li class="right"><a href="{{ path('fos_user_registration_register') }}">{{ 'site.menu.signup'|trans }}</a></li>
-                {% else %}
-                    <li class="right profile">
-                        <a>
-                            <i class="icon-user icon-white"></i>&nbsp;&nbsp;
-                            {{ app.user.username }}
-                        </a>
-                        {#{% if  app.user.getUnreadNotifs() > 0 %}#}
-                            {#<span class="badge"><a href="#">{{ app.user.getUnreadNotifs() }}</a></span>#}
-                        {#{% endif %}#}
-
-                        <ul class="profilebox">
-                            <li><a href="{{ path('nantarena_user_profile') }}">{{ 'site.menu.profile'|trans }}</a></li>
-
-                            {%  if is_granted('ROLE_ADMIN') %}
-                                <li><a href="{{ path('nantarena_admin_index') }}">{{ 'site.menu.admin'|trans }}</a>
-                            {% endif %}
-
-                            <li><a href="{{ path('fos_user_security_logout') }}">{{ 'site.menu.signout'|trans }}</a></li>
-                        </ul>
-                    </li>
-
-                {% endif %}
-            </ul>
-        </nav>
-
-        {% block banner %}
-            {{ render(controller('NantarenaBannerBundle:DisplayBanner:index')) }}
-        {% endblock %}
-
-    </header>
-
-    <div id="content" class="container">
-        <div class="row-fluid">
-
-            {% if form is defined %}
-                {% form_theme form with 'NantarenaSiteBundle:Form:standard_layout.html.twig' %}
+            {% if app.request.attributes.get('_route') == 'nantarena_site_home'%}
+                {% block banner %}
+                    {{ render(controller('NantarenaBannerBundle:DisplayBanner:index')) }}
+                {% endblock %}
             {% endif %}
+        </header>
 
-            {% block raw_body %}
-                <section class="span9">
-                    {% block breadcrumb %}{% endblock %}
-                    {% set block_page_title = block('page_title') %}
-                    {% if block_page_title is not empty %}
-                        <h1>{{ block_page_title|raw }}</h1>
-                    {% endif %}
-                    {% block body %}{% endblock %}
-                </section>
-                {% include 'NantarenaSiteBundle::_sidebar.html.twig' %}
-            {% endblock %}
+        <div id="content" class="container">
+            <div class="row-fluid">
+
+                {% if form is defined %}
+                    {% form_theme form with 'NantarenaSiteBundle:Form:standard_layout.html.twig' %}
+                {% endif %}
+
+                {% block raw_body %}
+                    <section class="span9">
+                        {% block breadcrumb %}{% endblock %}
+                        {% set block_page_title = block('page_title') %}
+                        {% if block_page_title is not empty %}
+                            <h1>{{ block_page_title|raw }}</h1>
+                        {% endif %}
+                        {% block body %}{% endblock %}
+                    </section>
+                    {% include 'NantarenaSiteBundle::_sidebar.html.twig' %}
+                {% endblock %}
+            </div>
         </div>
     </div>
 
@@ -130,7 +133,7 @@
             <div class="event">
                 <div class="icon"></div>
                 <ul>
-                    <li><a href="{{ static_link('les-tournois') }}">{{ 'site.nav.tournaments'|trans }}</a></li>
+                    {#<li><a href="{{ static_link('les-tournois') }}">{{ 'site.nav.tournaments'|trans }}</a></li>#}
                     <li><a href="{{ static_link('informations-pratiques') }}">{{ 'site.nav.info'|trans }}</a></li>
                     <li><a href="{{ static_link('ou-sommes-nous') }}">{{ 'site.nav.map'|trans }}</a></li>
                     <li><a href="{{ static_link('nos-partenaires') }}">{{ 'site.nav.sponsors'|trans }}</a></li>
@@ -143,13 +146,13 @@
                     <li><a href="{{ static_link('qui-sommes-nous') }}">{{ 'site.nav.whoarewe'|trans }}</a></li>
                     <li><a href="{{ path('nantarena_news_index') }}">{{ 'site.nav.news'|trans }}</a></li>
                     <li><a href="{{ static_link('presse') }}">{{ 'site.nav.press'|trans }}</a></li>
-                    <li><a href="{{ path('nantarena_forum_default_index') }}">{{ 'site.nav.forum'|trans }}</a></li>
                 </ul>
             </div>
 
             <div class="contact">
                 <div class="icon"></div>
                 <ul>
+                    <li><a href="{{ path('nantarena_forum_default_index') }}">{{ 'site.nav.forum'|trans }}</a></li>
                     <li><a href="{{ path('nantarena_contact') }}">{{ 'site.nav.contact'|trans }}</a></li>
                     <li><a href="http://webchat.quakenet.org/?channels=nantarena">{{ 'site.nav.irc'|trans }}</a></li>
                 </ul>

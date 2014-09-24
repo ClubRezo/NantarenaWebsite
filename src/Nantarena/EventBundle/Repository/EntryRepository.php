@@ -17,9 +17,9 @@ class EntryRepository extends EntityRepository
     public function findByEvent(Event $event)
     {
         return $this->createQueryBuilder('e')
-            ->join('e.entryType', 'et')
-            ->addSelect('et')
-            ->where('et.event = :event')
+            ->join('e.tournament', 't')
+            ->addSelect('t')
+            ->where('t.event = :event')
             ->setParameter('event', $event)
             ->getQuery()
             ->getResult();
@@ -28,9 +28,9 @@ class EntryRepository extends EntityRepository
     public function findByEventAndUser(Event $event, User $user)
     {
         return $this->createQueryBuilder('e')
-            ->join('e.entryType', 'et')
-            ->addSelect('et')
-            ->where('et.event = :event')
+            ->join('e.tournament', 't')
+            ->addSelect('t')
+            ->where('t.event = :event')
             ->andWhere('e.user = :user')
             ->setParameter('event', $event)
             ->setParameter('user', $user)

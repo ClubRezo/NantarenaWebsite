@@ -35,7 +35,7 @@ class UserRepository extends EntityRepository
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.entries', 'ee')
-            ->leftJoin('ee.entryType', 'et')
+            ->leftJoin('ee.tournament', 'et')
             ->where('et.event = :event')
             ->setParameter('event', $event)
             ->getQuery()

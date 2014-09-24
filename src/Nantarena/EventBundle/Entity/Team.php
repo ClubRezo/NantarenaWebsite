@@ -5,7 +5,6 @@ namespace Nantarena\EventBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Nantarena\EventBundle\Validator\Constraints\TeamNameConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamTagConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamCreatorConstraint;
@@ -22,6 +21,11 @@ use Nantarena\EventBundle\Validator\Constraints\TeamMembersTournamentsConstraint
  * @TeamTagConstraint(message="event.teams.unique.tag")
  * @TeamCreatorConstraint(message="event.teams.creator")
  * @TeamMembersTournamentsConstraint(message="event.teams.members.tournaments")
+ * @TeamMembersConstraint(
+ *      emptyMessage="event.teams.members.empty",
+ *      sameMessage="event.teams.members.same",
+ *      alreadyTeam="event.teams.members.already"
+ * )
  */
 class Team
 {
@@ -74,32 +78,20 @@ class Team
     private $desc;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Nantarena\UserBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="Nantarena\EventBundle\Entity\Entry")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", nullable=false)
      */
     private $creator;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Nantarena\UserBundle\Entity\User", inversedBy="teams")
-     * @ORM\JoinTable(name="event_team_members")
-     * @TeamMembersConstraint(
-     *      emptyMessage="event.teams.members.empty",
-     *      sameMessage="event.teams.members.same"
-     * )
+     * @ORM\OneToMany(targetEntity="Nantarena\EventBundle\Entity\Entry", mappedBy="team", cascade={"persist"})
      */
     private $members;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Nantarena\EventBundle\Entity\Tournament", inversedBy="teams")
-     * @ORM\JoinTable(name="event_team_tournaments")
+     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Tournament", inversedBy="teams")
      */
-    private $tournaments;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Event")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", nullable=false)
-     */
-    private $event;
+    private $tournament;
 
     /**
      * Constructor
@@ -107,7 +99,6 @@ class Team
     public function __construct()
     {
         $this->members = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tournaments = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -238,10 +229,10 @@ class Team
     /**
      * Set creator
      *
-     * @param \Nantarena\UserBundle\Entity\User $creator
+     * @param \Nantarena\EventBundle\Entity\Entry $creator
      * @return Team
      */
-    public function setCreator(\Nantarena\UserBundle\Entity\User $creator)
+    public function setCreator(\Nantarena\EventBundle\Entity\Entry $creator)
     {
         $this->creator = $creator;
     
@@ -251,7 +242,7 @@ class Team
     /**
      * Get creator
      *
-     * @return \Nantarena\UserBundle\Entity\User 
+     * @return \Nantarena\EventBundle\Entity\Entry
      */
     public function getCreator()
     {
@@ -261,24 +252,27 @@ class Team
     /**
      * Add members
      *
-     * @param \Nantarena\UserBundle\Entity\User $members
+     * @param \Nantarena\EventBundle\Entity\Entry $members
      * @return Team
      */
     public function addMember($members)
     {
-        if (null !== $members)
+        if (null !== $members) {
+            $members->setTeam($this);
             $this->members[] = $members;
-    
+        }
+
         return $this;
     }
 
     /**
      * Remove members
      *
-     * @param \Nantarena\UserBundle\Entity\User $members
+     * @param \Nantarena\EventBundle\Entity\Entry $members
      */
-    public function removeMember(\Nantarena\UserBundle\Entity\User $members)
+    public function removeMember(\Nantarena\EventBundle\Entity\Entry $members)
     {
+        $members->setTeam(null);
         $this->members->removeElement($members);
     }
 
@@ -293,64 +287,36 @@ class Team
     }
 
     /**
-     * Add tournaments
+     * get tournament
      *
-     * @param \Nantarena\EventBundle\Entity\Tournament $tournaments
+     * @return mixed
+     */
+    public function getTournament()
+    {
+        return $this->tournament;
+    }
+
+    /**
+     * Set tournament
+     *
+     * @param mixed $tournament
      * @return Team
      */
-    public function addTournament(\Nantarena\EventBundle\Entity\Tournament $tournaments)
+    public function setTournament(\Nantarena\EventBundle\Entity\Tournament $tournament)
     {
-        $this->tournaments[] = $tournaments;
-    
+        $this->tournament = $tournament;
+
         return $this;
     }
 
     /**
-     * Remove tournaments
+     * Method to indicate if the team is valid or not
+     * (if the minimum team members have paid)
      *
-     * @param \Nantarena\EventBundle\Entity\Tournament $tournaments
+     * @return bool
      */
-    public function removeTournament(\Nantarena\EventBundle\Entity\Tournament $tournaments)
-    {
-        $this->tournaments->removeElement($tournaments);
-    }
-
-    /**
-     * Get tournaments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTournaments()
-    {
-        return $this->tournaments;
-    }
-
-    /**
-     * Set event
-     *
-     * @param \Nantarena\EventBundle\Entity\Event $event
-     * @return Team
-     */
-    public function setEvent(\Nantarena\EventBundle\Entity\Event $event)
-    {
-        $this->event = $event;
-    
-        return $this;
-    }
-
-    /**
-     * Get event
-     *
-     * @return \Nantarena\EventBundle\Entity\Event 
-     */
-    public function getEvent()
-    {
-        return $this->event;
-    }
-
-    public function isValid()
-    {
-        # TODO
+    public function isValid() {
         return false;
     }
+
 }

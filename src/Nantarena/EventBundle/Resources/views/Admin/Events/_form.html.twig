@@ -4,12 +4,10 @@
     <fieldset>
         <legend>{{ 'event.form.fieldset.infos'|trans }}</legend>
 
-        <div class="row control-group">
+        <div class="control-group">
             <div class="span6">
                 {{ form_row(form.name, {'label': 'event.form.event.name'|trans|colon}) }}
                 {{ form_row(form.capacity, {'label': 'event.form.event.capacity'|trans|colon}) }}
-                {{ form_row(form.startDate, {'label': 'event.form.event.startDate'|trans|colon}) }}
-                {{ form_row(form.endDate, {'label': 'event.form.event.endDate'|trans|colon}) }}
 
                 {% form_theme form.rules with 'NantarenaSiteBundle:Form:resource_layout.html.twig' %}
                 {{ form_row(form.rules, {'label': 'event.form.event.rules'|trans|colon}) }}
@@ -21,28 +19,25 @@
                 {% form_theme form.cover with 'NantarenaSiteBundle:Form:image_layout.html.twig' %}
                 {{ form_row(form.cover, {'label': 'event.form.event.cover'|trans|colon}) }}
             </div>
-    </fieldset>
-
-    <fieldset>
-        <legend>{{ 'event.form.fieldset.entries'|trans }}</legend>
-
-        <div class="row control-group">
-            <div class="span6">
-                {{ form_row(form.startRegistrationDate, {'label': 'event.form.event.startRegistrationDate'|trans|colon}) }}
-                {{ form_row(form.endRegistrationDate, {'label': 'event.form.event.endRegistrationDate'|trans|colon}) }}
-            </div>
-            <div class="span6">
-                {% form_theme form.entryTypes with 'NantarenaSiteBundle:Form:inline_layout.html.twig' %}
-                {{ form_widget(form.entryTypes, {
-                    'add_text': 'event.form.entrytype.add'|trans,
-                    'labels': {
-                        'name': 'event.form.entrytype.name'|trans,
-                        'price': 'event.form.entrytype.price'|trans
-                    }
-                }) }}
-            </div>
         </div>
     </fieldset>
+
+    <div class="control-group">
+        <div class="span6">
+            <fieldset>
+                <legend>{{ 'event.form.fieldset.entries'|trans }}</legend>
+                {{ form_row(form.startRegistrationDate, {'label': 'event.form.event.startRegistrationDate'|trans|colon}) }}
+                {{ form_row(form.endRegistrationDate, {'label': 'event.form.event.endRegistrationDate'|trans|colon}) }}
+            </fieldset>
+        </div>
+        <div class="span6">
+            <fieldset>
+                <legend>{{ 'event.form.fieldset.event'|trans }}</legend>
+                {{ form_row(form.startDate, {'label': 'event.form.event.startDate'|trans|colon}) }}
+                {{ form_row(form.endDate, {'label': 'event.form.event.endDate'|trans|colon}) }}
+            </fieldset>
+        </div>
+    </div>
 
     <fieldset>
         <legend>{{ 'event.form.fieldset.tournaments'|trans }}</legend>
@@ -52,10 +47,11 @@
             'add_text': 'event.form.tournaments.add'|trans,
             'labels': {
                 'game': 'event.form.tournament.game'|trans,
-                'admin': 'event.form.tournament.admin'|trans,
+                'professional': 'event.form.tournament.professional'|trans,
+                'price': 'event.form.tournament.price'|trans,
                 'maxTeams': 'event.form.tournament.maxTeams'|trans,
                 'startDate': 'event.form.tournament.startDate'|trans,
-                'exclusive': 'event.form.tournament.exclusive'|trans
+                'admin': 'event.form.tournament.admin'|trans
             }
         }) }}
     </fieldset>

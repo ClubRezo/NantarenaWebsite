@@ -2,11 +2,10 @@
 
 namespace Nantarena\EventBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Nantarena\EventBundle\Validator\Constraints\UserEntryConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Entry
@@ -17,15 +16,22 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Entry
 {
     /**
-    * @ORM\Id()
-    * @ORM\ManyToOne(
-    *   targetEntity="Nantarena\EventBundle\Entity\EntryType")
-    * @ORM\JoinColumn(name="event_entry_type_id", referencedColumnName="id", nullable=false)
-    */
-    private $entryType;
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
 
     /**
-     * @ORM\Id()
+    * @ORM\ManyToOne(
+    *   targetEntity="Nantarena\EventBundle\Entity\Tournament")
+    * @ORM\JoinColumn(name="event_tournament_id", referencedColumnName="id", nullable=false)
+    */
+    private $tournament;
+
+    /**
      * @ORM\ManyToOne(
      *      targetEntity="Nantarena\UserBundle\Entity\User",
      *      inversedBy="entries")
@@ -34,12 +40,27 @@ class Entry
     private $user;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Team", inversedBy="members")
+     */
+    private $team;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="registration_date", type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
     private $registrationDate;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set registrationDate
@@ -65,26 +86,26 @@ class Entry
     }
 
     /**
-     * Set entryType
+     * Set tournament
      *
-     * @param \Nantarena\EventBundle\Entity\EntryType $entryType
+     * @param \Nantarena\EventBundle\Entity\Tournament $tournament
      * @return Entry
      */
-    public function setEntryType(\Nantarena\EventBundle\Entity\EntryType $entryType)
+    public function setTournament(\Nantarena\EventBundle\Entity\Tournament $tournament)
     {
-        $this->entryType = $entryType;
+        $this->tournament = $tournament;
     
         return $this;
     }
 
     /**
-     * Get entryType
+     * Get tournament
      *
-     * @return \Nantarena\EventBundle\Entity\EntryType
+     * @return \Nantarena\EventBundle\Entity\Tournament
      */
-    public function getEntryType()
+    public function getTournament()
     {
-        return $this->entryType;
+        return $this->tournament;
     }
 
     /**
@@ -111,37 +132,27 @@ class Entry
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection
+     * get optional team
+     *
+     * @return Team
      */
-    public function getTeams()
+    public function getTeam()
     {
-        if (null !== $this->user) {
-            $teams = $this->getUser()->getTeams();
-
-            /** @var Team $team */
-            foreach ($teams as $key => $team) {
-                if ($team->getEvent() !== $this->getEntryType()->getEvent())
-                    unset($teams[$key]);
-            }
-
-            return $teams;
-        }
-
-        return null;
+        return $this->team;
     }
 
-    public function getTournaments()
+    /**
+     * Set optional team
+     *
+     * @param mixed $team
+     * @return Entry
+     */
+    public function setTeam($team)
     {
-        $teams = $this->getTeams();
-        $tournaments = new ArrayCollection();
+        $this->team = $team;
 
-        /** @var Team $team */
-        foreach ($teams as $team) {
-            foreach($team->getTournaments() as $tournament) {
-                $tournaments->add($tournament);
-            }
-        }
-
-        return $tournaments;
+        return $this;
     }
+
+
 }

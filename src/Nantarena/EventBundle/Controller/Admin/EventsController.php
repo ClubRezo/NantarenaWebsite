@@ -79,12 +79,6 @@ class EventsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('NantarenaEventBundle:Event')->findWithAll($id);
 
-        $originalEntryTypes = array();
-
-        foreach ($event->getEntryTypes() as $entryType) {
-            $originalEntryTypes[] = $entryType;
-        }
-
         $originalTournaments = array();
 
         foreach ($event->getTournaments() as $tournament) {
@@ -105,24 +99,12 @@ class EventsController extends Controller
             $flashbag = $this->get('session')->getFlashBag();
 
             try {
-                foreach ($event->getEntryTypes() as $entryType) {
-                    foreach ($originalEntryTypes as $key => $toDel) {
-                        if ($toDel->getId() === $entryType->getId()) {
-                            unset($originalEntryTypes[$key]);
-                        }
-                    }
-                }
-
                 foreach ($event->getTournaments() as $tournament) {
                     foreach ($originalTournaments as $key => $toDel) {
                         if ($toDel->getId() === $tournament->getId()) {
                             unset($originalTournaments[$key]);
                         }
                     }
-                }
-
-                foreach ($originalEntryTypes as $entryType) {
-                    $em->remove($entryType);
                 }
 
                 foreach ($originalTournaments as $tournament) {

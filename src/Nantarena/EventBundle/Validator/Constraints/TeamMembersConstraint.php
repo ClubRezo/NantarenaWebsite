@@ -13,4 +13,10 @@ class TeamMembersConstraint extends Constraint
 {
     public $emptyMessage = 'event.team.members.empty';
     public $sameMessage = 'event.team.members.same';
+    public $alreadyTeam = 'event.team.members.already';
+
+    public function getTargets()
+    {
+        return self::CLASS_CONSTRAINT;
+    }
 }

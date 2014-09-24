@@ -1,43 +1,34 @@
 {{ form_start(form) }}
     {{ form_errors(form) }}
 
-    <div class="row control-group">
+    <div class="control-group">
         <div class="span6">
             <fieldset>
                 <legend>{{ 'event.form.fieldset.infos'|trans }}</legend>
 
                 {{ form_row(form.event, {'label': 'event.profile.index.event'|trans|colon}) }}
                 {{ form_row(form.name, {'label': 'event.form.team.name'|trans|colon}) }}
+                {{ form_row(form.tournament, {'label': 'event.form.team.tournament'|trans|colon}) }}
+                {{ form_row(form.creator.user, {'label': 'event.form.team.creator'|trans|colon}) }}
+
+                {#{% form_theme form.members with 'NantarenaSiteBundle:Form:inline_layout.html.twig' %}#}
+                {{ form_widget(form.members, {
+                    'add_text': 'event.form.team.members.add'|trans,
+                    'labels': {
+                        'user': 'event.form.team.members.list'|trans
+                    }
+                }) }}
+            </fieldset>
+        </div>
+        <div class="span6">
+            <fieldset>
+                <legend>{{ 'event.form.fieldset.other'|trans }}</legend>
+
                 {{ form_row(form.tag, {'label': 'event.form.team.tag'|trans|colon}) }}
                 {{ form_row(form.logo, {'label': 'event.form.team.logo'|trans|colon}) }}
                 {{ form_row(form.website, {'label': 'event.form.team.website'|trans|colon}) }}
                 {{ form_row(form.desc, {'label': 'event.form.team.desc'|trans|colon}) }}
 
-            </fieldset>
-        </div>
-        <div class="span6">
-            <fieldset>
-                <legend>{{ 'event.form.fieldset.tournaments'|trans }}</legend>
-
-                <div class="control-group">
-                    {{ form_widget(form.tournaments) }}
-                </div>
-
-            </fieldset>
-
-            <fieldset>
-                <legend>{{ 'event.form.fieldset.members'|trans }}</legend>
-
-                <div class="row">
-                    <div class="span6 offset3">
-                        {% form_theme form.members with 'NantarenaSiteBundle:Form:inline_layout.html.twig' %}
-                        {{ form_widget(form.members, {
-                            'add_text': 'event.form.team.members.add'|trans,
-                            'labels': 'event.form.team.members.name'|trans
-                        }) }}
-                    </div>
-                </div>
-                {{ form_row(form.creator, {'label': 'event.form.team.creator'|trans|colon}) }}
             </fieldset>
         </div>
     </div>
