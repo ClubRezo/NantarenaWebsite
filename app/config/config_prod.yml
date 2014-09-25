@@ -30,7 +30,7 @@ monolog:
             from_email:         %monolog_from%
             to_email:           %monolog_to%
             subject:            "NantarenaWebsite Error"
-            level:              debug
+            level:              error
         login:
             type:               stream
             path:               "%kernel.logs_dir%/auth.log"
