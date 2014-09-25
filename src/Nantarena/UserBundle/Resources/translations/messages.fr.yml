@@ -97,7 +97,7 @@ user:
         password: 'Mot de passe'
         recaptcha: 'Image de vérification'
         remember_me: 'Se souvenir de moi'
-        repeated: Vérification
+        repeated: 'Mot de passe (confirmation)'
         username: Pseudo
 
     login:
