@@ -18,12 +18,12 @@
 
             <tbody>
                 <tr>
-                    <td>{{ entry.entryType.event.name }}</td>
+                    <td>{{ entry.tournament.event.name }}</td>
                     <td>
-                        {{ entry.entryType.name }}
+                        {{ entry.tournament.name }}
                     </td>
                     <td>
-                        {{ entry.entryType.price }}€
+                        {{ entry.tournament.price }}€
                     </td>
                 </tr>
             </tbody>
@@ -34,8 +34,8 @@
             <small>{{ 'payment.payment_process.create.option.desc'|trans }}</small>
         </p>
         <p class="text-center text-warning" >
-                {{ 'payment.payment_process.create.option.no_coupon'|trans }}
-            </p>
+            {{ 'payment.payment_process.create.option.no_coupon'|trans }}
+        </p>
 
         <h2>{{ 'payment.payment_process.create.patners.title'|trans }}</h2>
         <p class="muted text-center">

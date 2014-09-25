@@ -49,7 +49,7 @@
                         {{ transaction.price|number_format(2, '.', ',') }}€
                     </td>
                     <td>
-                        {{ transaction.getentry.entrytype.name }}
+                        {{ transaction.entry.tournament.name }}
                     </td>
                     <td>
                         {% if transaction.payment.isPaypal %}

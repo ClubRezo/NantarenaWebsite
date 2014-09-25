@@ -50,8 +50,8 @@
                             {{ transaction.user.username }}
                         </td>
                         <td>
-                            {% if transaction.getentry is not empty %}
-                            {{ transaction.getentry.entrytype.name }}
+                            {% if transaction.entry is not empty %}
+                            {{ transaction.entry.tournament.name }}
                             {% else %}
                             -
                             {% endif %}

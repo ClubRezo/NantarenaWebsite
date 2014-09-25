@@ -1,0 +1,53 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'payment.admin.coupons.title'|trans %}
+{% block page_title 'payment.admin.coupons.title'|trans %}
+
+{% block admin_content %}
+    <div class="span10 offset1">
+        <table class="table sortable filterable" data-perpage="50">
+            <thead>
+                <tr>
+                    <th data-filter="ignore" class="tiny">#</th>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Opération</th>
+                    <th>Utilisateur</th>
+                    <th class="mini"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for coupon in coupons %}
+                <tr>
+                    <td>{{ coupon.id }}</td>
+                    <td>{{ coupon.name }}</td>
+                    <td>
+                        {% if coupon.isUnique %}
+                            Unique
+                        {% elseif coupon.isGlobal %}
+                            Global
+                        {% endif %}
+                    </td>
+                    <td>{{ coupon.operation }}</td>
+                    <td>{{ coupon.user }}</td>
+                    <td>
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+            <tbody class="empty">
+                <tr>
+                    <td colspan="10">
+                        <p class="text-center">Aucun coupon</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination pagination-centered"><ul></ul></div>
+    </div>
+
+{% endblock %}
