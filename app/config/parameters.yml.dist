@@ -17,3 +17,6 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     db_prefix:         na_
+
+    monolog_from:      ~
+    monolog_to:        ~
