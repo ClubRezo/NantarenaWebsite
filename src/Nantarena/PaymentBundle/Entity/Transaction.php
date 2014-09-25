@@ -13,7 +13,6 @@ use Nantarena\PaymentBundle\Validator\Constraints\OneTransactionConstraint;
  *
  * @ORM\Table(name="payment_transaction")
  * @ORM\Entity(repositoryClass="Nantarena\PaymentBundle\Repository\TransactionRepository")
- * @OneTransactionConstraint
  */
 class Transaction
 {
@@ -60,6 +59,18 @@ class Transaction
     * @ORM\JoinColumn(name="refund_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
     */
     private $refund;
+
+    /**
+     * @ORM\ManyToOne(
+     *   targetEntity="Nantarena\PaymentBundle\Entity\GlobalCoupon", inversedBy="transactions")
+     */
+    private $globalCoupon;
+
+    /**
+     * @ORM\OneToOne(
+     *   targetEntity="Nantarena\PaymentBundle\Entity\UniqueCoupon", inversedBy="transaction")
+     */
+    private $uniqueCoupon;
 
     /**
      * Is refund
@@ -229,4 +240,38 @@ class Transaction
     {
         return $this->refund;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUniqueCoupon()
+    {
+        return $this->uniqueCoupon;
+    }
+
+    /**
+     * @param mixed $uniqueCoupon
+     */
+    public function setUniqueCoupon($uniqueCoupon)
+    {
+        $this->uniqueCoupon = $uniqueCoupon;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGlobalCoupon()
+    {
+        return $this->globalCoupon;
+    }
+
+    /**
+     * @param mixed $globalCoupon
+     */
+    public function setGlobalCoupon($globalCoupon)
+    {
+        $this->globalCoupon = $globalCoupon;
+    }
+
+
 }

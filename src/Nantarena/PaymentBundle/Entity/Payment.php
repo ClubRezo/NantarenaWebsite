@@ -43,7 +43,7 @@ class Payment
     private $valid;
 
     /**
-     * @ORM\OneToMany(targetEntity="Nantarena\PaymentBundle\Entity\Transaction", mappedBy="payment", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Nantarena\PaymentBundle\Entity\Transaction", mappedBy="payment", cascade={"persist", "remove"})
      */
     private $transactions;
 
@@ -211,6 +211,7 @@ class Payment
      */
     public function addTransaction(\Nantarena\PaymentBundle\Entity\Transaction $transactions)
     {
+        $transactions->setPayment($this);
         $this->transactions[] = $transactions;
     
         return $this;

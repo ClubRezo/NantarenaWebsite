@@ -119,7 +119,7 @@ class PaypalService
     {
         // Payer
         $payer = new Payer();
-        $payer->setPayment_method("paypal");
+        $payer->setPaymentMethod("paypal");
 
         // Amount details
         $amountDetails = new Details();
@@ -145,14 +145,14 @@ class PaypalService
 
         // Redirect urls
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturn_url($url_succes);
-        $redirectUrls->setCancel_url($url_cancel);
+        $redirectUrls->setReturnUrl($url_succes);
+        $redirectUrls->setCancelUrl($url_cancel);
 
         // Payment
         $payment = new Payment();
         $payment->setIntent("sale");
         $payment->setPayer($payer);
-        $payment->setRedirect_urls($redirectUrls);
+        $payment->setRedirectUrls($redirectUrls);
         $payment->setTransactions(array($transaction));
 
         // Create Payment
@@ -194,7 +194,7 @@ class PaypalService
 
         // Apply the payment
         $paymentExecution = new PaymentExecution();
-        $paymentExecution->setPayer_id($payerId);   
+        $paymentExecution->setPayerId($payerId);
         $payment->execute($paymentExecution, $this->getApiContext());  
         
         return $payment;

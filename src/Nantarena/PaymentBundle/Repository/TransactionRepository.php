@@ -24,7 +24,7 @@ class TransactionRepository extends EntityRepository
             ->where('t.event = :event')
             ->andWhere('t.user = :user')
             ->andWhere($qb->expr()->isNull('t.refund'))
-            ->setParameter('event', $entry->getEntryType()->getEvent())
+            ->setParameter('event', $entry->getTournament()->getEvent())
             ->setParameter('user', $entry->getUser())
             ->getQuery()
             ->getOneOrNullResult();
@@ -53,7 +53,7 @@ class TransactionRepository extends EntityRepository
             ->andWhere('t.user = :user')
             ->andWhere($qb->expr()->isNull('t.refund'))
             ->andWhere($qb->expr()->eq('p.valid', true))
-            ->setParameter('event', $entry->getEntryType()->getEvent())
+            ->setParameter('event', $entry->getTournament()->getEvent())
             ->setParameter('user', $entry->getUser())
             ->getQuery()
             ->getOneOrNullResult();

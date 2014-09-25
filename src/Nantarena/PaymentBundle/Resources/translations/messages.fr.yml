@@ -79,17 +79,17 @@ payment:
                     <ul>
                         <li>Ce système de paiement fonctionne entièrement avec Paypal</li>
                         <li>Aucune information bancaire utilisée n'est enregistrée sur notre site</li>
-                        <li class="text-warning" >Le paiement par carte bancaire s'effectue à travers le système paypal</li>
+                        <li class="text-warning">Le paiement par carte bancaire s'effectue à travers le système paypal</li>
                         <li>SVP, n'utilisez pas les flèches de navigation où vous recommencerez la procédure à zéro</li>
                         <li>Si vous avez fait une erreur, vous devez annuler la procédure en cours</li>
-                        <li>Une fois le paiment effectué, votre compte sera automatiquement mis à jour</li>
+                        <li>Une fois le paiement effectué, votre compte sera automatiquement mis à jour</li>
                     </ul>
             place:
                 title: 'Votre place'
                 desc: 'C''est votre entrée pour notre événement'
-                event: 'L''événement'
-                status: 'Votre status'
-                price: 'Le prix'
+                event: 'Evénement'
+                status: 'Tournoi'
+                price: 'Prix'
             option:
                 title: 'Vos coupons de réduction'
                 desc: 'Vous pouvez sélectionner 1 coupon personnel ou global'
@@ -122,6 +122,7 @@ payment:
                 price: 'Prix'
         message:
             base_error: 'Une erreur s''est produite durant la procédure'
+            conflict_error: 'Un conflit de paiement a peut-être lieu avec un autre membre de votre équipe'
             event_signup: 'Vous n''êtes pas inscrit à cet événement'
             paypal: 'Un problème a été rencontré avec Paypal'
             cancel: 'La transaction a été supprimée'

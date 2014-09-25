@@ -34,6 +34,10 @@ class AdminController extends Controller implements DashboardInterface
                     'url' => $this->generateUrl('nantarena_admin_payment_user_list'),
                     'role' => 'ROLE_ADMIN'
                 ),
+                $translator->trans('payment.admin.dashboard.coupons_management') => array(
+                    'url' => $this->generateUrl('nantarena_admin_payment_coupons_list'),
+                    'role' => 'ROLE_ADMIN'
+                ),
             )
         );
     }

@@ -2,73 +2,85 @@
 
 namespace Nantarena\PaymentBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * uniqCoupon
+ * globalCoupon
  *
  * @ORM\Entity
- * @ORM\Table(name="payment_globalcoupon")
  */
 class GlobalCoupon extends Coupon
 {
+    /**
+     * @ORM\OneToMany(targetEntity="Nantarena\PaymentBundle\Entity\Transaction", mappedBy="globalCoupon")
+     */
+    private $transactions;
 
     /**
-     * @var string
+     * @ORM\Column(type="boolean")
      */
-    private $name;
+    private $valid;
 
-    /**
-     * @var string
-     */
-    private $description;
-
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return globalCoupon
-     */
-    public function setName($name)
+    public function __construct()
     {
-        $this->name = $name;
-    
+        $this->transactions = new ArrayCollection();
+    }
+
+    /**
+     * Add transactions
+     *
+     * @param \Nantarena\PaymentBundle\Entity\Transaction $transactions
+     * @return Payment
+     */
+    public function addTransaction(\Nantarena\PaymentBundle\Entity\Transaction $transactions)
+    {
+        $this->transactions[] = $transactions;
+
         return $this;
     }
 
     /**
-     * Get name
+     * Remove transactions
      *
-     * @return string 
+     * @param \Nantarena\PaymentBundle\Entity\Transaction $transactions
      */
-    public function getName()
+    public function removeTransaction(\Nantarena\PaymentBundle\Entity\Transaction $transactions)
     {
-        return $this->name;
+        $this->transactions->removeElement($transactions);
     }
 
     /**
-     * Set description
+     * Get transactions
      *
-     * @param string $description
-     * @return globalCoupon
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setDescription($description)
+    public function getTransactions()
     {
-        $this->description = $description;
-    
+        return $this->transactions;
+    }
+
+    /**
+     * Set valid
+     *
+     * @param boolean $valid
+     * @return Coupon
+     */
+    public function setValid($valid)
+    {
+        $this->valid = $valid;
+
         return $this;
     }
 
     /**
-     * Get description
+     * Get valid
      *
-     * @return string 
+     * @return boolean
      */
-    public function getDescription()
+    public function getValid()
     {
-        return $this->description;
+        return $this->valid;
     }
 }

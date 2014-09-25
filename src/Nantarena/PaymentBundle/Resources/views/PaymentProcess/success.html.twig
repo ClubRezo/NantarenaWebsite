@@ -34,10 +34,10 @@
                 {% endif %}
                     <td>{{ ptransaction.user.username }}</td>
                     <td>
-                        {% if ptransaction.getentry is empty %}
+                        {% if ptransaction.entry is empty %}
                         -
                         {% else %}
-                        {{ ptransaction.getentry.entrytype.name }}
+                        {{ ptransaction.entry.tournament.name }}
                         {% endif %}
                     </td>
                     <td>
@@ -50,7 +50,7 @@
                         <strong>{{ 'payment.payment_process.success.table.total'|trans }}</strong>
                     </td>
                     <td>
-                        <strong>{{ trans.payment.getamount|number_format(2, '.', ',') }}€</strong>
+                        <strong>{{ trans.payment.amount|number_format(2, '.', ',') }}€</strong>
                     </td>
                 </tr>
             </tbody>

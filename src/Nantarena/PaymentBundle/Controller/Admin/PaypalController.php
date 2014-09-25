@@ -73,7 +73,7 @@ class PaypalController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'Aucun paiement n a été supprimé');
         }
         
-        return $this->redirect($this->generateUrl('nantarena_admin_paypal_list'));
+        return $this->redirect($this->generateUrl('nantarena_admin_payment_paypal_list'));
     }
 
 }

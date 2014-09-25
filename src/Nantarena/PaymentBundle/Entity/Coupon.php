@@ -11,14 +11,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Coupon
  *
- * @ORM\Entity
- * @ORM\InheritanceType("JOINED")
+ * @ORM\Entity(repositoryClass="Nantarena\PaymentBundle\Repository\CouponRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({"coupon" = "Coupon", "uniq" = "UniqCoupon", "global" = "GlobalCoupon"})
+ * @ORM\DiscriminatorMap({"unique" = "UniqueCoupon", "global" = "GlobalCoupon"})
  * @ORM\Table(name="payment_coupon")
  */
 class Coupon
 {
+    const TYPE_PERCENT = 1;
+    const TYPE_MINUS = 2;
+    const TYPE_PLUS = 4;
+
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -39,32 +43,6 @@ class Coupon
     private $description;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $startDate;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $endDate;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Nantarena\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
-    private $user;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $assocDate;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $valid;
-
-    /**
      * @ORM\Column(name="op_type", type="decimal")
      */
     private $op_type;
@@ -73,9 +51,6 @@ class Coupon
      * @ORM\Column(name="op_value", type="decimal", precision=5, scale=2)
      */
     private $op_value;
-
-
-
 
     /**
      * Get id
@@ -134,98 +109,6 @@ class Coupon
     }
 
     /**
-     * Set startDate
-     *
-     * @param \DateTime $startDate
-     * @return Coupon
-     */
-    public function setStartDate($startDate)
-    {
-        $this->startDate = $startDate;
-    
-        return $this;
-    }
-
-    /**
-     * Get startDate
-     *
-     * @return \DateTime 
-     */
-    public function getStartDate()
-    {
-        return $this->startDate;
-    }
-
-    /**
-     * Set endDate
-     *
-     * @param \DateTime $endDate
-     * @return Coupon
-     */
-    public function setEndDate($endDate)
-    {
-        $this->endDate = $endDate;
-    
-        return $this;
-    }
-
-    /**
-     * Get endDate
-     *
-     * @return \DateTime 
-     */
-    public function getEndDate()
-    {
-        return $this->endDate;
-    }
-
-    /**
-     * Set assocDate
-     *
-     * @param \DateTime $assocDate
-     * @return Coupon
-     */
-    public function setAssocDate($assocDate)
-    {
-        $this->assocDate = $assocDate;
-    
-        return $this;
-    }
-
-    /**
-     * Get assocDate
-     *
-     * @return \DateTime 
-     */
-    public function getAssocDate()
-    {
-        return $this->assocDate;
-    }
-
-    /**
-     * Set valid
-     *
-     * @param boolean $valid
-     * @return Coupon
-     */
-    public function setValid($valid)
-    {
-        $this->valid = $valid;
-    
-        return $this;
-    }
-
-    /**
-     * Get valid
-     *
-     * @return boolean 
-     */
-    public function getValid()
-    {
-        return $this->valid;
-    }
-
-    /**
      * Set op_type
      *
      * @param string $opType
@@ -233,8 +116,10 @@ class Coupon
      */
     public function setOpType($opType)
     {
-        $this->op_type = $opType;
-    
+        if ($opType === self::TYPE_PERCENT || $opType === self::TYPE_MINUS || $opType === self::TYPE_PLUS) {
+            $this->op_type = $opType;
+        }
+
         return $this;
     }
 
@@ -271,26 +156,23 @@ class Coupon
         return $this->op_value;
     }
 
-    /**
-     * Set user
-     *
-     * @param \Nantarena\UserBundle\Entity\User $user
-     * @return Coupon
-     */
-    public function setUser(\Nantarena\UserBundle\Entity\User $user)
-    {
-        $this->user = $user;
-    
-        return $this;
+    public function isUnique() {
+        return $this instanceof UniqueCoupon;
     }
 
-    /**
-     * Get user
-     *
-     * @return \Nantarena\UserBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
+    public function isGlobal() {
+        return $this instanceof GlobalCoupon;
+    }
+
+    public function getOperation() {
+        if ($this->getOpType() === self::TYPE_PERCENT) {
+            return '-' . $this->getOpValue() . '%';
+        } else if ($this->getOpType() === self::TYPE_MINUS) {
+            return '-' . $this->getOpValue() . '€';
+        } else if ($this->getOpType() === self::TYPE_PLUS) {
+            return '+' . $this->getOpValue() . '€';
+        } else {
+            return '-';
+        }
     }
 }
