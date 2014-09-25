@@ -58,8 +58,8 @@
                     <td>
                         {% if entry.team is not empty %}
                             <a href="#">
-                                <abbr title="[{{ team.tag }}]" data-placement="right">
-                                    {{ team.name }}
+                                <abbr title="[{{ entry.team.tag }}]" data-placement="right">
+                                    {{ entry.team.name }}
                                 </abbr>
                             </a>
                         {% else %}
