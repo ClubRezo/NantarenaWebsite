@@ -58,8 +58,8 @@
                     <td>
                         {% if entry.team is not empty %}
                             <a href="#">
-                                <abbr title="[{{ team.tag }}]" data-placement="right">
-                                    {{ team.name }}
+                                <abbr title="[{{ entry.team.tag }}]" data-placement="right">
+                                    {{ entry.team.name }}
                                 </abbr>
                             </a>
                         {% else %}
@@ -69,7 +69,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        {#TODO#}<a href="{{ path('nantarena_payment_paymentprocess_create', {'slug': entry.entryType.event.slug}) }}" class="btn btn-success">Payer</a>
+                        {#TODO#}<a href="{{ path('nantarena_payment_paymentprocess_create', {'slug': entry.tournament.event.slug}) }}" class="btn btn-success">Payer</a>
                     </td>
                     <td>
                         {#TODO: Check if the user has not paid #}
