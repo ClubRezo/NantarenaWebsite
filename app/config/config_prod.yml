@@ -31,8 +31,6 @@ monolog:
             to_email:           %monolog_to%
             subject:            "NantarenaWebsite Error"
             level:              debug
-            content_type:       text/html
-            formatter:          monolog.formatter.htmlformatter
         login:
             type:               stream
             path:               "%kernel.logs_dir%/auth.log"
