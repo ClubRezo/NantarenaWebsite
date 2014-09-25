@@ -8,7 +8,7 @@
             </h2>
             <p class="news-informations">
                 {% block news_informations %}
-                    <a href="#">{{ news.author }}</a>
+                    {{ news.author }}
                     <span>{{ news.date|date('d/m/Y') }}</span>
                     <span>{{ news.date|date('H:i') }}</span>
                 {% endblock %}
