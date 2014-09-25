@@ -6,10 +6,14 @@
 {% block user_content %}
     <div class="span9 offset2">
         {{ form_start(form, {
-        'action': path('fos_user_registration_register'),
-        'method': 'POST'
+            'action': path('fos_user_registration_register'),
+            'method': 'POST'
         }) }}
         {{ form_errors(form) }}
+
+        <!-- Chrome autofill fake inputs -->
+        <input name="fakeLogin" type="text" class="hide" />
+        <input name="fakePassword" type="password" class="hide" />
 
         {{ form_row(form.username, {'label': 'user.form.username'|trans|colon}) }}
         {{ form_row(form.email, {'label': 'user.form.email'|trans|colon}) }}

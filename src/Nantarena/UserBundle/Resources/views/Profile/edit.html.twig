@@ -9,8 +9,8 @@
     <div class="span8 offset2">
 
         {{ form_start(form, {
-        'action': path('fos_user_profile_edit'),
-        'method': 'POST'
+            'action': path('fos_user_profile_edit'),
+            'method': 'POST'
         }) }}
         {{ form_errors(form) }}
 
@@ -31,6 +31,9 @@
 
         <fieldset>
             <legend></legend>
+
+            <!-- Chrome autofill fake input -->
+            <input name="fakeLogin" type="text" class="hide" />
 
             {{ form_row(form.current_password, {'label': 'user.form.current_password'|trans|colon}) }}
         </fieldset>
