@@ -1,25 +1,29 @@
 <aside class="span3">
 
-    {#<div id="tournamentWidget" class="widget">#}
-        {#<h4>Inscriptions aux tournois</h4>#}
+    <div id="tournamentWidget" class="widget">
+        <h4>Inscriptions aux tournois</h4>
 
-        {#<div>#}
-            {#<ul>#}
-                {#<li>#}
-                    {#<p><a href="#">League of Legends</a></p>#}
-                    {#<div class="progress ttip" data-title="13/24 équipes validées" data-placement="bottom">#}
-                        {#<div class="bar" style="width: 60%"></div>#}
-                    {#</div>#}
-                {#</li>#}
-                {#<li>#}
-                    {#<p><a href="#">Counter-Strike: Global Offensive</a></p>#}
-                    {#<div class="progress ttip" data-title="13/24 équipes validées" data-placement="bottom">#}
-                        {#<div class="bar" style="width: 30%"></div>#}
-                    {#</div>#}
-                {#</li>#}
-            {#</ul>#}
-        {#</div>#}
-    {#</div>#}
+
+        <div id="tournamentCountdown">
+          
+        </div>
+        <div id="tournamentProgress">
+            <ul>
+                <li>
+                    <p><a href="">League of Legends</a></p>
+                    <div class="progress ttip" data-title="13/24 équipes validées" data-placement="bottom">
+                        <div class="bar" style="width: 60%"></div>
+                    </div>
+                </li>
+                <li>
+                    <p><a href="">Counter-Strike: Global Offensive</a></p>
+                    <div class="progress ttip" data-title="13/24 équipes validées" data-placement="bottom">
+                        <div class="bar" style="width: 30%"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 
     {% render controller('NantarenaForumBundle:Widget:recent') %}
 
