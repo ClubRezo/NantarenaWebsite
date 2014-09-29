@@ -17,6 +17,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    nantarena_user.registration_listener:
+        class: Nantarena\UserBundle\EventListener\RegistrationSubscriber
+        arguments: [@doctrine.orm.default_entity_manager]
+        tags:
+            - { name: kernel.event_subscriber }
+
     nantarena_user.user_subscriber:
         class: Nantarena\UserBundle\EventListener\UserSubscriber
         tags:
