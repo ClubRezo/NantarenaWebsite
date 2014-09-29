@@ -3,6 +3,8 @@
 {% block title 'user.registration.title'|trans %}
 {% block page_title 'user.registration.page_title'|trans %}
 
+{% set menu_active = "index" %}
+
 {% block user_content %}
     <p class="text-center">
         {{ 'user.registration.confirmed'|trans({'%username%': user.username}) }}
