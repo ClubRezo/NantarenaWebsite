@@ -7,29 +7,12 @@
 {% endblock %}
 
 {% block body %}
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <ul id="profile-menu">
-            <li {% if menu_active == 'index' %}class="active"{% endif %}>
-                <a href="{{ path('nantarena_user_profile') }}">{{ 'user.menu.index'|trans }}</a>
-            </li>
-            <li {% if menu_active == 'edit' %}class="active"{% endif %}>
-                <a href="{{ path('fos_user_profile_edit') }}">{{ 'user.menu.edit'|trans }}</a>
-            </li>
-            <li {% if menu_active == 'teams' %}class="active"{% endif %}>
-                <a href="#">{{ 'user.menu.teams'|trans }}</a>
-            </li>
-            <li {% if menu_active == 'tournaments' %}class="active"{% endif %}>
-                <a href="#">{{ 'user.menu.tournaments'|trans }}</a>
-            </li>
-        </ul>
-    {% endif %}
 
     <div class="row-fluid">
         <div class="span10 offset1">
             {% include 'NantarenaSiteBundle::_flashbag.html.twig' %}
         </div>
     </div>
-
 
     <div>
         {% block user_content %}

@@ -85,13 +85,13 @@
                             {#{% endif %}#}
 
                             <ul class="profilebox">
-                                <li><a href="{{ path('nantarena_user_profile') }}">{{ 'site.menu.profile'|trans }}</a></li>
+                                <li><a href="{{ url('fos_user_profile_edit') }}">{{ 'site.menu.profile'|trans }}</a></li>
 
                                 {%  if is_granted('ROLE_ADMIN') %}
-                                    <li><a href="{{ path('nantarena_admin_index') }}">{{ 'site.menu.admin'|trans }}</a>
+                                    <li><a href="{{ url('nantarena_admin_index') }}">{{ 'site.menu.admin'|trans }}</a>
                                 {% endif %}
 
-                                <li><a href="{{ path('fos_user_security_logout') }}">{{ 'site.menu.signout'|trans }}</a></li>
+                                <li><a href="{{ url('fos_user_security_logout') }}">{{ 'site.menu.signout'|trans }}</a></li>
                             </ul>
                         </li>
 
