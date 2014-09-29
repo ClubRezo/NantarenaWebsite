@@ -24,8 +24,10 @@
                         <td>{{ c.name }}</td>
                         <td>
                             <a href="{{ category_edit_path(c) }}"><i class="icon-wrench"></i></a>
-                            &nbsp;&nbsp;
-                            <a href="{{ category_delete_path(c) }}"><i class="icon-trash"></i></a>
+                            {% if categories|length > 1 %}
+                                &nbsp;&nbsp;
+                                <a href="{{ category_delete_path(c) }}"><i class="icon-trash"></i></a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
