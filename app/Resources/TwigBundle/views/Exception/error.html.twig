@@ -1,0 +1,16 @@
+{% extends 'NantarenaSiteBundle::layout.html.twig' %}
+
+{% block title %}Erreur inattendue{% endblock %}
+{% block page_title %}Erreur inattendue{% endblock %}
+
+{% block body %}
+
+    <div class="alert alert-warning span7 offset2 text-center">
+        Une erreur inattendue est survenue. <br/>
+        N'hésitez pas à contacter le webmaster si vous la rencontrez souvent.
+        <br/><br />
+        <a href="{{ url('nantarena_site_home') }}">Retour à l'accueil</a>
+    </div>
+
+{% endblock %}
+
