@@ -2,6 +2,14 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
 
+services:
+    monolog.formatter.htmlformatter:
+        class: Monolog\Formatter\HtmlFormatter
+    monolog.processor.gitprocessor:
+        class: Monolog\Processor\GitProcessor
+        tags:
+            - { name: monolog.processor }
+
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }
