@@ -12,14 +12,6 @@ doctrine:
 #        result_cache_driver: apc
 #        query_cache_driver: apc
 
-services:
-    monolog.formatter.htmlformatter:
-        class: Monolog\Formatter\HtmlFormatter
-    monolog.processor.gitprocessor:
-        class: Monolog\Processor\GitProcessor
-        tags:
-            - { name: monolog.processor }
-
 monolog:
     handlers:
         main:
