@@ -28,7 +28,7 @@
         overflow: hidden;
     }
 
-    div#banner .item span {
+    div#banner .item > span {
         height: 100%;
         vertical-align: middle;
         display: inline-block;

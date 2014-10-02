@@ -17,7 +17,7 @@
         overflow: hidden;
     }
 
-    div.banner-overview .item span {
+    div.banner-overview .item > span {
         height: 100%;
         vertical-align: middle;
         display: inline-block;
