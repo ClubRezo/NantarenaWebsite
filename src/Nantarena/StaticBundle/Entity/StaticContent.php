@@ -15,6 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="Nantarena\StaticBundle\Repository\StaticContentRepository")
  * @ORM\Table(name="static_content")
  * @UniqueEntity("title")
+ * @ORM\HasLifecycleCallbacks
  */
 class StaticContent
 {
@@ -71,6 +72,13 @@ class StaticContent
 
     public function __construct()
     {
+        $this->update = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate() {
         $this->update = new \DateTime();
     }
 
