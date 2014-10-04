@@ -120,7 +120,7 @@ forum:
         activity: 'Derniers messages'
         last_by: 'Par %username%'
         no_activity: 'Aucune activité'
-        threads: Fils de discussion
+        threads: Discussions
         title: 'Index du forum'
         unreads: 'Consulter les messages non lus'
 
