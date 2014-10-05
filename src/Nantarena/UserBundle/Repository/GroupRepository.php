@@ -15,7 +15,7 @@ class GroupRepository extends EntityRepository
     public function findAllWithCount()
     {
         return $this->createQueryBuilder('g')
-            ->join('g.users', 'u')
+            ->leftJoin('g.users', 'u')
             ->addSelect('u')
             ->getQuery()
             ->getResult();
