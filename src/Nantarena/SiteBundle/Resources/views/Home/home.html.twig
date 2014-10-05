@@ -14,9 +14,12 @@
             {% embed 'NantarenaNewsBundle:News:_news.html.twig' with {'news': news} %}
             {% endembed %}
         {% else %}
-            <p>
-                {{ 'home.news.no_results'|trans }}
-            </p>
+            <br/>
+            <div class="row-fluid">
+                <p class="no-results alert alert-warning span6 offset3">
+                    {{ 'home.news.no_results'|trans }}
+                </p>
+            </div>
         {% endfor %}
 
         <p class="text-center"><a href="{{ path('nantarena_news_index') }}" class="btn">{{ 'home.news.link'|trans }}</a></p>

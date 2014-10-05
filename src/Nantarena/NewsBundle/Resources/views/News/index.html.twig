@@ -16,9 +16,12 @@
             {% embed 'NantarenaNewsBundle:News:_news.html.twig' with {'news': entity} %}
             {% endembed %}
         {% else %}
-            <p class="no-results">
-                {{ 'news.index.no_results'|trans }}
-            </p>
+            <br/>
+            <div class="row-fluid">
+                <p class="no-results alert alert-warning span6 offset3">
+                    {{ 'news.index.no_results'|trans }}
+                </p>
+            </div>
         {% endfor %}
     </div>
 
