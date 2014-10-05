@@ -21,7 +21,7 @@ class AdminController extends Controller implements DashboardInterface
 
                 $translator->trans('news.admin.dashboard.categories_management') => array(
                     'url' => $this->generateUrl('nantarena_news_admin_categories_index'),
-                    'role' => 'ROLE_NEWS_ADMIN_CATEGORIES'
+                    'role' => 'ROLE_NEWS_ADMIN_NEWS'
                 ),
             )
         );

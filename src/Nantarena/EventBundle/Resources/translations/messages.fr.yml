@@ -1,3 +1,8 @@
+ROLE_EVENT_ADMIN_GAMES: 'Admin - Gestion des jeux'
+ROLE_EVENT_ADMIN_EVENTS: 'Admin - Gestion des évènements'
+ROLE_EVENT_ADMIN_ENTRIES: 'Admin - Gestion des inscriptions'
+ROLE_EVENT_TOURNAMENTS_MANAGER: 'Administrateur de tournoi'
+
 event:
     admin:
         dashboard:

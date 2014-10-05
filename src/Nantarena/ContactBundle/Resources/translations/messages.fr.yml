@@ -1,3 +1,5 @@
+ROLE_CONTACT_ADMIN_CATEGORY: 'Admin - Gestion du formulaire de contact'
+
 contact:
     title: 'Contact'
     admin:

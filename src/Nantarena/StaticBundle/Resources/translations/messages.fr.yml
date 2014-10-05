@@ -1,3 +1,5 @@
+ROLE_STATIC_ADMIN: 'Admin - Gestion des pages statiques'
+
 static:
     admin:
         back: 'Retour à la liste'

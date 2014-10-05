@@ -1,3 +1,6 @@
+ROLE_FORUM_ADMIN: 'Admin - Gestion du forum'
+ROLE_FORUM_MODERATE: 'Modération du forum'
+
 forum:
     admin:
         categories:

@@ -16,8 +16,6 @@ class LoadGroupData extends AbstractFixture implements OrderedFixtureInterface
 
         $staffGroup = new Group('Staff');
         $staffGroup->addRole('ROLE_USER_ADMIN_USERS');
-        // donne accès aux parties reservées au staff
-        $staffGroup->addRole('ROLE_STAFF_FORUM');
 
         $usersGroup = new Group('Membres');
         $usersGroup->addRole('ROLE_USER');

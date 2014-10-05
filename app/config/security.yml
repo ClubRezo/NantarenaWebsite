@@ -7,8 +7,6 @@ security:
 
     role_hierarchy:
         ROLE_SUPER_ADMIN:
-            - ROLE_STAFF_FORUM
-
             - ROLE_ADMIN
 
             - ROLE_STATIC_ADMIN
@@ -16,7 +14,6 @@ security:
             - ROLE_FORUM_ADMIN
             - ROLE_FORUM_MODERATE
 
-            - ROLE_NEWS_ADMIN_CATEGORIES
             - ROLE_NEWS_ADMIN_NEWS
 
             - ROLE_USER_ADMIN_USERS
@@ -27,7 +24,6 @@ security:
 
             - ROLE_CONTACT_ADMIN_CATEGORY
 
-            - ROLE_EVENT_ADMIN_GAMES
             - ROLE_EVENT_ADMIN_EVENTS
             - ROLE_EVENT_ADMIN_ENTRIES
             - ROLE_EVENT_TOURNAMENTS_MANAGER
@@ -71,7 +67,6 @@ security:
 
         - { path: ^/admin/static, roles: ROLE_STATIC_ADMIN }
 
-        - { path: ^/admin/news/categories, roles: ROLE_NEWS_ADMIN_CATEGORIES }
         - { path: ^/admin/news, roles: ROLE_NEWS_ADMIN_NEWS }
 
         - { path: ^/admin/users, roles: ROLE_USER_ADMIN_USERS }
@@ -82,7 +77,9 @@ security:
 
         - { path: ^/admin/contact/category, roles: ROLE_CONTACT_ADMIN_CATEGORY }
 
-        - { path: ^/admin/event/games, roles: ROLE_EVENT_ADMIN_GAMES }
         - { path: ^/admin/event/events, roles: ROLE_EVENT_ADMIN_EVENTS }
+        - { path: ^/admin/event/games, roles: ROLE_EVENT_ADMIN_EVENTS }
+        - { path: ^/admin/event/entries, roles: ROLE_EVENT_ADMIN_ENTRIES }
+        - { path: ^/admin/event/teams, roles: ROLE_EVENT_ADMIN_ENTRIES }
 
         - { path: ^/admin, roles: ROLE_ADMIN } # Attention à le laisser en dernier

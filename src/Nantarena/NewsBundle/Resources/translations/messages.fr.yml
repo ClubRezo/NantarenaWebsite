@@ -1,3 +1,6 @@
+ROLE_NEWS_ADMIN_CATEGORIES: 'Admin - Gestion des catégories de news'
+ROLE_NEWS_ADMIN_NEWS: 'Admin - Gestion des news'
+
 news:
     admin:
         categories:

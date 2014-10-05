@@ -21,8 +21,6 @@
                 <span class="label label-important">{{ 'forum.role.admin'|trans }}</span>
             {% elseif post.user.hasRole('ROLE_FORUM_MODERATE') %}
                 <span class="label label-success">{{ 'forum.role.moderator'|trans }}</span>
-            {% elseif post.user.hasRole('ROLE_STAFF_FORUM') %}
-                <span class="label label-info">{{ 'forum.role.staff'|trans }}</span>
             {% else %}
                 <span class="label">{{ 'forum.role.member'|trans }}</span>
             {% endif %}

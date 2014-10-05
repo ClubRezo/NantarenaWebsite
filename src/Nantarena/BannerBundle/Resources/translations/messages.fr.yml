@@ -1,3 +1,6 @@
+ROLE_BANNER_ADMIN_HEADERNEWS: 'Admin - Gestion de la une'
+ROLE_BANNER_ADMIN_SPONSOR_SLIDE: 'Admin - Gestion des slides sponsor'
+
 banner:
     admin:
         dashboard:
