@@ -19,12 +19,14 @@ class WidgetController extends BaseController
      */
     public function recentAction($limit = 10)
     {
+        $em = $this->getDoctrine()->getManager();
+        $em->clear();
         $threads = $this->getDoctrine()->getRepository('NantarenaForumBundle:Thread')->findRecents($limit);
         /** @var ReadStatus $status */
         $status = null;
 
         if ($this->getSecurityContext()->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $em = $this->getDoctrine()->getManager();
+
             $status = $this->getDoctrine()->getRepository('NantarenaForumBundle:ReadStatus')->findOneByUser($this->getUser());
             // récupération des derniers plus récents (non lus)
             $unreads = $this->getDoctrine()->getRepository('NantarenaForumBundle:Thread')->findUnreads($status->getUpdateDate());
