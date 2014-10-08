@@ -1,6 +1,13 @@
 $(function() {
 
     /**
+     * Affichage/Masquage du menu mobile
+     */
+    $('nav#header li a.menu').on('click', function() {
+        $('nav#menu').slideToggle();
+    });
+
+    /**
      * Affichage/Masquage du formulaire de login
      */
     $("nav#menu .login").click(function() {

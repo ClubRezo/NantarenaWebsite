@@ -1,0 +1,11 @@
+@media (max-width: 767px) {
+    .news article header {
+        border-radius: 0px;
+        padding-left: 10px;
+        width: calc(100% - 10px);
+    }
+
+    .news article header p {
+        right: 10px;
+    }
+}

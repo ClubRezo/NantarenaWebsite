@@ -1,0 +1,141 @@
+@media (max-width: 767px) {
+
+/* Header */
+    body > div > header {
+        /*display: none;*/
+        background: rgb(25,25,25);
+    }
+
+    #container_header {
+        height: 144px;
+    }
+
+    #container_header .logo {
+        width: 94%;
+        height: 76px;
+        background: url('../images/logo.png') no-repeat center center;
+        float: none;
+        margin: auto;
+        background-size: contain;
+    }
+
+    #container_header nav#header {
+        float: none;
+        margin: auto;
+        margin-top: -10px;
+        width: 320px;
+    }
+
+    nav#header li {
+        padding-right: 0px;
+    }
+
+    nav#header li a.menu {
+        display: block;
+    }
+
+/* Menu */
+    nav#menu {
+        height: auto;
+        display: none;
+    }
+
+    nav#menu > ul {
+        height: auto;
+    }
+
+    nav#menu li {
+        display: block;
+        height: 38px;
+    }
+
+    nav#menu li.left {
+        float: none;
+    }
+
+    nav#menu li.right {
+        float: none;
+    }
+
+    nav#menu li > a {
+        margin-top: 0px;
+    }
+
+    .js nav#menu li.no-js {
+        display: block;
+    }
+
+    nav#menu li.js {
+        display: none;
+    }
+
+/* Widgets */
+    div#content > div > aside {
+        display: none;
+    }
+
+/* Footer */
+    body > #wrapper > div#content {
+        /*padding-bottom: 270px;*/
+        padding-bottom: 0px;
+    }
+
+    body > footer {
+        background: rgb(25,25,25);
+        height: 270px;
+        margin-top: -270px;
+        display: none;
+    }
+
+    #container_footer > div {
+        width: 50%;
+        height: 120px;
+    }
+
+    #container_footer > div.social ul {
+        padding-top: 18px;
+    }
+
+    #container_footer ul {
+        padding-left: 0px;
+        margin-left: 0px;
+    }
+
+    #container_footer li {
+        padding-left: 0px;
+        text-align: center;
+        line-height: 25px;
+    }
+
+    #container_footer li:hover {
+        padding-left: 0px;
+    }
+
+    #container_footer li:before {
+        content: '';
+    }
+
+    footer #scrolltotop a {
+        display: none;
+    }
+
+    #container_footer > p {
+        font-size: 0.7em;
+    }
+
+/* Contenu */
+    h1 {
+        font-size: 30px;
+    }
+
+    h1:after {
+        height: 40px;
+        background-size: 100% 36px;
+    }
+
+/* Countdown*/
+    .countdownHolder {
+        width: auto;
+        font-size: 34px;
+    }
+}

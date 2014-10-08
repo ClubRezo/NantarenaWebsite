@@ -97,7 +97,7 @@
 
     nav#header {
         float: right;
-        width: 300px;
+        width: 375px;
         margin-top: 20px
     }
 
@@ -134,6 +134,11 @@
 
     nav#header li a.contact {
         background-position: -180px 0px;
+    }
+
+    nav#header li a.menu {
+        background-position: -240px 0px;
+        display: none;
     }
 
     nav#header li a.info:hover {
