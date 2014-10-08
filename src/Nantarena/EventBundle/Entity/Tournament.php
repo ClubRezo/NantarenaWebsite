@@ -2,6 +2,7 @@
 
 namespace Nantarena\EventBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -263,4 +264,39 @@ class Tournament
 
         return $name;
     }
+
+    /**
+     * Add teams
+     *
+     * @param \Nantarena\EventBundle\Entity\Team $teams
+     * @return Tournament
+     */
+    public function addTeam($teams)
+    {
+        if (null !== $teams) {
+            $this->teams[] = $teams;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove teams
+     *
+     * @param \Nantarena\EventBundle\Entity\Team $teams
+     */
+    public function removeTeam(\Nantarena\EventBundle\Entity\Team $teams)
+    {
+        $this->teams->removeElement($teams);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTeams()
+    {
+        return $this->teams;
+    }
+
+
 }

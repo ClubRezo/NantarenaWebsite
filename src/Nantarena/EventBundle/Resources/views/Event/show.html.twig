@@ -118,6 +118,12 @@
         <h2>{{ 'event.show.tournaments'|trans }}</h2>
 
         {% for tournament in event.tournaments %}
+
+            {% set teamsNb = 0 %}
+            {% for team in tournament.teams if team.isValid %}
+                {% set teamsNb = teamsNb + 1 %}
+            {% endfor %}
+
             <section class="tournament">
                 <header>
                     <h3>
@@ -154,29 +160,31 @@
                         </div>
                         <div class="span6">
                             <div class="progress">
-                                <div class="bar" style="width: 60%"></div>
+                                <div class="bar" style="width: {{ teamsNb / tournament.maxTeams * 100 }}%"></div>
                             </div>
                             <p>
-                                {{ 'event.show.tournament.teams.validated'|transchoice(13) }}
-                                -
-                                <a href="#" class="teams-show">{{ 'event.show.tournament.teams.show'|trans }}</a>
-                                <a href="#" class="teams-hide hide">{{ 'event.show.tournament.teams.hide'|trans }}</a>
+                                {{ 'event.show.tournament.teams.validated'|transchoice(teamsNb) }}
+                                {% if teamsNb > 0 %}
+                                    -
+                                    <a href="#" class="teams-show">{{ 'event.show.tournament.teams.show'|trans }}</a>
+                                    <a href="#" class="teams-hide hide">{{ 'event.show.tournament.teams.hide'|trans }}</a>
+                                {% endif %}
                             </p>
                         </div>
                     </div>
                 </header>
 
                 <div class="teams hide">
-                    <div class="team">
-                        <h4>Jabbawockeez</h4>
-                        <ul>
-                            <li>AznBak</li>
-                            <li>Chaca or Shaco</li>
-                            <li class="captain">kiilys</li>
-                            <li>Kuroari</li>
-                            <li>Shodaime</li>
-                        </ul>
-                    </div>
+                    {% for team in tournament.teams if team.isValid %}
+                        <div class="team">
+                            <h4>{{ team.name }}</h4>
+                            <ul>
+                                {% for member in team.members %}
+                                    <li>{{ member.user.username }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
                 </div>
 
             </section>
