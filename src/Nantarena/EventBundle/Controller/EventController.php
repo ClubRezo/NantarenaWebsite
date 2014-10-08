@@ -4,6 +4,8 @@ namespace Nantarena\EventBundle\Controller;
 
 use Nantarena\EventBundle\Entity\Entry;
 use Nantarena\EventBundle\Entity\Event;
+use Nantarena\EventBundle\Entity\Team;
+use Nantarena\EventBundle\Form\Type\TeamType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;

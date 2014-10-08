@@ -213,6 +213,14 @@ event:
             team: Equipe
             tournament: Tournoi
             type: Type
+        createTeam:
+            success: Votre équipe a bien été créée
+            error: Erreur lors de la création de l'équipe. Veuillez réessayer ou contacter un administrateur
+            teamExists: Vous avez déjà créé une équipe
+            title: Créer votre équipe
+        addMembers:
+            title: Ajouter des membres à votre équipe
+            submit: Ajouter
 
     show:
         capacity: Capacité

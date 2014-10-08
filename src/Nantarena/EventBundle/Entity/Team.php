@@ -84,7 +84,7 @@ class Team
     private $creator;
 
     /**
-     * @ORM\OneToMany(targetEntity="Nantarena\EventBundle\Entity\Entry", mappedBy="team", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Nantarena\EventBundle\Entity\Entry", mappedBy="team")
      */
     private $members;
 
@@ -235,7 +235,6 @@ class Team
     public function setCreator(\Nantarena\EventBundle\Entity\Entry $creator)
     {
         $this->creator = $creator;
-    
         return $this;
     }
 

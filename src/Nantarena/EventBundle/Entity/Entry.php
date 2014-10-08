@@ -40,7 +40,7 @@ class Entry
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Team", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="Nantarena\EventBundle\Entity\Team", inversedBy="members", cascade={"persist"})
      */
     private $team;
 
