@@ -33,6 +33,7 @@
         CKEDITOR.config.removePlugins = 'elementspath,bidi,dialogadvtab,div,filebrowser,flash,format,forms,horizontalrule,iframe,justify,liststyle,pagebreak,showborders,stylescombo,table,tabletools,templates';
         CKEDITOR.config.height = 300;
         CKEDITOR.config.toolbar = [
+            { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source' ] },
             { name: 'styles', items : [ 'FontSize','TextColor' ] },
             { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
             { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Blockquote' ] },
