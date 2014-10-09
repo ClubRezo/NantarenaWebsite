@@ -107,7 +107,7 @@ news:
 
     news_embed:
         category: 'Publiée dans <a href="%path%" class="label label-info">%category%</a>'
-        comments: '{0} Aucun commentaire|{1} Un commentaire|]1,Inf] %count% commentaires'
+        comments: '{0} Aucun commentaire|[1,Inf] Voir les commentaires'
         read: 'Lire la news'
         title: '%title%'
 
