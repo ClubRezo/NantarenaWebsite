@@ -2,7 +2,6 @@
 
 namespace Nantarena\ForumBundle\Controller;
 
-use Doctrine\ORM\NoResultException;
 use Nantarena\ForumBundle\Entity\ReadStatus;
 use Nantarena\ForumBundle\Entity\Thread;
 use Nantarena\SiteBundle\Controller\BaseController;
@@ -20,7 +19,6 @@ class WidgetController extends BaseController
     public function recentAction($limit = 10)
     {
         $em = $this->getDoctrine()->getManager();
-        $em->clear();
         $threads = $this->getDoctrine()->getRepository('NantarenaForumBundle:Thread')->findRecents($limit);
         /** @var ReadStatus $status */
         $status = null;

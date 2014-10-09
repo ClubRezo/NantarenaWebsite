@@ -3,15 +3,13 @@
 namespace Nantarena\ForumBundle\Twig;
 
 use Nantarena\ForumBundle\Entity\Post;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class PostExtension extends \Twig_Extension implements ContainerAwareInterface
+class PostExtension extends \Twig_Extension
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\Container
+     * @var \Nantarena\ForumBundle\Manager\PostManager
      */
-    protected $container;
+    protected $postManager;
 
     public function getFunctions()
     {
@@ -23,12 +21,12 @@ class PostExtension extends \Twig_Extension implements ContainerAwareInterface
 
     public function getEditPath(Post $post)
     {
-        return $this->container->get('nantarena_forum.post_manager')->getEditPath($post);
+        return $this->postManager->getEditPath($post);
     }
 
     public function getDeletePath(Post $post)
     {
-        return $this->container->get('nantarena_forum.post_manager')->getDeletePath($post);
+        return $this->postManager->getDeletePath($post);
     }
 
     /**
@@ -42,14 +40,10 @@ class PostExtension extends \Twig_Extension implements ContainerAwareInterface
     }
 
     /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
+     * @param \Nantarena\ForumBundle\Manager\PostManager $postManager
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function setPostManager($postManager)
     {
-        $this->container = $container;
+        $this->postManager = $postManager;
     }
 }

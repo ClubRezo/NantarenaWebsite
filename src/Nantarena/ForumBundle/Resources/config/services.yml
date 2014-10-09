@@ -46,28 +46,28 @@ services:
         tags:
             - { name: twig.extension }
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setCategoryManager, [@nantarena_forum.category_manager] ]
 
     nantarena_forum.twig.forum_extension:
         class: Nantarena\ForumBundle\Twig\ForumExtension
         tags:
             - { name: twig.extension }
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setForumManager, [@nantarena_forum.forum_manager] ]
 
     nantarena_forum.twig.thread_extension:
         class: Nantarena\ForumBundle\Twig\ThreadExtension
         tags:
             - { name: twig.extension }
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setThreadManager, [@nantarena_forum.thread_manager] ]
 
     nantarena_forum.twig.post_extension:
         class: Nantarena\ForumBundle\Twig\PostExtension
         tags:
             - { name: twig.extension }
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setPostManager, [@nantarena_forum.post_manager] ]
 
     nantarena_forum.twig.bbcode_extension:
         class: Nantarena\ForumBundle\Twig\BbcodeExtension

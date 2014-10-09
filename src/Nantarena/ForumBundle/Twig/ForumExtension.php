@@ -3,15 +3,13 @@
 namespace Nantarena\ForumBundle\Twig;
 
 use Nantarena\ForumBundle\Entity\Forum;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ForumExtension extends \Twig_Extension implements ContainerAwareInterface
+class ForumExtension extends \Twig_Extension
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\Container
+     * @var \Nantarena\ForumBundle\Manager\ForumManager
      */
-    protected $container;
+    protected $forumManager;
 
     public function getFunctions()
     {
@@ -25,22 +23,22 @@ class ForumExtension extends \Twig_Extension implements ContainerAwareInterface
 
     public function getForumPath(Forum $forum)
     {
-        return $this->container->get('nantarena_forum.forum_manager')->getForumPath($forum);
+        return $this->forumManager->getForumPath($forum);
     }
 
     public function getDeletePath(Forum $forum)
     {
-        return $this->container->get('nantarena_forum.forum_manager')->getDeletePath($forum);
+        return $this->forumManager->getDeletePath($forum);
     }
 
     public function getEditPath(Forum $forum)
     {
-        return $this->container->get('nantarena_forum.forum_manager')->getEditPath($forum);
+        return $this->forumManager->getEditPath($forum);
     }
 
     public function getCreatePath()
     {
-        return $this->container->get('nantarena_forum.forum_manager')->getCreatePath();
+        return $this->forumManager->getCreatePath();
     }
 
     /**
@@ -54,14 +52,10 @@ class ForumExtension extends \Twig_Extension implements ContainerAwareInterface
     }
 
     /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
+     * @param \Nantarena\ForumBundle\Manager\ForumManager $forumManager
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function setForumManager($forumManager)
     {
-        $this->container = $container;
+        $this->forumManager = $forumManager;
     }
 }

@@ -3,15 +3,13 @@
 namespace Nantarena\ForumBundle\Twig;
 
 use Nantarena\ForumBundle\Entity\Category;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class CategoryExtension extends \Twig_Extension implements ContainerAwareInterface
+class CategoryExtension extends \Twig_Extension
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\Container
+     * @var \Nantarena\ForumBundle\Manager\CategoryManager
      */
-    protected $container;
+    protected $categoryManager;
 
     public function getFunctions()
     {
@@ -25,22 +23,22 @@ class CategoryExtension extends \Twig_Extension implements ContainerAwareInterfa
 
     public function getCategoryPath(Category $category)
     {
-        return $this->container->get('nantarena_forum.category_manager')->getCategoryPath($category);
+        return $this->categoryManager->getCategoryPath($category);
     }
 
     public function getDeletePath(Category $category)
     {
-        return $this->container->get('nantarena_forum.category_manager')->getDeletePath($category);
+        return $this->categoryManager->getDeletePath($category);
     }
 
     public function getEditPath(Category $category)
     {
-        return $this->container->get('nantarena_forum.category_manager')->getEditPath($category);
+        return $this->categoryManager->getEditPath($category);
     }
 
     public function getCreatePath()
     {
-        return $this->container->get('nantarena_forum.category_manager')->getCreatePath();
+        return $this->categoryManager->getCreatePath();
     }
 
     /**
@@ -54,14 +52,10 @@ class CategoryExtension extends \Twig_Extension implements ContainerAwareInterfa
     }
 
     /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
+     * @param \Nantarena\ForumBundle\Manager\CategoryManager $categoryManager
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function setCategoryManager($categoryManager)
     {
-        $this->container = $container;
+        $this->categoryManager = $categoryManager;
     }
 }

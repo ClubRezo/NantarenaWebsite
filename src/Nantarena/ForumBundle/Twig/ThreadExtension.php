@@ -4,15 +4,13 @@ namespace Nantarena\ForumBundle\Twig;
 
 use Nantarena\ForumBundle\Entity\Forum;
 use Nantarena\ForumBundle\Entity\Thread;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ThreadExtension extends \Twig_Extension implements ContainerAwareInterface
+class ThreadExtension extends \Twig_Extension
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\Container
+     * @var \Nantarena\ForumBundle\Manager\ThreadManager
      */
-    protected $container;
+    protected $threadManager;
 
     public function getFunctions()
     {
@@ -28,32 +26,32 @@ class ThreadExtension extends \Twig_Extension implements ContainerAwareInterface
 
     public function getThreadPath(Thread $thread, $page = 1)
     {
-        return $this->container->get('nantarena_forum.thread_manager')->getThreadPath($thread, $page);
+        return $this->threadManager->getThreadPath($thread, $page);
     }
 
     public function getThreadReplyPath(Thread $thread)
     {
-        return $this->container->get('nantarena_forum.thread_manager')->getReplyPath($thread);
+        return $this->threadManager->getReplyPath($thread);
     }
 
     public function getThreadCreatePath(Forum $forum)
     {
-        return $this->container->get('nantarena_forum.thread_manager')->getCreatePath($forum);
+        return $this->threadManager->getCreatePath($forum);
     }
 
     public function getThreadLockPath(Thread $thread)
     {
-        return $this->container->get('nantarena_forum.thread_manager')->getLockPath($thread);
+        return $this->threadManager->getLockPath($thread);
     }
 
     public function getThreadDeletePath(Thread $thread)
     {
-        return $this->container->get('nantarena_forum.thread_manager')->getDeletePath($thread);
+        return $this->threadManager->getDeletePath($thread);
     }
 
     public function getThreadMovePath(Thread $thread)
     {
-        return $this->container->get('nantarena_forum.thread_manager')->getMovePath($thread);
+        return $this->threadManager->getMovePath($thread);
     }
 
     /**
@@ -67,14 +65,10 @@ class ThreadExtension extends \Twig_Extension implements ContainerAwareInterface
     }
 
     /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
+     * @param \Nantarena\ForumBundle\Manager\ThreadManager $threadManager
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function setThreadManager($threadManager)
     {
-        $this->container = $container;
+        $this->threadManager = $threadManager;
     }
 }
