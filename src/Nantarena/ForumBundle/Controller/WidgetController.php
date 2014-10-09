@@ -19,6 +19,7 @@ class WidgetController extends BaseController
     public function recentAction($limit = 10)
     {
         $em = $this->getDoctrine()->getManager();
+        $em->clear();
         $threads = $this->getDoctrine()->getRepository('NantarenaForumBundle:Thread')->findRecents($limit);
         /** @var ReadStatus $status */
         $status = null;
