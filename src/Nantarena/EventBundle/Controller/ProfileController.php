@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ProfileController
@@ -93,6 +94,47 @@ class ProfileController extends Controller
                 'slug' => $event->getSlug(),
             )));
         }
+
+    }
+
+    /** Modify a  team
+     * @param \Nantarena\EventBundle\Entity\Team $team
+     * @Route("profile/team/modify/{slug}/{team}", name="nantarena_profile_modify_team")
+     * @param Request $request
+     *
+     * @param \Nantarena\EventBundle\Entity\Event $event
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @template
+     */
+    public function modifyTeamAction(Team $team, Request $request, Event $event)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $flashbag = $this->get('session')->getFlashBag();
+        $translator = $this->get('translator');
+
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $form = $this->createForm(new TeamType(), $team, array(
+            'em' => $em,
+            'event' => $event));
+                $form->remove('creator')
+                    ->remove('tournament');
+
+        if($request->getMethod() === 'POST') {
+            $form->handleRequest($request);
+            if($form->isValid()) {
+                try {
+                    $em->flush();
+                    $flashbag->add('success', $translator->trans('event.profile.modifyTeam.success'));
+                } catch (\Exception $e) {
+                    $flashbag->add('error', $translator->trans('event.profile.modifyTeam.error'));
+                }
+            }
+        }
+        return array(
+            'form' => $form->createView(),
+            'event' => $event,
+        );
 
     }
 
