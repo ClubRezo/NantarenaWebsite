@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Tournament
  *
  * @ORM\Table(name="event_tournament")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Nantarena\EventBundle\Repository\TournamentRepository")
  */
 class Tournament
 {
