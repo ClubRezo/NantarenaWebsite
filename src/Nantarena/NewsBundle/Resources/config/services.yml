@@ -24,18 +24,19 @@ services:
         tags:
             - { name: twig.extension }
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setNewsManager, [@nantarena_news.news_manager] ]
+            - [ setTranslator, [@translator] ]
 
     nantarena_news.twig.comment_extension:
         class: Nantarena\NewsBundle\Twig\CommentExtension
         tags:
             - { name: twig.extension }
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setCommentManager, [@nantarena_news.comment_manager] ]
 
     nantarena_news.twig.category_extension:
         class: Nantarena\NewsBundle\Twig\CategoryExtension
         tags:
             - { name: twig.extension }
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setCategoryManager, [@nantarena_news.category_manager] ]

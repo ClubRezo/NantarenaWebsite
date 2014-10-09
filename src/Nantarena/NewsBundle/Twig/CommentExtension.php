@@ -4,15 +4,13 @@ namespace Nantarena\NewsBundle\Twig;
 
 use Nantarena\NewsBundle\Entity\Comment;
 use Nantarena\NewsBundle\Entity\News;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class CommentExtension extends \Twig_Extension implements ContainerAwareInterface
+class CommentExtension extends \Twig_Extension
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\Container
+     * @var \Nantarena\NewsBundle\Manager\CommentManager
      */
-    protected $container;
+    protected $commentManager;
 
     public function getFunctions()
     {
@@ -24,12 +22,12 @@ class CommentExtension extends \Twig_Extension implements ContainerAwareInterfac
 
     public function getCreateCommentPath(News $news)
     {
-        return $this->container->get('nantarena_news.comment_manager')->getCreateCommentPath($news);
+        return $this->commentManager->getCreateCommentPath($news);
     }
 
     public function getDeleteCommentPath(Comment $comment)
     {
-        return $this->container->get('nantarena_news.comment_manager')->getDeleteCommentPath($comment);
+        return $this->commentManager->getDeleteCommentPath($comment);
     }
 
     /**
@@ -43,14 +41,10 @@ class CommentExtension extends \Twig_Extension implements ContainerAwareInterfac
     }
 
     /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
+     * @param \Nantarena\NewsBundle\Manager\CommentManager $commentManager
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function setCommentManager($commentManager)
     {
-        $this->container = $container;
+        $this->commentManager = $commentManager;
     }
 }

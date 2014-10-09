@@ -3,15 +3,18 @@
 namespace Nantarena\NewsBundle\Twig;
 
 use Nantarena\NewsBundle\Entity\News;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class NewsExtension extends \Twig_Extension implements ContainerAwareInterface
+class NewsExtension extends \Twig_Extension
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\Container
+     * @var \Symfony\Component\Translation\Translator
      */
-    protected $container;
+    protected $translator;
+
+    /**
+     * @var \Nantarena\NewsBundle\Manager\NewsManager
+     */
+    protected $newsManager;
 
     public function getFunctions()
     {
@@ -25,25 +28,41 @@ class NewsExtension extends \Twig_Extension implements ContainerAwareInterface
 
     public function getNewsPath(News $news)
     {
-        return $this->container->get('nantarena_news.news_manager')->getNewsPath($news);
+        return $this->newsManager->getNewsPath($news);
+    }
+
+    /**
+     * @param \Nantarena\NewsBundle\Manager\NewsManager $newsManager
+     */
+    public function setNewsManager($newsManager)
+    {
+        $this->newsManager = $newsManager;
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
     }
 
     public function getEditPath(News $news)
     {
-        return $this->container->get('nantarena_news.news_manager')->getEditPath($news);
+        return $this->newsManager->getEditPath($news);
     }
 
     public function getDeletePath(News $news)
     {
-        return $this->container->get('nantarena_news.news_manager')->getDeletePath($news);
+        return $this->newsManager->getDeletePath($news);
     }
 
     public function getNewsState(News $news)
     {
         if (true == $news->getState()) {
-            return $this->container->get('translator')->trans('news.state.published');
+            return $this->translator->trans('news.state.published');
         } else {
-            return $this->container->get('translator')->trans('news.state.unpublished');
+            return $this->translator->trans('news.state.unpublished');
         }
     }
 
@@ -55,17 +74,5 @@ class NewsExtension extends \Twig_Extension implements ContainerAwareInterface
     public function getName()
     {
         return 'news_extension';
-    }
-
-    /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 }
