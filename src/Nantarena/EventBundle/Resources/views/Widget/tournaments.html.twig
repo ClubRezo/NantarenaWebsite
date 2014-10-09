@@ -1,0 +1,24 @@
+{% if active %}
+    <div id="tournamentWidget" class="widget">
+        <h4>Inscriptions aux tournois</h4>
+
+        <div id="tournamentProgress">
+            <ul>
+                {% for tournament in tournaments %}
+
+                    {% set teamsNb = 0 %}
+                    {% for team in tournament.teams if team.isValid %}
+                        {% set teamsNb = teamsNb + 1 %}
+                    {% endfor %}
+
+                    <li>
+                        <p><a href="">{{ tournament.name }}</a></p>
+                        <div class="progress ttip" data-title="{{ teamsNb }}/{{ tournament.maxTeams }} équipes validées" data-placement="bottom">
+                            <div class="bar" style="width: {{ teamsNb / tournament.maxTeams * 100 }}%"></div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}
