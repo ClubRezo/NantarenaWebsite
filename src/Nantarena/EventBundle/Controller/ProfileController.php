@@ -113,28 +113,46 @@ class ProfileController extends Controller
         $translator = $this->get('translator');
 
         $user = $this->get('security.context')->getToken()->getUser();
+        $entry = null;
+        $user->hasEntry($event, $entry);
 
-        $form = $this->createForm(new TeamType(), $team, array(
-            'em' => $em,
-            'event' => $event));
-                $form->remove('creator')
-                    ->remove('tournament');
+        //Can only modify team if is part of it
+        if($entry->getTeam() != null && $entry->getTeam()->getId() === $team->getId()){
+            $form = $this->createForm(new TeamType(), $team, array(
+                'em' => $em,
+                'event' => $event));
+                    $form->remove('creator')
+                        ->remove('tournament');
 
-        if($request->getMethod() === 'POST') {
-            $form->handleRequest($request);
-            if($form->isValid()) {
-                try {
-                    $em->flush();
-                    $flashbag->add('success', $translator->trans('event.profile.modifyTeam.success'));
-                } catch (\Exception $e) {
-                    $flashbag->add('error', $translator->trans('event.profile.modifyTeam.error'));
+            if($request->getMethod() === 'POST') {
+                $form->handleRequest($request);
+                if($form->isValid()) {
+                    foreach($team->getMembers() as $member) {
+                        if($member->getTeam() == null) {
+                            $member->setTeam($team);
+                        }
+                    }
+                    try {
+                        $em->flush();
+                        $flashbag->add('success', $translator->trans('event.profile.modifyTeam.success'));
+                        return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                            'slug' => $event->getSlug()
+                            )));
+                    } catch (\Exception $e) {
+                        $flashbag->add('error', $translator->trans('event.profile.modifyTeam.error'));
+                    }
                 }
             }
+            return array(
+                'form' => $form->createView(),
+                'event' => $event,
+            );
+        }else{
+            $flashbag->add('error', $translator->trans('event.profile.modifyTeam.notInTeam'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug()
+            )));
         }
-        return array(
-            'form' => $form->createView(),
-            'event' => $event,
-        );
 
     }
 

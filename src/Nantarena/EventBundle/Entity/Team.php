@@ -257,7 +257,6 @@ class Team
     public function addMember($members)
     {
         if (null !== $members) {
-            $members->setTeam($this);
             $this->members[] = $members;
         }
 

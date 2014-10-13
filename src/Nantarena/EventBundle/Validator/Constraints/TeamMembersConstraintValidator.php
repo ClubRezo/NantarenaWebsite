@@ -16,7 +16,7 @@ class TeamMembersConstraintValidator extends ConstraintValidator
         foreach($value->getMembers() as $member) {
             $membersId[] = $member->getUser()->getId();
 
-            if ($member->getTeam()->getId() !== $value->getId()) {
+            if ($member->getTeam() != null && $member->getTeam()->getId() !== $value->getId()) {
                 $this->context->addViolation($constraint->alreadyTeam);
             }
         }

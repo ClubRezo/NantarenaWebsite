@@ -227,6 +227,7 @@ event:
             submit: Modifier
             success: Equipe modifiée avec succès
             error: Une erreur est survenue durant la modification de l'équipe
+            notInTeam: Vous ne pouvez pas modifier cette équipe car vous n'en faites pas partie
         addMembers:
             title: Ajouter des membres à votre équipe
             submit: Ajouter
