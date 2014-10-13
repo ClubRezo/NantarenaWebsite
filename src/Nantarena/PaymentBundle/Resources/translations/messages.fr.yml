@@ -1,3 +1,5 @@
+ROLE_PAYMENT_ADMIN: 'Admin - Gestion des paiements'
+
 payment:
     title: 'Paiement'
     admin:

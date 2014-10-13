@@ -28,6 +28,8 @@ security:
             - ROLE_EVENT_ADMIN_ENTRIES
             - ROLE_EVENT_TOURNAMENTS_MANAGER
 
+            - ROLE_PAYMENT_ADMIN
+
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username_email
@@ -83,5 +85,7 @@ security:
         - { path: ^/admin/event/games, roles: ROLE_EVENT_ADMIN_EVENTS }
         - { path: ^/admin/event/entries, roles: ROLE_EVENT_ADMIN_ENTRIES }
         - { path: ^/admin/event/teams, roles: ROLE_EVENT_ADMIN_ENTRIES }
+
+        - { path: ^/admin/payment, roles: ROLE_PAYMENT_ADMIN }
 
         - { path: ^/admin, roles: ROLE_ADMIN } # Attention à le laisser en dernier
