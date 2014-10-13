@@ -134,6 +134,11 @@ class TeamsController extends Controller
             try {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($team);
+                foreach($team->getMembers() as $member) {
+                    if($member->getTeam() == null) {
+                        $member->setTeam($team);
+                    }
+                }
                 $em->flush();
 
                 $flashbag->add('success', $translator->trans('event.admin.teams.edit.flash_success'));
