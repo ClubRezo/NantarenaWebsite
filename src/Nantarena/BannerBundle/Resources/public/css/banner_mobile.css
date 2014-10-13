@@ -1,0 +1,9 @@
+@media (max-width: 767px) {
+
+    div#banner div.sponsors {
+        width: 100%;
+        height: 100%;
+        float: none;
+        margin: 0;
+    }
+}

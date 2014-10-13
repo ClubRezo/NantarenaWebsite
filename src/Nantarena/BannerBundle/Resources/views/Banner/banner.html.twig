@@ -1,7 +1,7 @@
 <div id="banner">
     <div class="container">
         {% if slides|length > 0 %}
-            <div class="une">
+            <div class="une hidden-phone">
                 <div class="item">
                     <span></span>
                     <div class="une_news">
@@ -13,6 +13,13 @@
             <div class="sponsors carousel slide carousel-fade" id="car_sponsors">
 
                 <div class="carousel-inner">
+
+                    <div class="item visible-phone">
+                        <span></span>
+                        <div class="une_news">
+                            {% if hnews is not null %} {{hnews.content|raw}} {% endif %}
+                        </div>
+                    </div>
 
                     {% for slide in slides %}
                         {% if loop.index0 == num %}
