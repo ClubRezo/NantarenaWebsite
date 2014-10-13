@@ -111,7 +111,9 @@ class EventController extends Controller
         // Check if user is not already registered
         if ($user->hasEntry($event)) {
             $flashbag->add('error', $translator->trans('event.participate.flash.already'));
-            return $this->redirect($this->generateUrl('nantarena_event_show'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug(),
+            )));
         }
 
         // Check if event is full
