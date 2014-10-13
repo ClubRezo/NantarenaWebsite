@@ -189,7 +189,9 @@ class EventController extends Controller
         // Check if user is already registered
         if (!$user->hasEntry($event, $entry)) {
             $flashbag->add('error', $translator->trans('event.cancel.flash.notyet'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug(),
+            )));
         }
 
         // TODO: Check if user has not paid
@@ -213,7 +215,9 @@ class EventController extends Controller
                 $flashbag->add('error', $translator->trans('event.cancel.flash.error'));
             }
 
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug(),
+            )));
         }
 
         return array(

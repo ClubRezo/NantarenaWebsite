@@ -109,6 +109,7 @@
                         {% else %}
                             <a href="{{ path('nantarena_profile_create_team', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
                         {% endif %}
+                        <a href="{{ path('nantarena_event_cancel', {'slug' : event.slug}) }}" class="btn btn-danger">{{ 'event.cancel.submit'|trans }}</a>
                     {% elseif event.full %}
                         <span class="text-error">{{ 'event.participate.flash.full'|trans }}</span>
                     {% else %}

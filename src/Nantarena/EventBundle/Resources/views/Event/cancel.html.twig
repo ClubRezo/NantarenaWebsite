@@ -18,7 +18,7 @@
         {% endblock %}
 
         {% block back %}
-            <a href="{{ path('nantarena_user_profile') }}">
+            <a href="{{ path('nantarena_event_show', {'slug' : event.slug}) }}">
                 {{ 'event.cancel.back'|trans }}
             </a>
         {% endblock %}
