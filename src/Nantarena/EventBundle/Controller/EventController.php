@@ -30,9 +30,16 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $event = $em->getRepository('NantarenaEventBundle:Event')->findOneShow($slug);
+        $securityContext = $this->get('security.context');
+        $entry = null;
+        if($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $user = $securityContext->getToken()->getUser();
+            $user->hasEntry($event, $entry);
+        }
 
         return array(
             'event' => $event,
+            'entry' => $entry,
         );
     }
 
@@ -104,7 +111,7 @@ class EventController extends Controller
         // Check if user is not already registered
         if ($user->hasEntry($event)) {
             $flashbag->add('error', $translator->trans('event.participate.flash.already'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
 
         // Check if event is full
@@ -148,7 +155,9 @@ class EventController extends Controller
             $em->flush();
 
             $flashbag->add('success', $translator->trans('event.participate.flash.success'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug(),
+            )));
         }
 
         return array(

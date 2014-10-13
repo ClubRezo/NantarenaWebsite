@@ -24,12 +24,19 @@ class TeamNameConstraintValidator extends ConstraintValidator
             ->join('t.tournament', 'to')
             ->where('t.name = :name')
             ->andWhere('to.event = :event')
-            ->andWhere('t.id <> :id')
+//            ->andWhere('t.id <> :id')
             ->setParameter('name', $value->getName())
-            ->setParameter('event', $value->getTournament()->getEvent())
-            ->setParameter('id', $value->getId())
-            ->getQuery()
-            ->getResult();
+            ->setParameter('event', $value->getTournament()->getEvent());
+//            ->setParameter('id', $value->getId());
+        if($value->getId() === null) {
+            $teams->andWhere('t.id is not null');
+        } else {
+            $teams->andWhere('t.id <> :id')
+                  ->setParameter('id', $value->getId());
+        }
+        $teams = $teams->getQuery()
+                       ->getResult();
+
 
         if (count($teams) > 0) {
             $this->context->addViolationAt('name', $constraint->message);

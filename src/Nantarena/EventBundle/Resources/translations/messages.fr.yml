@@ -193,7 +193,8 @@ event:
             one: 'Confirmer l''inscription'
 
         flash:
-            already: 'Vous participez déjà à l''évènement'
+            already: 'Vous participez déjà à un tournoi'
+            participation: 'Vous êtes inscrit au tournoi '
             closed: 'Les inscriptions sont cloturées'
             full: 'L''évènement est complet'
             login: 'Vous devez vous connecter pour participer à l''évènement'
@@ -218,6 +219,14 @@ event:
             error: Erreur lors de la création de l'équipe. Veuillez réessayer ou contacter un administrateur
             teamExists: Vous avez déjà créé une équipe
             title: Créer votre équipe
+            createButton: Créer une équipe
+            joinButton: Rejoindre une équipe
+        modifyTeam:
+            button: Modifier l'équipe
+            title: Modifier votre équipe
+            submit: Modifier
+            success: Equipe modifiée avec succès
+            error: Une erreur est survenue durant la modification de l'équipe
         addMembers:
             title: Ajouter des membres à votre équipe
             submit: Ajouter

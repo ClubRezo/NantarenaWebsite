@@ -47,7 +47,9 @@
                  </div>
              </div>
 
+             {% block submit_button %}
              {{ form_row(form.submit, {'label': 'event.admin.teams.create.submit'|trans}) }}
+             {% endblock %}
          {{ form_end(form) }}
 
         {% block back %}

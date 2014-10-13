@@ -1,0 +1,8 @@
+{% extends 'NantarenaEventBundle:Profile:createTeam.html.twig' %}
+
+{% block title 'event.profile.modifyTeam.title'|trans %}
+{% block page_title 'event.profile.modifyTeam.title'|trans %}
+
+{% block submit_button %}
+    {{ form_row(form.submit, {'label': 'event.profile.modifyTeam.submit'|trans}) }}
+{% endblock %}

@@ -103,12 +103,18 @@
                     {% elseif event.startRegistrationDate|date('Y-m-d') > "now"|date('Y-m-d') %}
                         <span class="text-error">{{ 'event.participate.flash.notyet'|trans }}</span>
                     {% elseif is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.hasEntry(event) %}
-                        <span class="text-error">{{ 'event.participate.flash.already'|trans }}</span>
+                        <span>{{ 'event.participate.flash.participation'|trans }}{{ entry.tournament.game.name }}</span>
+                        {% if entry.team is not null %}
+                            <a href="{{ path('nantarena_profile_modify_team', {'team' : entry.team.id, 'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.modifyTeam.button'|trans }}</a>
+                        {% else %}
+                            <a href="{{ path('nantarena_profile_create_team', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
+                        {% endif %}
                     {% elseif event.full %}
                         <span class="text-error">{{ 'event.participate.flash.full'|trans }}</span>
                     {% else %}
                         <a href="{{ path('nantarena_event_participate', {'slug': event.slug}) }}" class="btn btn-success">{{ 'event.show.registration.open'|trans }}</a>
                     {% endif %}
+
                 </p>
             </div>
         </div>
