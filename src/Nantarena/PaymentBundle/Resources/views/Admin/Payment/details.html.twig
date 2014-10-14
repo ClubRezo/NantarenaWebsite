@@ -7,23 +7,24 @@
 
     <h2>{{ 'payment.admin.payment.details.infos'|trans }}</h2>
 
-    <div class="row">
-        <div class="span4 offset4">
-            <dl class="dl-horizontal">
-                <dt>{{ 'payment.admin.payment.details.num'|trans|colon }}</dt>
-                <dd>{{ payment.id }}</dd>
-                <dt>{{ 'payment.admin.payment.details.user'|trans|colon }}</dt>
-                <dd>{{ payment.user.username }}</dd>
-                <dt>{{ 'payment.admin.payment.details.date'|trans|colon }}</dt>
-                <dd>{{ payment.date|date("d/m/Y à H:i") }}</dd>
-                <dt>{{ 'payment.admin.payment.details.amount'|trans|colon }}</dt>
-                <dd>{{ payment.amount }}€</dd>
-                <dt>{{ 'payment.admin.payment.details.number'|trans|colon }}</dt>
-                <dd>{{ payment.transactions|length }}</dd>
-            </dl>
+    <div class="infos">
+        <div class="row-fluid">
+            <div class="span4 offset4">
+                <dl class="dl-horizontal">
+                    <dt>{{ 'payment.admin.payment.details.num'|trans|colon }}</dt>
+                    <dd>{{ payment.id }}</dd>
+                    <dt>{{ 'payment.admin.payment.details.user'|trans|colon }}</dt>
+                    <dd>{{ payment.user.username }}</dd>
+                    <dt>{{ 'payment.admin.payment.details.date'|trans|colon }}</dt>
+                    <dd>{{ payment.date|date("d/m/Y à H:i") }}</dd>
+                    <dt>{{ 'payment.admin.payment.details.amount'|trans|colon }}</dt>
+                    <dd>{{ payment.amount }}€</dd>
+                    <dt>{{ 'payment.admin.payment.details.number'|trans|colon }}</dt>
+                    <dd>{{ payment.transactions|length }}</dd>
+                </dl>
+            </div>
         </div>
     </div>
-
 
     <div class="text-align">
         {% if not payment.isValidRefund %}

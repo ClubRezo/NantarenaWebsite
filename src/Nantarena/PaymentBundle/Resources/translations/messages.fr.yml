@@ -12,7 +12,7 @@ payment:
             refund_management: 'Liste des remboursements'
         paypal:
             list:
-                title: 'Paiement Paypal en cours'
+                title: 'Paiements Paypal en cours'
         payment:
             list:
                 title: 'Liste des paiements effectués'
