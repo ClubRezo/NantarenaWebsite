@@ -8,38 +8,39 @@ payment:
             payment_management: 'Liste des paiements'
             transaction_management: 'Liste des transactions'
             user_management: 'Liste des participants à un événement'
-            paypal_management: 'Gestion des transactions temporaires paypal'
+            paypal_management: 'Gestion des transactions temporaires Paypal'
             refund_management: 'Liste des remboursements'
         paypal:
             list:
-                title: 'Payment paypal en cours'
+                title: 'Paiement Paypal en cours'
         payment:
             list:
                 title: 'Liste des paiements effectués'
-                return: 'Retour sur la liste des paiements'
-                return_trans: 'Retour sur la liste des transactions'
+                return: 'Retour à la liste des paiements'
+                return_trans: 'Retour à la liste des transactions'
             details:
-                title: 'Détail du paiement'
-                return: 'Retour sur la description du paiement'
-                num: 'Paiement n°<strong>%num%</strong>'
-                user: 'Le paiement à été effectué par <strong>%user%</strong>'
-                date: 'Le <strong>%date%</strong>'
-                amount: 'Le montant est de <strong>%amount%€</strong>'
-                number: 'Le paiement concerne <strong>%number%</strong> personne(s)'
+                infos: 'Détails du paiement'
+                title: 'Paiement n°%num%'
+                return: 'Retour à la description du paiement'
+                num: 'Identifiant'
+                user: 'Auteur'
+                date: 'Date'
+                amount: 'Montant'
+                number: 'Transactions'
                 list:
                     title: 'Liste des transactions associées'
                     th_user: 'Participant'
-                    th_status: 'Status'
+                    th_status: 'Statut'
                     th_price: 'Prix'
-                    th_refund: 'Info remboursement'
+                    th_refund: 'Info annulation'
         refund:
             list:
-                title: 'Liste des remboursements effectués'
+                title: 'Liste des annulations effectués'
             payment:
-                title: 'Rembourser un paiement complet'
-                btn: 'Remboursement complet du paiement'
+                title: 'Annuler un paiement complet'
+                btn: 'Annuler complètement le paiement'
             transaction:
-                title: 'Rembourser une partie du paiement'
+                title: 'Annulation de la transaction'
                 btn: 'Remboursement'
             form:
                 submit: 'Rembourser'
@@ -50,10 +51,10 @@ payment:
             flash:
                 pay_refund: 'Le paiement est remboursé'
                 modify_refund: 'Le remboursement a été modifié'
-                validate_refund: 'Le remboursement à été validé'
+                validate_refund: 'Le remboursement a été validé'
                 no_pay: 'Pas de paiement correspondant'
                 no_trans: 'Pas de transaction correspondante'
-                is_refund: 'Le remboursement de la transation à déjà été fait'
+                is_refund: 'Le remboursement de la transation a déjà été fait'
         cash:
             title: 'Paiement en liquide'
         transaction:
@@ -79,8 +80,8 @@ payment:
                     <ul>
                         <li>Ce système de paiement fonctionne entièrement avec Paypal</li>
                         <li>Aucune information bancaire utilisée n'est enregistrée sur notre site</li>
-                        <li class="text-warning">Le paiement par carte bancaire s'effectue à travers le système paypal</li>
-                        <li>SVP, n'utilisez pas les flèches de navigation où vous recommencerez la procédure à zéro</li>
+                        <li class="text-warning">Le paiement par carte bancaire s'effectue à travers le système Paypal</li>
+                        <li>Veuillez ne pas utiliser les flèches de navigation, ou vous recommencerez la procédure à zéro</li>
                         <li>Si vous avez fait une erreur, vous devez annuler la procédure en cours</li>
                         <li>Une fois le paiement effectué, votre compte sera automatiquement mis à jour</li>
                     </ul>
@@ -92,7 +93,7 @@ payment:
                 price: 'Prix'
             option:
                 title: 'Vos coupons de réduction'
-                desc: 'Vous pouvez sélectionner 1 coupon personnel ou global'
+                desc: 'Vous pouvez sélectionner un coupon personnel ou global'
                 no_coupon: 'Aucun coupon de réduction n''est disponible'
             patners:
                 title: 'Payer pour vos coéquipiers'
@@ -112,13 +113,13 @@ payment:
             button: 'Accès à Paypal'
         success:
             title: 'Récapitulatif de la commande'
-            event: 'Événement : %event%'
+            event: 'Évènement : %event%'
             button: 'Confirmer et payer'
             num: 'Paiement n°%num%'
             table:
                 total: 'Total'
                 name: 'Nom'
-                status: 'Status'
+                status: 'Statut'
                 price: 'Prix'
         message:
             base_error: 'Une erreur s''est produite durant la procédure'

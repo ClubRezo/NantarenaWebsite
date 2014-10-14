@@ -13,69 +13,71 @@
         {{ form_end(form) }}
     </div>
 
-    <div class="span10">
-        <table class="table sortable filterable" data-perpage="50">
-            <thead>
+    <table class="table sortable filterable" data-perpage="50">
+        <thead>
+        <tr>
+            <th data-filter="ignore" class="tiny">#</th>
+            <th>Utilisateur</th>
+            <th data-filter="date">Date</th>
+            <th>Prix</th>
+            <th>Transactions</th>
+            <th>Méthode</th>
+            <th class="mini"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for payment in lpayment %}
+            {% if payment.isValidRefund %}
+            <tr class="error">
+            {% else %}
             <tr>
-                <th data-filter="ignore" class="tiny">#</th>
-                <th>Acheteur</th>
-                <th data-filter="date">Date</th>
-                <th>Prix</th>
-                <th>Nombre de transaction</th>
-                <th>Méthode</th>
-                <th class="mini"></th>
+            {% endif %}
+                <td>{{ payment.id }}</td>
+                <td>
+                    {{ payment.user.username }}
+                </td>
+                <td>
+                    {{ payment.date|date("d/m/Y H:i") }}
+                </td>
+                <td>
+                    {{ payment.amount|number_format(2, '.', ',') }}€
+                </td>
+                <td>
+                    {{ payment.transactions|length }}
+                </td>
+                <td>
+                    {% if payment.isPaypal %}
+                        Paypal
+                    {% elseif payment.isCash %}
+                        Liquide
+                    {% elseif payment.isAdaptative %}
+                        Liquide
+                    {% else %}
+                        Classique
+                    {% endif %}
+
+                    {% if payment.isValidRefund %}
+                        (Annulé)
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('nantarena_admin_payment_payment_details', {'id': payment.id}) }}">
+                        <i class="icon-eye-open"></i>
+                    </a>
+                </td>
             </tr>
-            </thead>
+        {% endfor %}
+        </tbody>
 
-            <tbody>
-            {% for payment in lpayment %}
-                {% if payment.isValidRefund %}
-                <tr class="error">
-                {% else %}
-                <tr>
-                {% endif %}
-                    <td>{{ payment.id }}</td>
-                    <td>
-                        {{ payment.user.username }}
-                    </td>
-                    <td>
-                        {{ payment.date|date("d/m/Y H:i") }}
-                    </td>
-                    <td>
-                        {{ payment.amount|number_format(2, '.', ',') }}€
-                    </td>
-                    <td>
-                        {{ payment.transactions|length }}
-                    </td>
-                    <td>
-                        {% if payment.isPaypal %}
-                        paypal
-                        {% elseif payment.isCash %}
-                        liquide
-                        {% elseif payment.isAdaptative %}
-                        liquide
-                        {% else %}
-                        classique
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ path('nantarena_admin_payment_payment_details', {'id': payment.id}) }}">
-                            <i class="icon-eye-open"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
+        <tbody class="empty">
+            <tr>
+                <td colspan="10">
+                    <p class="text-center">Aucun paiement</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-            <tbody class="empty">
-                <tr>
-                    <td colspan="10">
-                        <p class="text-center">Aucun paiement</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="pagination pagination-centered"><ul></ul></div>
-    </div>
+    <div class="pagination pagination-centered"><ul></ul></div>
 {% endblock %}
