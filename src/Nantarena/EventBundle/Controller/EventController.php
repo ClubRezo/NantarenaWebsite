@@ -26,9 +26,18 @@ class EventController extends Controller
      * @Route("/{slug}", name="nantarena_event_show")
      * @Template()
      */
-    public function showAction($slug)
+    public function showAction($slug = null)
     {
         $em = $this->getDoctrine()->getManager();
+
+        if (null === $slug) {
+            /** @var Event $nextEvent */
+            $nextEvent = $em->getRepository('NantarenaEventBundle:Event')->findNext();
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $nextEvent->getSlug()
+            )));
+        }
+        
         $event = $em->getRepository('NantarenaEventBundle:Event')->findOneShow($slug);
         $securityContext = $this->get('security.context');
         $entry = null;

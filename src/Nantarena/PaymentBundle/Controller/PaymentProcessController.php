@@ -52,7 +52,7 @@ class PaymentProcessController extends Controller
     {
         // Check if a transaction is running and delete it if possible
         if (!$this->cleanPaypalTransaction($event)) {
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
         $user = $this->getUser();
 
@@ -152,7 +152,7 @@ class PaymentProcessController extends Controller
                 $em->getConnection()->rollback();
 
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.conflict_error'));
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
+                return $this->redirect($this->generateUrl('nantarena_event_show'));
             }
 
             // New transaction has been created
@@ -188,7 +188,7 @@ class PaymentProcessController extends Controller
     {
         $transaction = $this->getTransactionStep($event, 1);
         if (!$transaction) {
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
 
         return array(
@@ -208,7 +208,7 @@ class PaymentProcessController extends Controller
     {
         $transaction = $this->getTransactionStep($event, 1);
         if (!$transaction) {
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
 
         $user = $this->getUser();
@@ -256,12 +256,12 @@ class PaymentProcessController extends Controller
                     return $this->redirect($redirectUrl);
                 } else {
                     $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
-                    return $this->redirect($this->generateUrl('nantarena_user_profile'));
+                    return $this->redirect($this->generateUrl('nantarena_event_show'));
                 }
 
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
+                return $this->redirect($this->generateUrl('nantarena_event_show'));
             }
 
         } catch (\Exception $ex) {
@@ -271,7 +271,7 @@ class PaymentProcessController extends Controller
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
     }
 
@@ -286,7 +286,7 @@ class PaymentProcessController extends Controller
     {
         $transaction = $this->getTransactionStep($event, 2);
         if (!$transaction) {
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
 
         $paypalPayment = $transaction->getPayment();
@@ -301,7 +301,7 @@ class PaymentProcessController extends Controller
 
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
-                return $this->redirect($this->generateUrl('nantarena_user_profile'));
+                return $this->redirect($this->generateUrl('nantarena_event_show'));
             }
 
         } elseif ($state === 'cancel') {
@@ -309,11 +309,11 @@ class PaymentProcessController extends Controller
             $this->removePayment($paypalPayment);
 
             $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.cancel'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
 
         } else {
             $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
     }
 
@@ -328,7 +328,7 @@ class PaymentProcessController extends Controller
     {
         $transaction = $this->getTransactionStep($event, 3);
         if (!$transaction) {
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
 
         return array(
@@ -347,7 +347,7 @@ class PaymentProcessController extends Controller
     {
         $transaction = $this->getTransactionStep($event, 3);
         if (!$transaction) {
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
 
         $paypalPayment = $transaction->getPayment();
@@ -385,7 +385,7 @@ class PaymentProcessController extends Controller
             $this->get('session')->set('payProcess', false);
         // }
 
-        return $this->redirect($this->generateUrl('nantarena_user_profile'));
+        return $this->redirect($this->generateUrl('nantarena_event_show'));
     }
 
     /**
@@ -397,14 +397,14 @@ class PaymentProcessController extends Controller
     {
         $transaction = $this->getActivePaypalTransaction($event);
         if (!$transaction) {
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         } else {
             $paypalPayment = $transaction->getPayment();
             
             $this->removePayment($paypalPayment);
 
             $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.cancel'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
     }
 
