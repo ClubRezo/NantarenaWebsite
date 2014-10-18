@@ -9,7 +9,7 @@ payment:
             transaction_management: 'Liste des transactions'
             user_management: 'Liste des participants à un événement'
             paypal_management: 'Gestion des transactions temporaires Paypal'
-            refund_management: 'Liste des remboursements'
+            refund_management: 'Liste des paiements annulés'
         paypal:
             list:
                 title: 'Paiements Paypal en cours'
@@ -35,7 +35,7 @@ payment:
                     th_refund: 'Info annulation'
         refund:
             list:
-                title: 'Liste des annulations effectués'
+                title: 'Liste des paiements annulés'
             payment:
                 title: 'Annuler un paiement complet'
                 btn: 'Annuler complètement le paiement'
