@@ -124,9 +124,12 @@ event:
             error: 'Erreur lors de votre désinscription. Veuillez réessayer ou contacter un administrateur.'
             notyet: 'Vous n''êtes pas inscrit à l''évènement'
             success: 'Vous êtes maintenant désinscrit avec succès'
+            team: 'Vous avez créé une équipe, veuillez supprimer en premier cette équipe si vous souhaitez annuler votre participation'
 
         submit: 'Se désinscrire'
-        title: 'Annuler votre participation à l''évènement'
+        info: 'Etes-vous sûr de vouloir annuler votre participation à l''évènement ?'
+        page_title: '%name%'
+        title: 'Desinscription'
 
     form:
         event:

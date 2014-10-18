@@ -193,6 +193,8 @@ class EventController extends Controller
         }
 
         $user = $this->get('security.context')->getToken()->getUser();
+
+        /** @var Entry $entry */
         $entry = null;
 
         // Check if user is already registered
@@ -203,14 +205,20 @@ class EventController extends Controller
             )));
         }
 
+        // Check if user has a team
+        if (null !== $entry->getTeam() && $entry->getTeam()->getCreator()->getId() === $entry->getId()) {
+            $flashbag->add('error', $translator->trans('event.cancel.flash.team'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
+        }
+
         // TODO: Check if user has not paid
 
         $form = $this->createDeleteForm($event);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            try {
-                if ($form->get('id')->getData() == $event->getId() || null === $entry) {
+//            try {
+                if ($form->get('id')->getData() == $event->getId()) {
                     $em = $this->getDoctrine()->getManager();
 
                     $em->remove($entry);
@@ -220,9 +228,9 @@ class EventController extends Controller
                 } else {
                     throw new \Exception;
                 }
-            } catch (\Exception $e) {
-                $flashbag->add('error', $translator->trans('event.cancel.flash.error'));
-            }
+//            } catch (\Exception $e) {
+//                $flashbag->add('error', $translator->trans('event.cancel.flash.error'));
+//            }
 
             return $this->redirect($this->generateUrl('nantarena_event_show', array(
                 'slug' => $event->getSlug(),
