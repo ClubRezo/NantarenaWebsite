@@ -5,63 +5,6 @@
 
 {% block event_content %}
 
-    {% if entry is not null %}
-        <h2>Votre inscription</h2>
-
-        <div class="infos">
-            <div class="row-fluid">
-                <div class="span12">
-                    <ul>
-                        <li>
-                            <strong>{{ 'Mon tournoi'|colon }}</strong>
-                            {{ entry.tournament.name }}
-
-                            {# TODO: Ne pas afficher si payé #}
-                            (<a href="{{ path('nantarena_event_cancel', {'slug': event.slug}) }}">Se désinscrire</a>)
-                        </li>
-                        <li>
-                            <strong>{{ 'Mon équipe'|colon }}</strong>
-                            {% if entry.team is not null %}
-                                {{ entry.team.name }}
-
-                                (
-                                    <a href="{{ path('nantarena_profile_view_team', {'slug' : event.slug, 'team' : entry.team.id}) }}">{{ 'event.profile.team.view'|trans }}</a>
-                                {% if entry == entry.team.creator %}
-                                    -
-                                    <a href="{{ path('nantarena_profile_modify_team', {'team' : entry.team.id, 'slug' : event.slug}) }}">{{ 'event.profile.modifyTeam.button'|trans }}</a>
-                                {% endif %}
-                                )
-                            {% else %}
-                                -
-                            {% endif %}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            {% if entry.team is not null %}
-                {% if entry.team.isValid %}
-                    <p class="text-center text-success">
-                        L'équipe a été validée définitivement
-                    </p>
-                {% else %}
-                    <p class="text-center text-error">
-                        L'équipe n'est pas encore validée définitivement
-                    </p>
-                {% endif %}
-            {% endif %}
-
-            <p class="text-center">
-                {% if entry.team is null %}
-                    <a href="{{ path('nantarena_profile_create_team', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
-                {% else %}
-                    {# TODO: Ne pas afficher si payé #}
-                    <a class="btn btn-success" href="{{ path('nantarena_payment_paymentprocess_create', {'slug' : event.slug}) }}">Payer</a>
-                {% endif %}
-            </p>
-        </div>
-    {% endif %}
-
     <h2>
         <time datetime="{{ event.startDate|date('Y-m-d') }}">
             {% if event.startDate|date('Y-m-d') == event.endDate|date('Y-m-d') %}
@@ -170,6 +113,64 @@
             </div>
         </div>
     </div>
+
+    {% if entry is not null %}
+        <h2>Votre inscription</h2>
+
+        <div class="infos">
+            <div class="row-fluid">
+                <div class="span12">
+                    <ul>
+                        <li>
+                            <strong>{{ 'Mon tournoi'|colon }}</strong>
+                            {{ entry.tournament.name }}
+
+                            {# TODO: Ne pas afficher si payé #}
+                            (<a href="{{ path('nantarena_event_cancel', {'slug': event.slug}) }}">Se désinscrire</a>)
+                        </li>
+                        <li>
+                            <strong>{{ 'Mon équipe'|colon }}</strong>
+                            {% if entry.team is not null %}
+                                {{ entry.team.name }}
+
+                                (
+                                <a href="{{ path('nantarena_profile_view_team', {'slug' : event.slug, 'team' : entry.team.id}) }}">{{ 'event.profile.team.view'|trans }}</a>
+                                {% if entry == entry.team.creator %}
+                                    -
+                                    <a href="{{ path('nantarena_profile_modify_team', {'team' : entry.team.id, 'slug' : event.slug}) }}">{{ 'event.profile.modifyTeam.button'|trans }}</a>
+                                {% endif %}
+                                )
+                            {% else %}
+                                -
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {% if entry.team is not null %}
+                {% if entry.team.isValid %}
+                    <p class="text-center text-success">
+                        L'équipe a été validée définitivement
+                    </p>
+                {% else %}
+                    <p class="text-center text-error">
+                        L'équipe n'est pas encore validée définitivement
+                    </p>
+                {% endif %}
+            {% endif %}
+
+            <p class="text-center">
+                {% if entry.team is null %}
+                    <a href="{{ path('nantarena_profile_create_team', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
+                {% else %}
+                    {# TODO: Ne pas afficher si payé #}
+                    <a class="btn btn-success" href="{{ path('nantarena_payment_paymentprocess_create', {'slug' : event.slug}) }}">Payer</a>
+                {% endif %}
+            </p>
+        </div>
+    {% endif %}
+
 
     {% if event.tournaments.count > 0 %}
         <h2>{{ 'event.show.tournaments'|trans }}</h2>
