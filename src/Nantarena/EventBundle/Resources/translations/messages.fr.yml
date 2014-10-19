@@ -198,7 +198,7 @@ event:
 
         flash:
             already: 'Vous participez déjà à un tournoi'
-            participation: 'Vous êtes inscrit au tournoi '
+            participation: 'Vous êtes inscrit au tournoi %tournament%'
             closed: 'Les inscriptions sont cloturées'
             full: 'L''évènement est complet'
             login: 'Vous devez vous connecter pour participer à l''évènement'
@@ -233,7 +233,7 @@ event:
             error: Une erreur est survenue durant la modification de l'équipe
             notInTeam: Vous ne pouvez pas modifier cette équipe car vous n'êtes pas le créateur
         team:
-            view: Voir mon équipe
+            view: Voir l'équipe
             title: Récapitulatif de l'équipe
             myTeam: Mon équipe
             myTournament: Mon tournoi
