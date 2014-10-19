@@ -259,7 +259,7 @@ class Tournament
         $name = $this->getGame()->getName();
 
         if ($this->isProfessional()) {
-            $name .= ' (tournoi pro)';
+            $name .= ' (tournoi avec cash-prize)';
         }
 
         return $name;
