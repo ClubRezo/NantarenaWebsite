@@ -150,6 +150,7 @@ event:
             team: Equipe
             other: 'Informations complémentaires'
             tournaments: Tournois
+            tournament: Tournoi
 
         game:
             name: Nom
@@ -227,7 +228,12 @@ event:
             submit: Modifier
             success: Equipe modifiée avec succès
             error: Une erreur est survenue durant la modification de l'équipe
-            notInTeam: Vous ne pouvez pas modifier cette équipe car vous n'en faites pas partie
+            notInTeam: Vous ne pouvez pas modifier cette équipe car vous n'êtes pas le créateur
+        team:
+            view: Voir mon équipe
+            title: Récapitulatif de l'équipe
+            myTeam: Mon équipe
+            myTournament: Mon tournoi
         addMembers:
             title: Ajouter des membres à votre équipe
             submit: Ajouter

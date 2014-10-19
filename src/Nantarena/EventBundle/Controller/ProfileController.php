@@ -116,8 +116,8 @@ class ProfileController extends Controller
         $entry = null;
         $user->hasEntry($event, $entry);
 
-        //Can only modify team if is part of it
-        if($entry->getTeam() != null && $entry->getTeam()->getId() === $team->getId()){
+        //Can only modify team if is creator
+        if($entry->getTeam() != null && $entry == $entry->getTeam()->getCreator()){
             $form = $this->createForm(new TeamType(), $team, array(
                 'em' => $em,
                 'event' => $event));
@@ -154,6 +154,30 @@ class ProfileController extends Controller
             )));
         }
 
+    }
+
+    /**
+     * @Route("profile/team/view/{slug}/{team}", name="nantarena_profile_view_team")
+     * @param Team $team
+     * @param Request $request
+     * @param Event $event
+     * @return array
+     * @template
+     */
+    public function viewTeamAction(Team $team, Request $request, Event $event)
+    {
+//        $em = $this->getDoctrine()->getManager();
+//        $flashbag = $this->get('session')->getFlashBag();
+//        $translator = $this->get('translator');
+
+//        $user = $this->get('security.context')->gettoken()->getUser();
+//        $entry = null;
+//        $user->hasEntry($event, $entry);
+
+        return array(
+            'team' => $team,
+            'event' => $event,
+        );
     }
 
 }
