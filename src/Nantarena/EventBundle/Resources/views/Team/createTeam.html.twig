@@ -53,8 +53,6 @@
          {{ form_end(form) }}
 
         {% block back %}
-            <a href="{{ path('nantarena_event_participate', {'slug': event.slug}) }}">
-                {{ 'event.cancel.back'|trans }}
-            </a>
+            <p class="text-center"><a href="{{ path('nantarena_event_show', {slug: event.slug}) }}">Retour à la page de l'évènement</a></p>
         {% endblock %}
 {% endblock %}
