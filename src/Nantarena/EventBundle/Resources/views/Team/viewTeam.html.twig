@@ -1,0 +1,40 @@
+{% extends 'NantarenaEventBundle::layout.html.twig' %}
+
+{% block title 'event.profile.team.title'|trans({'%name%': team.name}) %}
+{% block page_title 'event.profile.team.title'|trans({'%name%': team.name}) %}
+
+{% block event_content %}
+    <div class="infos">
+        <div class="row-fluid">
+            <ul class="unstyled">
+                <li><strong>{{ 'event.form.fieldset.event'|trans }}</strong> : {{ event.name }}</li>
+                <li><strong>{{ 'event.form.fieldset.tournament'|trans }}</strong> : {{ team.tournament.game.name }}</li>
+            </ul>
+        </div>
+    </div>
+    <h2>{{ 'event.form.team.members.list'|trans }}</h2>
+    <div class="infos">
+        <div class="row-fluid">
+            <ul class="unstyled">
+                {% for member in team.members %}
+                    <li>
+                        {{ member.user.username }}
+                        {% if member == team.creator %}
+                            (créateur)
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% set others = team.tournament.game.teamCapacity - team.members|length %}
+            {% if others > 0 %}
+                <p class="text-center text-error">
+                    Il reste encore {{ others }} membres non assignés dans l'équipe.
+                </p>
+            {% else %}
+                <p class="text-center text-success">
+                    L'équipe est complète.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock event_content %}

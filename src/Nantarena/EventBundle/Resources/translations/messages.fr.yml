@@ -234,9 +234,8 @@ event:
             notInTeam: Vous ne pouvez pas modifier cette équipe car vous n'êtes pas le créateur
         team:
             view: Voir l'équipe
-            title: Récapitulatif de l'équipe
+            title: Equipe "%name%"
             myTeam: Mon équipe
-            myTournament: Mon tournoi
         addMembers:
             title: Ajouter des membres à votre équipe
             submit: Ajouter

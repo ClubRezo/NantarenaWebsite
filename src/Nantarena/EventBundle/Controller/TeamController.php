@@ -14,35 +14,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ProfileController
+ * Class TeamController
  *
  * @package Nantarena\EventBundle\Controller
  *
+ * @Route("/event")
+ *
  */
-class ProfileController extends Controller
+class TeamController extends Controller
 {
     /**
-     * @Template()
-     */
-    public function indexAction()
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-
-        $em = $this->get('doctrine')->getManager();
-        $event = $em->getRepository('NantarenaEventBundle:Event')->findNext();
-
-        return array(
-            'entries' => $user->getEntries(),
-            'nextEvent' => $event
-        );
-    }
-
-    /**
+     * @Route("{slug}/team/create", name="nantarena_event_team_create")
      * @param Request $request
-     * @Route("profile/team/create/{slug}", name="nantarena_profile_create_team")
-     * @Template()
      * @param \Nantarena\EventBundle\Entity\Event $event
      * @return array
+     * @Template()
      */
     public function createTeamAction(Request $request, Event $event)
     {
@@ -97,16 +83,15 @@ class ProfileController extends Controller
 
     }
 
-    /** Modify a  team
-     * @param \Nantarena\EventBundle\Entity\Team $team
-     * @Route("profile/team/modify/{slug}/{team}", name="nantarena_profile_modify_team")
+    /** Edit a team
+     * @Route("{slug}/team/edit/{team}", name="nantarena_event_team_edit")
      * @param Request $request
-     *
      * @param \Nantarena\EventBundle\Entity\Event $event
+     * @param \Nantarena\EventBundle\Entity\Team $team
      * @return \Symfony\Component\HttpFoundation\Response
-     * @template
+     * @Template()
      */
-    public function modifyTeamAction(Team $team, Request $request, Event $event)
+    public function modifyTeamAction(Request $request, Event $event, Team $team)
     {
         $em = $this->getDoctrine()->getManager();
         $flashbag = $this->get('session')->getFlashBag();
@@ -157,27 +142,17 @@ class ProfileController extends Controller
     }
 
     /**
-     * @Route("profile/team/view/{slug}/{team}", name="nantarena_profile_view_team")
+     * @Route("{slug}/team/view/{team}", name="nantarena_event_team_view")
      * @param Team $team
-     * @param Request $request
      * @param Event $event
      * @return array
-     * @template
+     * @Template()
      */
-    public function viewTeamAction(Team $team, Request $request, Event $event)
+    public function viewTeamAction(Event $event, Team $team)
     {
-//        $em = $this->getDoctrine()->getManager();
-//        $flashbag = $this->get('session')->getFlashBag();
-//        $translator = $this->get('translator');
-
-//        $user = $this->get('security.context')->gettoken()->getUser();
-//        $entry = null;
-//        $user->hasEntry($event, $entry);
-
         return array(
             'team' => $team,
             'event' => $event,
         );
     }
-
 }

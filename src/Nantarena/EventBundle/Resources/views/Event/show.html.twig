@@ -134,10 +134,10 @@
                                 {{ entry.team.name }}
 
                                 (
-                                <a href="{{ path('nantarena_profile_view_team', {'slug' : event.slug, 'team' : entry.team.id}) }}">{{ 'event.profile.team.view'|trans }}</a>
+                                <a href="{{ path('nantarena_event_team_view', {'slug' : event.slug, 'team' : entry.team.id}) }}">{{ 'event.profile.team.view'|trans }}</a>
                                 {% if entry == entry.team.creator %}
                                     -
-                                    <a href="{{ path('nantarena_profile_modify_team', {'team' : entry.team.id, 'slug' : event.slug}) }}">{{ 'event.profile.modifyTeam.button'|trans }}</a>
+                                    <a href="{{ path('nantarena_event_team_edit', {'team' : entry.team.id, 'slug' : event.slug}) }}">{{ 'event.profile.modifyTeam.button'|trans }}</a>
                                 {% endif %}
                                 )
                             {% else %}
