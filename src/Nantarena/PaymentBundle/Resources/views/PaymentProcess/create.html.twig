@@ -1,0 +1,40 @@
+{% extends 'NantarenaPaymentBundle::PaymentProcess/layout.html.twig' %}
+
+{% block title 'payment.payment_process.create.title'|trans %}
+
+{% block page_title 'payment.payment_process.create.title'|trans %}
+
+{% block step_pos 'payment.payment_process.bar.create.pos'|trans %}
+{% block step_desc 'payment.payment_process.bar.create.desc'|trans %}
+
+{% block payment_process %}
+
+    <h2>{{ 'payment.payment_process.create.explain.title'|trans }}</h2>
+
+    {{ 'payment.payment_process.create.explain.content'|trans|raw }}
+
+    <!-- PayPal Logo -->
+    <table border="0" cellpadding="10" cellspacing="0" align="center">
+        <tr>
+            <td align="center"></td>
+        </tr>
+        <tr>
+            <td align="center"><a href="#" title="PayPal Comment Ca Marche"
+                                  onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=600');"><img
+                            src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_site_fr.png"
+                            border="0" alt="Now accepting PayPal"></a>
+
+                <div style="text-align:center"></div>
+            </td>
+        </tr>
+    </table><!-- PayPal Logo -->
+
+    <hr>
+
+
+    {% embed 'NantarenaPaymentBundle:Form:_payment.html.twig' with {
+        'submit': 'payment.payment_process.create.form.submit'|trans
+    } %}{% endembed %}
+
+
+{% endblock %}

@@ -259,7 +259,7 @@ class Tournament
         $name = $this->getGame()->getName();
 
         if ($this->isProfessional()) {
-            $name .= ' (tournoi pro)';
+            $name .= ' (avec cash-prize)';
         }
 
         return $name;
@@ -298,5 +298,19 @@ class Tournament
         return $this->teams;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isComplete() {
+        $validTeams = 0;
 
+        /** @var Team $team */
+        foreach ($this->getTeams() as $team) {
+            if ($team->isValid()) {
+                $validTeams++;
+            }
+        }
+
+        return ($validTeams >= $this->getMaxTeams());
+    }
 }

@@ -1,0 +1,59 @@
+{% extends 'NantarenaEventBundle::layout.html.twig' %}
+
+{% block title 'event.profile.team.title'|trans({'%name%': team.name}) %}
+{% block page_title 'event.profile.team.title'|trans({'%name%': team.name}) %}
+
+{% block event_content %}
+    <h2>{{ 'event.form.team.members.list'|trans }}</h2>
+    <div class="infos">
+        <div class="row-fluid">
+            <ul class="unstyled">
+                {% for member in team.members %}
+                    <li>
+                        {{ member.user.username }}
+                        {% if member == team.creator %}
+                            (créateur)
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            {% set others = team.tournament.game.teamCapacity - team.members|length %}
+            {% if others > 0 %}
+                <p class="text-center text-error">
+                    Il reste encore {{ others }} membres non assignés dans l'équipe.
+                </p>
+            {% else %}
+                <p class="text-center text-success">
+                    L'équipe est complète.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <h2>{{ 'event.form.fieldset.infos'|trans }}</h2>
+    <div class="infos">
+        <div class="row-fluid">
+            <ul class="unstyled">
+                <li><strong>{{ 'event.form.fieldset.event'|trans|colon }}</strong> {{ event.name }}</li>
+                <li><strong>{{ 'event.form.fieldset.tournament'|trans|colon }}</strong> {{ team.tournament.game.name }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>{{ 'event.form.fieldset.other'|trans }}</h2>
+    <div class="infos">
+        <ul class="unstyled">
+            <li><strong>{{ 'event.form.team.tag'|trans|colon }}</strong> {{ team.tag }}</li>
+            <li><strong>{{ 'event.form.team.website'|trans|colon }}</strong> <a href="{{ team.website }}">{{ team.website }}</a></li>
+            <li><strong>{{ 'event.form.team.desc'|trans|colon }}</strong> {{ team.desc }}</li>
+        </ul>
+    </div>
+
+    {% if app.user == team.creator.user %}
+        <p class="text-center">
+            <a href="{{ path('nantarena_event_team_edit', {'team' : team.id, 'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.modifyTeam.button'|trans }}</a>
+        </p>
+    {% endif %}
+
+    <p class="text-center"><a href="{{ path('nantarena_event_show', {slug: event.slug}) }}">Retour à la page de l'évènement</a></p>
+{% endblock event_content %}

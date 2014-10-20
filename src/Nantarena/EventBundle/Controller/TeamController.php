@@ -14,35 +14,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ProfileController
+ * Class TeamController
  *
  * @package Nantarena\EventBundle\Controller
  *
+ * @Route("/event")
+ *
  */
-class ProfileController extends Controller
+class TeamController extends Controller
 {
     /**
-     * @Template()
-     */
-    public function indexAction()
-    {
-        $user = $this->get('security.context')->getToken()->getUser();
-
-        $em = $this->get('doctrine')->getManager();
-        $event = $em->getRepository('NantarenaEventBundle:Event')->findNext();
-
-        return array(
-            'entries' => $user->getEntries(),
-            'nextEvent' => $event
-        );
-    }
-
-    /**
+     * @Route("{slug}/team/create", name="nantarena_event_team_create")
      * @param Request $request
-     * @Route("profile/team/create/{slug}", name="nantarena_profile_create_team")
-     * @Template()
      * @param \Nantarena\EventBundle\Entity\Event $event
      * @return array
+     * @Template()
      */
     public function createTeamAction(Request $request, Event $event)
     {
@@ -97,45 +83,76 @@ class ProfileController extends Controller
 
     }
 
-    /** Modify a  team
-     * @param \Nantarena\EventBundle\Entity\Team $team
-     * @Route("profile/team/modify/{slug}/{team}", name="nantarena_profile_modify_team")
+    /** Edit a team
+     * @Route("{slug}/team/edit/{team}", name="nantarena_event_team_edit")
      * @param Request $request
-     *
      * @param \Nantarena\EventBundle\Entity\Event $event
+     * @param \Nantarena\EventBundle\Entity\Team $team
      * @return \Symfony\Component\HttpFoundation\Response
-     * @template
+     * @Template()
      */
-    public function modifyTeamAction(Team $team, Request $request, Event $event)
+    public function modifyTeamAction(Request $request, Event $event, Team $team)
     {
         $em = $this->getDoctrine()->getManager();
         $flashbag = $this->get('session')->getFlashBag();
         $translator = $this->get('translator');
 
         $user = $this->get('security.context')->getToken()->getUser();
+        $entry = null;
+        $user->hasEntry($event, $entry);
 
-        $form = $this->createForm(new TeamType(), $team, array(
-            'em' => $em,
-            'event' => $event));
-                $form->remove('creator')
-                    ->remove('tournament');
+        //Can only modify team if is creator
+        if($entry->getTeam() != null && $entry == $entry->getTeam()->getCreator()){
+            $form = $this->createForm(new TeamType(), $team, array(
+                'em' => $em,
+                'event' => $event));
+                    $form->remove('creator')
+                        ->remove('tournament');
 
-        if($request->getMethod() === 'POST') {
-            $form->handleRequest($request);
-            if($form->isValid()) {
-                try {
-                    $em->flush();
-                    $flashbag->add('success', $translator->trans('event.profile.modifyTeam.success'));
-                } catch (\Exception $e) {
-                    $flashbag->add('error', $translator->trans('event.profile.modifyTeam.error'));
+            if($request->getMethod() === 'POST') {
+                $form->handleRequest($request);
+                if($form->isValid()) {
+                    foreach($team->getMembers() as $member) {
+                        if($member->getTeam() == null) {
+                            $member->setTeam($team);
+                        }
+                    }
+                    try {
+                        $em->flush();
+                        $flashbag->add('success', $translator->trans('event.profile.modifyTeam.success'));
+                        return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                            'slug' => $event->getSlug()
+                            )));
+                    } catch (\Exception $e) {
+                        $flashbag->add('error', $translator->trans('event.profile.modifyTeam.error'));
+                    }
                 }
             }
+            return array(
+                'form' => $form->createView(),
+                'event' => $event,
+            );
+        }else{
+            $flashbag->add('error', $translator->trans('event.profile.modifyTeam.notInTeam'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug()
+            )));
         }
-        return array(
-            'form' => $form->createView(),
-            'event' => $event,
-        );
 
     }
 
+    /**
+     * @Route("{slug}/team/view/{team}", name="nantarena_event_team_view")
+     * @param Team $team
+     * @param Event $event
+     * @return array
+     * @Template()
+     */
+    public function viewTeamAction(Event $event, Team $team)
+    {
+        return array(
+            'team' => $team,
+            'event' => $event,
+        );
+    }
 }

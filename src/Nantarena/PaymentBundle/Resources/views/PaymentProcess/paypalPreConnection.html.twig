@@ -1,0 +1,29 @@
+{% extends 'NantarenaPaymentBundle::PaymentProcess/layout.html.twig' %}
+
+{% block title 'payment.payment_process.paypal.title'|trans %}
+
+{% block page_title 'payment.payment_process.paypal.title'|trans %}
+
+{% block step_pos'payment.payment_process.bar.paypal.pos'|trans %}
+{% block step_desc 'payment.payment_process.bar.paypal.desc'|trans %}
+
+{% block payment_process %}
+
+    {{ 'payment.payment_process.paypal.explain'|trans|raw }}
+
+    <div class="text-center">
+        <p>
+            <a class="btn btn-primary" href="{{ path('nantarena_payment_paypalpayment_paypalconnection', {'slug': event.slug}) }}">
+                {{ 'payment.payment_process.paypal.button'|trans }}
+            </a>
+        </p>
+        <p>
+            <a class="btn btn-danger" href="{{ path('nantarena_payment_paypalpayment_clean', {'slug': event.slug}) }}">
+                {{ 'payment.payment_process.cancel'|trans }}
+            </a>
+        </p>
+
+        <!-- PayPal Logo --><table border="0" cellpadding="10" cellspacing="0" align="center"><tr><td align="center"></td></tr><tr><td align="center"><a href="#" title="PayPal Comment Ca Marche" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=600');"><img src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_paiements_securises_fr.jpg" border="0" alt="PayPal Acceptance Mark"></a></td></tr></table><!-- PayPal Logo -->
+    </div>
+
+{% endblock %}

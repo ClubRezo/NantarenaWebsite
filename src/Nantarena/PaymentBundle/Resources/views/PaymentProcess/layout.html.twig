@@ -1,0 +1,15 @@
+{% extends 'NantarenaSiteBundle::layout.html.twig' %}
+
+{% block body %}
+    {% include 'NantarenaSiteBundle::_flashbag.html.twig' %}
+    <div class="text-center">
+        <div class="progress">
+            <div class="bar" style="width: {% block step_pos %}0{% endblock %}%;"></div>
+        </div>
+            {% block step_desc %}{% endblock %}
+        <hr/>
+    </div>
+    {% block payment_process %}
+    {% endblock %}
+
+{% endblock %}

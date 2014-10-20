@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Nantarena\EventBundle\Validator\Constraints\TeamNameConstraint;
-use Nantarena\EventBundle\Validator\Constraints\TeamTagConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamCreatorConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamMembersConstraint;
 use Nantarena\EventBundle\Validator\Constraints\TeamMembersTournamentsConstraint;
@@ -18,7 +17,6 @@ use Nantarena\EventBundle\Validator\Constraints\TeamMembersTournamentsConstraint
  * @ORM\Table(name="event_team")
  * @ORM\Entity(repositoryClass="Nantarena\EventBundle\Repository\TeamRepository")
  * @TeamNameConstraint(message="event.teams.unique.name")
- * @TeamTagConstraint(message="event.teams.unique.tag")
  * @TeamCreatorConstraint(message="event.teams.creator")
  * @TeamMembersTournamentsConstraint(message="event.teams.members.tournaments")
  * @TeamMembersConstraint(
@@ -50,7 +48,6 @@ class Team
      * @var string
      *
      * @ORM\Column(name="tag", type="string", length=50)
-     * @Assert\NotBlank()
      */
     private $tag;
 
@@ -257,7 +254,6 @@ class Team
     public function addMember($members)
     {
         if (null !== $members) {
-            $members->setTeam($this);
             $this->members[] = $members;
         }
 

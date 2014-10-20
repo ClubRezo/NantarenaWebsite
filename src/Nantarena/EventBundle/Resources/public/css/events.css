@@ -96,6 +96,13 @@ h2 {
         padding-top: 1px;
     }
 
+    section.tournament header h3 span.platform {
+        right: auto;
+        left: 10px;
+        color: inherit;
+        margin-top: 2px;
+    }
+
     section.tournament header ul {
         list-style-type: none;
         margin: 0;
@@ -110,6 +117,10 @@ h2 {
     section.tournament header .progress .bar {
         background-color: #346CA0;
         background-image: none;
+    }
+
+    section.tournament header .progress .bar.bar-success {
+        background-color: #5eb95e;
     }
 
     section.tournament header p {

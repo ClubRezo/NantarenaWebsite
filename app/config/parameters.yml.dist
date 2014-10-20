@@ -17,6 +17,10 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     db_prefix:         na_
-
+    
     monolog_from:      ~
     monolog_to:        ~
+    
+    paypal_clientid:   ~
+    paypal_secret:     ~
+    paypal_mode:        sandbox

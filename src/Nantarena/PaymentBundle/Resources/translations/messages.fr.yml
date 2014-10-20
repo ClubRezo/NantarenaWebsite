@@ -1,0 +1,139 @@
+ROLE_PAYMENT_ADMIN: 'Admin - Gestion des paiements'
+
+payment:
+    title: 'Paiement'
+    admin:
+        dashboard:
+            title: 'Gestion des paiements'
+            payment_management: 'Liste des paiements'
+            transaction_management: 'Liste des transactions'
+            user_management: 'Liste des participants à un événement'
+            paypal_management: 'Gestion des transactions temporaires Paypal'
+            refund_management: 'Liste des paiements annulés'
+        paypal:
+            list:
+                title: 'Paiements Paypal en cours'
+        payment:
+            list:
+                title: 'Liste des paiements effectués'
+                return: 'Retour à la liste des paiements'
+                return_trans: 'Retour à la liste des transactions'
+            details:
+                infos: 'Détails du paiement'
+                title: 'Paiement n°%num%'
+                return: 'Retour à la description du paiement'
+                num: 'Identifiant'
+                user: 'Auteur'
+                date: 'Date'
+                amount: 'Montant'
+                number: 'Transactions'
+                list:
+                    title: 'Liste des transactions associées'
+                    th_user: 'Participant'
+                    th_status: 'Statut'
+                    th_price: 'Prix'
+                    th_refund: 'Info annulation'
+        refund:
+            list:
+                title: 'Liste des paiements annulés'
+            payment:
+                title: 'Annuler un paiement complet'
+                btn: 'Annuler complètement le paiement'
+            transaction:
+                title: 'Annulation de la transaction'
+                btn: 'Remboursement'
+            form:
+                submit: 'Rembourser'
+                description: 'Explication'
+                valid: 'Validé'
+            modify:
+                submit: 'Modifier'
+            flash:
+                pay_refund: 'Le paiement est remboursé'
+                modify_refund: 'Le remboursement a été modifié'
+                validate_refund: 'Le remboursement a été validé'
+                no_pay: 'Pas de paiement correspondant'
+                no_trans: 'Pas de transaction correspondante'
+                is_refund: 'Le remboursement de la transation a déjà été fait'
+        cash:
+            title: 'Paiement en liquide'
+        transaction:
+            title: 'Liste des transactions'
+
+    payment_process:
+        bar:
+            create:
+                pos: '33'
+                desc: 'Étape 1 sur 3'
+            paypal:
+                pos: '66'
+                desc: 'Étape 2 sur 3'
+            success:
+                pos: '100'
+                desc: 'Étape 3 sur 3'
+        cancel: 'Annuler'
+        create:
+            title: 'Sélection de vos options de paiement'
+            explain:
+                title: 'Explications et recommandations'
+                content: >
+                    <ul>
+                        <li>Ce système de paiement fonctionne entièrement avec Paypal</li>
+                        <li>Aucune information bancaire utilisée n'est enregistrée sur notre site</li>
+                        <li class="text-warning">Le paiement par carte bancaire s'effectue à travers le système Paypal</li>
+                        <li>Veuillez ne pas utiliser les flèches de navigation, ou vous recommencerez la procédure à zéro</li>
+                        <li>Si vous avez fait une erreur, vous devez annuler la procédure en cours</li>
+                        <li>Une fois le paiement effectué, votre compte sera automatiquement mis à jour</li>
+                    </ul>
+            place:
+                title: 'Votre place'
+                desc: 'C''est votre entrée pour notre événement'
+                event: 'Evénement'
+                status: 'Tournoi'
+                price: 'Prix'
+            option:
+                title: 'Vos coupons de réduction'
+                desc: 'Vous pouvez sélectionner un coupon personnel ou global'
+                no_coupon: 'Aucun coupon de réduction n''est disponible'
+            patners:
+                title: 'Payer pour vos coéquipiers'
+                desc: 'Les coéquipiers pour qui vous payez ne pourront pas utiliser leurs coupons'
+                label: 'Coéquipier(s)'
+                no_partner: 'Pas de partenaires non payés'
+            form:
+                submit: 'Continuer'
+        paypal:
+            title: 'Accès à Paypal'
+            explain: >
+                    <ul>
+                        <li>La prochaine étape se déroule su Paypal</li>
+                        <li>Vous pourrez payer avec votre compte Paypal ou renseigner les informations pour votre carte bancaire</li>
+                        <li>Un descriptif détaillé vous sera présenté avant de payer</li>
+                    </ul>
+            button: 'Accès à Paypal'
+        success:
+            title: 'Récapitulatif de la commande'
+            event: 'Évènement : %event%'
+            button: 'Confirmer et payer'
+            num: 'Paiement n°%num%'
+            table:
+                total: 'Total'
+                name: 'Nom'
+                status: 'Statut'
+                price: 'Prix'
+        message:
+            base_error: 'Une erreur s''est produite durant la procédure'
+            conflict_error: 'Un conflit de paiement a peut-être lieu avec un autre membre de votre équipe'
+            event_signup: 'Vous n''êtes pas inscrit à cet événement'
+            paypal: 'Un problème a été rencontré avec Paypal'
+            cancel: 'La transaction a été supprimée'
+            payment: 'Le paiement s''est bien déroulé - Merci'
+            small_amount: 'Le montant est trop petit pour paypal'
+            bad_step: 'Oups ! Vous n''êtes pas sur la bonne étape'
+            payed: 'Vous avez déjà payé !'
+            pay_running: 'Vous avez déjà un paiement en cours sur votre compte'
+            pay_admin: 'Un paiement administrateur est en cours pour votre compte'
+            expired: 'La session est expirée'
+            time_error: 'Un paiement est en cours, si cette erreur apparait encore dans 15 min, contactez un admin'
+            coop: 'Votre coéquipier %user% est en train de payer votre place.'
+            time: 'Sa session expire dans %min% minutes et %sec% secondes'

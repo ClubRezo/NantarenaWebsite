@@ -124,9 +124,12 @@ event:
             error: 'Erreur lors de votre désinscription. Veuillez réessayer ou contacter un administrateur.'
             notyet: 'Vous n''êtes pas inscrit à l''évènement'
             success: 'Vous êtes maintenant désinscrit avec succès'
+            team: 'Vous avez créé une équipe, veuillez supprimer en premier cette équipe si vous souhaitez annuler votre participation'
 
         submit: 'Se désinscrire'
-        title: 'Annuler votre participation à l''évènement'
+        info: 'Etes-vous sûr de vouloir annuler votre participation à l''évènement ?'
+        page_title: '%name%'
+        title: 'Desinscription'
 
     form:
         event:
@@ -150,6 +153,7 @@ event:
             team: Equipe
             other: 'Informations complémentaires'
             tournaments: Tournois
+            tournament: Tournoi
 
         game:
             name: Nom
@@ -194,7 +198,7 @@ event:
 
         flash:
             already: 'Vous participez déjà à un tournoi'
-            participation: 'Vous êtes inscrit au tournoi '
+            participation: 'Vous êtes inscrit au tournoi %tournament%'
             closed: 'Les inscriptions sont cloturées'
             full: 'L''évènement est complet'
             login: 'Vous devez vous connecter pour participer à l''évènement'
@@ -227,6 +231,11 @@ event:
             submit: Modifier
             success: Equipe modifiée avec succès
             error: Une erreur est survenue durant la modification de l'équipe
+            notInTeam: Vous ne pouvez pas modifier cette équipe car vous n'êtes pas le créateur
+        team:
+            view: Voir l'équipe
+            title: Equipe "%name%"
+            myTeam: Mon équipe
         addMembers:
             title: Ajouter des membres à votre équipe
             submit: Ajouter
@@ -264,7 +273,9 @@ event:
             teams:
                 hide: 'Cacher les équipes'
                 show: 'Voir les équipes'
-                validated: '%count% équipe validée|%count% équipes validées'
+                total: '%count% équipe|%count% équipes'
+                players: '%count% joueur|%count% joueurs'
+                valid: 'dont %count% équipe validée|dont %count% équipes validées'
 
         tournaments: 'Les tournois organisés'
         tournaments_start: 'Début des tournois'

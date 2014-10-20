@@ -1,3 +1,8 @@
+nantarena_payment:
+    resource: "@NantarenaPaymentBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 nantarena_forum:
     resource: "@NantarenaForumBundle/Controller/"
     type:     annotation

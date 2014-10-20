@@ -23,8 +23,16 @@ class TablePrefixSubscriber implements EventSubscriber
     public function loadClassMetadata(LoadClassMetadataEventArgs $args)
     {
         $classMetadata = $args->getClassMetadata();
-        $classMetadata->setPrimaryTable(array('name' => $this->prefix . $classMetadata->getTableName()));
 
+        if (!empty($this->prefix)) {
+            if (0 !== strpos($classMetadata->getTableName(), $this->prefix))
+            {
+                $classMetadata->setPrimaryTable(array('name' => $this->prefix . $classMetadata->getTableName()));
+            }
+        } else {
+            $classMetadata->setPrimaryTable(array('name' => $this->prefix . $classMetadata->getTableName()));
+        }
+            
         foreach ($classMetadata->getAssociationMappings() as $fieldName => $mapping) {
             if ($mapping['type'] == ClassMetadataInfo::MANY_TO_MANY
                 && isset($classMetadata->associationMappings[$fieldName]['joinTable']['name'])) {

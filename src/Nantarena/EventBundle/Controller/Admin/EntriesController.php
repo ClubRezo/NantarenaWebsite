@@ -37,7 +37,7 @@ class EntriesController extends Controller
 
         if (null === $event) {
             if (null === ($event = $db->getRepository('NantarenaEventBundle:Event')->findNext()))
-                return array();
+                return array(); // FIXME
         }
 
         $form = $this->createEventChoiceForm($event)->handleRequest($request);

@@ -6,15 +6,26 @@
             <ul>
                 {% for tournament in tournaments %}
 
-                    {% set teamsNb = 0 %}
-                    {% for team in tournament.teams if team.isValid %}
-                        {% set teamsNb = teamsNb + 1 %}
+                    {% set teamsValid = 0 %}
+                    {% set playersTotal = 0 %}
+                    {% set teamsTotal = tournament.teams|length %}
+
+                    {% if tournament.maxTeams < teamsTotal %}
+                        {% set teamsTotal = tournament.maxTeams %}
+                    {% endif %}
+
+                    {% for team in tournament.teams %}
+                        {% set playersTotal = playersTotal + team.members|length %}
+                        {% if team.isValid %}
+                            {% set teamsValid = teamsValid + 1 %}
+                        {% endif %}
                     {% endfor %}
 
                     <li>
-                        <p><a href="">{{ tournament.name }}</a></p>
-                        <div class="progress ttip" data-title="{{ teamsNb }}/{{ tournament.maxTeams }} équipes validées" data-placement="bottom">
-                            <div class="bar" style="width: {{ teamsNb / tournament.maxTeams * 100 }}%"></div>
+                        <p><a href="#">{{ tournament.name }}</a></p>
+                        <div class="progress ttip" data-title="{{ teamsValid }}/{{ tournament.maxTeams }} validées (sur {{ teamsTotal }} équipes inscrites)" data-placement="bottom">
+                            <div class="bar bar-success" style="width: {{ teamsValid / tournament.maxTeams * 100 }}%"></div>
+                            <div class="bar" style="width: {{ teamsTotal / tournament.maxTeams * 100 }}%"></div>
                         </div>
                     </li>
                 {% endfor %}

@@ -26,9 +26,18 @@ class EventController extends Controller
      * @Route("/{slug}", name="nantarena_event_show")
      * @Template()
      */
-    public function showAction($slug)
+    public function showAction($slug = null)
     {
         $em = $this->getDoctrine()->getManager();
+
+        if (null === $slug) {
+            /** @var Event $nextEvent */
+            $nextEvent = $em->getRepository('NantarenaEventBundle:Event')->findNext();
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $nextEvent->getSlug()
+            )));
+        }
+        
         $event = $em->getRepository('NantarenaEventBundle:Event')->findOneShow($slug);
         $securityContext = $this->get('security.context');
         $entry = null;
@@ -111,7 +120,9 @@ class EventController extends Controller
         // Check if user is not already registered
         if ($user->hasEntry($event)) {
             $flashbag->add('error', $translator->trans('event.participate.flash.already'));
-            return $this->redirect($this->generateUrl('nantarena_event_show'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug(),
+            )));
         }
 
         // Check if event is full
@@ -182,12 +193,22 @@ class EventController extends Controller
         }
 
         $user = $this->get('security.context')->getToken()->getUser();
+
+        /** @var Entry $entry */
         $entry = null;
 
         // Check if user is already registered
         if (!$user->hasEntry($event, $entry)) {
             $flashbag->add('error', $translator->trans('event.cancel.flash.notyet'));
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug(),
+            )));
+        }
+
+        // Check if user has a team
+        if (null !== $entry->getTeam() && $entry->getTeam()->getCreator()->getId() === $entry->getId()) {
+            $flashbag->add('error', $translator->trans('event.cancel.flash.team'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
 
         // TODO: Check if user has not paid
@@ -196,8 +217,8 @@ class EventController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            try {
-                if ($form->get('id')->getData() == $event->getId() || null === $entry) {
+//            try {
+                if ($form->get('id')->getData() == $event->getId()) {
                     $em = $this->getDoctrine()->getManager();
 
                     $em->remove($entry);
@@ -207,11 +228,13 @@ class EventController extends Controller
                 } else {
                     throw new \Exception;
                 }
-            } catch (\Exception $e) {
-                $flashbag->add('error', $translator->trans('event.cancel.flash.error'));
-            }
+//            } catch (\Exception $e) {
+//                $flashbag->add('error', $translator->trans('event.cancel.flash.error'));
+//            }
 
-            return $this->redirect($this->generateUrl('nantarena_user_profile'));
+            return $this->redirect($this->generateUrl('nantarena_event_show', array(
+                'slug' => $event->getSlug(),
+            )));
         }
 
         return array(

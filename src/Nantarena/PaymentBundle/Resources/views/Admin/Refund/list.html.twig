@@ -1,0 +1,48 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'payment.admin.refund.list.title'|trans %}
+{% block page_title 'payment.admin.refund.list.title'|trans %}
+
+{% block admin_content %}
+    <table class="table sortable filterable" data-sort="2" data-perpage="50">
+        <thead>
+        <tr>
+            <th data-filter="ignore" class="tiny">#</th>
+            <th>Responsable</th>
+            <th data-filter="date">Date</th>
+            <th class="mini"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for refund in lrefund %}
+            {% if refund.valid %}
+                <tr class="success" >
+            {% else %}
+                <tr>
+            {% endif %}
+
+                <td>{{ refund.id }}</td>
+                <td>
+                    {{ refund.user.username }}
+                </td>
+                <td>
+                    {{ refund.date|date("d/m/Y H:i") }}
+                </td>
+                <td>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+        <tbody class="empty">
+            <tr>
+                <td colspan="10">
+                    <p class="text-center">Pas de remboursement en cours</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination pagination-centered"><ul></ul></div>
+{% endblock %}

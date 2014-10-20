@@ -481,6 +481,10 @@
         background-image: none;
     }
 
+    #tournamentWidget .progress .bar.bar-success {
+        background-color: #5eb95e;
+    }
+
     #tournamentWidget a {
         font-weight: bold;
     }

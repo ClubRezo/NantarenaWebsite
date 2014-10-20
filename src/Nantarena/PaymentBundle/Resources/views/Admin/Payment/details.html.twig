@@ -1,0 +1,115 @@
+{% extends 'NantarenaAdminBundle::layout.html.twig' %}
+
+{% block title 'payment.admin.payment.details.title'|trans({'%num%': payment.id}) %}
+{% block page_title 'payment.admin.payment.details.title'|trans({'%num%': payment.id}) %}
+
+{% block admin_content %}
+
+    <h2>{{ 'payment.admin.payment.details.infos'|trans }}</h2>
+
+    <div class="infos">
+        <div class="row-fluid">
+            <div class="span4 offset4">
+                <dl class="dl-horizontal">
+                    <dt>{{ 'payment.admin.payment.details.num'|trans|colon }}</dt>
+                    <dd>{{ payment.id }}</dd>
+                    <dt>{{ 'payment.admin.payment.details.user'|trans|colon }}</dt>
+                    <dd>{{ payment.user.username }}</dd>
+                    <dt>{{ 'payment.admin.payment.details.date'|trans|colon }}</dt>
+                    <dd>{{ payment.date|date("d/m/Y à H:i") }}</dd>
+                    <dt>{{ 'payment.admin.payment.details.amount'|trans|colon }}</dt>
+                    <dd>{{ payment.amount }}€</dd>
+                    <dt>{{ 'payment.admin.payment.details.number'|trans|colon }}</dt>
+                    <dd>{{ payment.transactions|length }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-align">
+        {% if not payment.isValidRefund %}
+        <div class="text-center">
+            <p>
+                <a class="btn" href="{{ path('nantarena_admin_payment_refund_payment', {'id': payment.id}) }}">{{ 'payment.admin.refund.payment.btn'|trans }}</a>
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    <h2>{{ 'payment.admin.payment.details.list.title'|trans }}</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="tiny">#</th>
+            <th>{{ 'payment.admin.payment.details.list.th_user'|trans }}</th>
+            <th>{{ 'payment.admin.payment.details.list.th_status'|trans }}</th>
+            <th>{{ 'payment.admin.payment.details.list.th_price'|trans }}</th>
+            <th>{{ 'payment.admin.payment.details.list.th_refund'|trans }}</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for transaction in payment.transactions %}
+            {% if transaction.refund %}
+                {% if transaction.refund.valid %}
+                <tr class="error">
+                {% else %}
+                <tr class="warning">
+                {% endif %}
+            {% else %}
+            <tr>
+            {% endif %}
+                <td>{{ transaction.id }}</td>
+                <td>
+                    {{ transaction.user.username }}
+                </td>
+                <td>
+                    {% if transaction.entry is not empty %}
+                    {{ transaction.entry.tournament.name }}
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    {{ transaction.price }}
+                </td>
+                <td>
+                    {% if transaction.refund %}
+                        {{ transaction.refund.description }}
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if transaction.refund %}
+                        <a href="{{ path('nantarena_admin_payment_refund_modify', {'id': transaction.refund.id}) }}">
+                            <i class="icon-wrench"></i>
+                        </a>
+                        {% if not transaction.refund.valid %}
+                            <a href="{{ path('nantarena_admin_payment_refund_validate', {'id': transaction.refund.id}) }}">
+                                <i class="icon-ok"></i>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ path('nantarena_admin_payment_refund_transaction', {'id': transaction.id}) }}">
+                            <i class="icon-download-alt"></i>{{ 'payment.admin.refund.transaction.btn'|trans }}
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination pagination-centered"><ul></ul></div>
+
+    <p class="text-center">
+        <a href="{{ path('nantarena_admin_payment_payment_list') }}">{{ 'payment.admin.payment.list.return'|trans }}</a>
+    </p>
+    <p class="text-center">
+        <a href="{{ path('nantarena_admin_payment_transaction_list') }}">{{ 'payment.admin.payment.list.return_trans'|trans }}</a>
+    </p>
+
+{% endblock %}

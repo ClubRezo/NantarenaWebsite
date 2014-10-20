@@ -70,10 +70,14 @@
                                     }) }}
                                 </td>
                                 <td>
-                                    {{ form_row(form['tournament-' ~ tournament.id], {
-                                        'label': 'event.participate.confirm.many'|trans,
-                                        'attr': {'class': 'btn-success'}
-                                    }) }}
+                                    {% if tournament.isComplete %}
+                                        <span class="text-error">Complet</span>
+                                    {% else %}
+                                        {{ form_row(form['tournament-' ~ tournament.id], {
+                                            'label': 'event.participate.confirm.many'|trans,
+                                            'attr': {'class': 'btn-success'}
+                                        }) }}
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
