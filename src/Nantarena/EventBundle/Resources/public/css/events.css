@@ -96,6 +96,13 @@ h2 {
         padding-top: 1px;
     }
 
+    section.tournament header h3 span.platform {
+        right: auto;
+        left: 10px;
+        color: inherit;
+        margin-top: 2px;
+    }
+
     section.tournament header ul {
         list-style-type: none;
         margin: 0;

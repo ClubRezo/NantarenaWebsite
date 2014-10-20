@@ -166,7 +166,7 @@
                 {% else %}
                     {# TODO: Ne pas afficher si payé #}
                     {#<a class="btn btn-success" href="{{ path('nantarena_payment_paymentprocess_create', {'slug' : event.slug}) }}">Payer</a>#}
-                    <span class="text-error">Paiement bientôt possible...</span>
+                    <a class="btn btn-success disabled ttip" title="Paiement bientôt possible" href="#">Payer</a>
                 {% endif %}
             </p>
         </div>
@@ -178,14 +178,17 @@
 
         {% for tournament in event.tournaments %}
 
-            {% set teamsNb = 0 %}
+            {% set teamsValid = 0 %}
             {% for team in tournament.teams if team.isValid %}
-                {% set teamsNb = teamsNb + 1 %}
+                {% set teamsValid = teamsValid + 1 %}
             {% endfor %}
 
             <section class="tournament">
                 <header>
                     <h3>
+                        <span class="platform badge
+                            {% if tournament.game.platform == 'PC' %}badge-info{% endif %}
+                        ">{{ tournament.game.platform }}</span>
                         {{ tournament.name }}
                         <span>
                             {{ 'event.show.tournament.format'|trans({
@@ -219,11 +222,11 @@
                         </div>
                         <div class="span6">
                             <div class="progress">
-                                <div class="bar" style="width: {{ teamsNb / tournament.maxTeams * 100 }}%"></div>
+                                <div class="bar" style="width: {{ teamsValid / tournament.maxTeams * 100 }}%"></div>
                             </div>
                             <p>
-                                {{ 'event.show.tournament.teams.validated'|transchoice(teamsNb) }}
-                                {% if teamsNb > 0 %}
+                                {{ 'event.show.tournament.teams.validated'|transchoice(teamsValid) }}
+                                {% if teamsValid > 0 %}
                                     -
                                     <a href="#" class="teams-show">{{ 'event.show.tournament.teams.show'|trans }}</a>
                                     <a href="#" class="teams-hide hide">{{ 'event.show.tournament.teams.hide'|trans }}</a>
