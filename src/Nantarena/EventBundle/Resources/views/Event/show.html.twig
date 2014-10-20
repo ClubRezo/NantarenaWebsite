@@ -162,7 +162,7 @@
 
             <p class="text-center">
                 {% if entry.team is null %}
-                    <a href="{{ path('nantarena_profile_create_team', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
+                    <a href="{{ path('nantarena_event_team_create', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
                 {% else %}
                     {# TODO: Ne pas afficher si payé #}
                     {#<a class="btn btn-success" href="{{ path('nantarena_payment_paymentprocess_create', {'slug' : event.slug}) }}">Payer</a>#}
