@@ -40,9 +40,13 @@
                     <td>{{ team.id }}</td>
                     <td>
                         <a href="#">
+                            {% if team.tag is not empty %}
                             <abbr title="[{{ team.tag }}]" data-placement="right">
                                 {{ team.name }}
                             </abbr>
+                            {% else %}
+                                {{ team.name }}
+                            {% endif %}
                         </a>
                     </td>
                     <td>

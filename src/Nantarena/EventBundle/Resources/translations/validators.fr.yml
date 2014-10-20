@@ -32,4 +32,3 @@ event:
 
         unique:
             name: 'Une équipe de même nom existe déjà pour cet évènement'
-            tag: 'Une équipe de même tag existe déjà pour cet évènement'

@@ -16,12 +16,6 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: team_name_constraint }
 
-    nantarena_event.team_tag_constraint:
-        class: Nantarena\EventBundle\Validator\Constraints\TeamTagConstraintValidator
-        arguments: [@doctrine.orm.entity_manager]
-        tags:
-            - { name: validator.constraint_validator, alias: team_tag_constraint }
-
     nantarena_event.team_members_tournaments_constraint:
         class: Nantarena\EventBundle\Validator\Constraints\TeamMembersTournamentsConstraintValidator
         tags:
