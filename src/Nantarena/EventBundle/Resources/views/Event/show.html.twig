@@ -98,9 +98,9 @@
                 </ul>
 
                 <p class="text-center">
-                    {% if event.endRegistrationDate|date('Y-m-d') < "now"|date('Y-m-d') %}
+                    {% if event.endRegistrationDate|date('Y-m-d H:i') < "now"|date('Y-m-d H:i') %}
                         <span class="text-error">{{ 'event.participate.flash.closed'|trans }}</span>
-                    {% elseif event.startRegistrationDate|date('Y-m-d') > "now"|date('Y-m-d') %}
+                    {% elseif event.startRegistrationDate|date('Y-m-d H:i') > "now"|date('Y-m-d H:i') %}
                         <span class="text-error">{{ 'event.participate.flash.notyet'|trans }}</span>
                     {% elseif event.full %}
                         <span class="text-error">{{ 'event.participate.flash.full'|trans }}</span>
