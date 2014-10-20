@@ -119,6 +119,10 @@ h2 {
         background-image: none;
     }
 
+    section.tournament header .progress .bar.bar-success {
+        background-color: #5eb95e;
+    }
+
     section.tournament header p {
         text-align: center;
         margin: 0;

@@ -273,7 +273,9 @@ event:
             teams:
                 hide: 'Cacher les équipes'
                 show: 'Voir les équipes'
-                validated: '%count% équipe validée|%count% équipes validées'
+                total: '%count% équipe|%count% équipes'
+                players: '%count% joueur|%count% joueurs'
+                valid: 'dont %count% équipe validée|dont %count% équipes validées'
 
         tournaments: 'Les tournois organisés'
         tournaments_start: 'Début des tournois'

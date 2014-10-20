@@ -179,8 +179,18 @@
         {% for tournament in event.tournaments %}
 
             {% set teamsValid = 0 %}
-            {% for team in tournament.teams if team.isValid %}
-                {% set teamsValid = teamsValid + 1 %}
+            {% set playersTotal = 0 %}
+            {% set teamsTotal = tournament.teams|length %}
+
+            {% if tournament.maxTeams < teamsTotal %}
+                {% set teamsTotal = tournament.maxTeams %}
+            {% endif %}
+
+            {% for team in tournament.teams %}
+                {% set playersTotal = playersTotal + team.members|length %}
+                {% if team.isValid %}
+                    {% set teamsValid = teamsValid + 1 %}
+                {% endif %}
             {% endfor %}
 
             <section class="tournament">
@@ -222,10 +232,14 @@
                         </div>
                         <div class="span6">
                             <div class="progress">
-                                <div class="bar" style="width: {{ teamsValid / tournament.maxTeams * 100 }}%"></div>
+                                <div class="bar bar-success" style="width: {{ teamsValid / tournament.maxTeams * 100}}%"></div>
+                                <div class="bar" style="width: {{ teamsTotal / tournament.maxTeams * 100}}%"></div>
                             </div>
                             <p>
-                                {{ 'event.show.tournament.teams.validated'|transchoice(teamsValid) }}
+                                {{ 'event.show.tournament.teams.total'|transchoice(teamsTotal) }}
+                                ({{ 'event.show.tournament.teams.players'|transchoice(playersTotal) }})
+                                {{ 'event.show.tournament.teams.valid'|transchoice(teamsValid) }}
+
                                 {% if teamsValid > 0 %}
                                     -
                                     <a href="#" class="teams-show">{{ 'event.show.tournament.teams.show'|trans }}</a>
