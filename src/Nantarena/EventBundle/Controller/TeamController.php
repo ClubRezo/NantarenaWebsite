@@ -66,7 +66,9 @@ class TeamController extends Controller
                             $em->persist($team);
 
                             foreach($team->getMembers() as $member) {
-                                $member->setTeam($team);
+                                if($member->getTeam() == null) {
+                                    $member->setTeam($team);
+                                }
                             }
 
                             $em->flush();
