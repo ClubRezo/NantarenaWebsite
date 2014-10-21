@@ -21,7 +21,9 @@ class TeamType extends AbstractType
                 'data' => $options['event']->getName()
             ))
             ->add('name', 'text')
-            ->add('tag', 'text')
+            ->add('tag', 'text', array(
+                'required' => false
+            ))
             ->add('logo', 'url', array(
                 'required' => false
             ))
