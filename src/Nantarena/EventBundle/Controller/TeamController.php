@@ -36,7 +36,14 @@ class TeamController extends Controller
         $flashbag = $this->get('session')->getFlashBag();
         $translator = $this->get('translator');
 
+        // Check if user is logged
+        if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirect($this->generateUrl('fos_user_security_login'));
+        }
+
         $creator = $this->get('security.context')->getToken()->getUser();
+
+        /** @var Entry $entry */
         $entry = null;
         // if user has an entry, create team
         if(($creator->hasEntry($event, $entry)) === true){
@@ -57,6 +64,8 @@ class TeamController extends Controller
                     if($form->isValid()) {
                         try {
                             $em->persist($team);
+                            $em->flush();
+                            $entry->setTeam($team);
                             $em->flush();
                             $flashbag->add('success', $translator->trans('event.profile.createTeam.success'));
                         } catch (\Exception $e) {
