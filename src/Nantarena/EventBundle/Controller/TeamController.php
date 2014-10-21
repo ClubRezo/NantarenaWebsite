@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TeamController extends Controller
 {
     /**
-     * @Route("{slug}/team/create", name="nantarena_event_team_create")
+     * @Route("/{slug}/team/create", name="nantarena_event_team_create")
      * @param Request $request
      * @param \Nantarena\EventBundle\Entity\Event $event
      * @return array
@@ -84,7 +84,7 @@ class TeamController extends Controller
     }
 
     /** Edit a team
-     * @Route("{slug}/team/edit/{team}", name="nantarena_event_team_edit")
+     * @Route("/{slug}/team/edit/{team}", name="nantarena_event_team_edit")
      * @param Request $request
      * @param \Nantarena\EventBundle\Entity\Event $event
      * @param \Nantarena\EventBundle\Entity\Team $team
@@ -142,7 +142,7 @@ class TeamController extends Controller
     }
 
     /**
-     * @Route("{slug}/team/view/{team}", name="nantarena_event_team_view")
+     * @Route("/{slug}/team/view/{team}", name="nantarena_event_team_view")
      * @param Team $team
      * @param Event $event
      * @return array
