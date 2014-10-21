@@ -64,8 +64,11 @@ class TeamController extends Controller
                     if($form->isValid()) {
                         try {
                             $em->persist($team);
-                            $em->flush();
-                            $entry->setTeam($team);
+
+                            foreach($team->getMembers() as $member) {
+                                $member->setTeam($team);
+                            }
+
                             $em->flush();
                             $flashbag->add('success', $translator->trans('event.profile.createTeam.success'));
                         } catch (\Exception $e) {
