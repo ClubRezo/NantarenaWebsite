@@ -47,7 +47,7 @@ class Team
     /**
      * @var string
      *
-     * @ORM\Column(name="tag", type="string", length=50)
+     * @ORM\Column(name="tag", type="string", length=50, nullable=true)
      */
     private $tag;
 
