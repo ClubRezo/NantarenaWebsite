@@ -1,7 +1,7 @@
 ROLE_USER_ADMIN_GROUPS: 'Admin - Gestion des groupes d''utilisateurs'
 ROLE_USER_ADMIN_USERS: 'Admin - Gestion des utilisateurs'
 
-'Bad credentials': 'Identifiants incorrects'
+'Invalid credentials.': 'Identifiants incorrects'
 
 user:
     admin:

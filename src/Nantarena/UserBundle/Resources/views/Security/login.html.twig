@@ -7,7 +7,7 @@
     <div class="span8 offset2">
         {% if error %}
             <div class="alert alert-error">
-                {{ error|trans }}
+                {{ error.messageKey|trans }}
             </div>
         {% endif %}
 
