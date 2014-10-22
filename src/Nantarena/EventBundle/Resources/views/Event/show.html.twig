@@ -222,11 +222,13 @@
                                         {{ tournament.startDate|date('i') }}
                                     {% endif %}
                                 </li>
-                                {% if tournament.admin is not null %}
-                                <li>
-                                    <strong>{{ 'event.show.tournament.admin'|trans|colon }}</strong>
-                                    {{ tournament.admin.username }}
-                                </li>
+                                {% if teamsTotal > 0 %}
+                                    <li>
+                                        <p class="text-center">
+                                            <a href="#" class="teams-show">{{ 'event.show.tournament.teams.show'|trans }}</a>
+                                            <a href="#" class="teams-hide hide">{{ 'event.show.tournament.teams.hide'|trans }}</a>
+                                        </p>
+                                    </li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -239,26 +241,35 @@
                                 {{ 'event.show.tournament.teams.total'|transchoice(teamsTotal) }}
                                 ({{ 'event.show.tournament.teams.players'|transchoice(playersTotal) }})
                                 {{ 'event.show.tournament.teams.valid'|transchoice(teamsValid) }}
-
-                                {% if teamsValid > 0 %}
-                                    -
-                                    <a href="#" class="teams-show">{{ 'event.show.tournament.teams.show'|trans }}</a>
-                                    <a href="#" class="teams-hide hide">{{ 'event.show.tournament.teams.hide'|trans }}</a>
-                                {% endif %}
                             </p>
                         </div>
                     </div>
                 </header>
 
                 <div class="teams hide">
-                    {% for team in tournament.teams if team.isValid %}
+                    {% for team in tournament.teams %}
                         <div class="team">
-                            <h4>{{ team.name }}</h4>
-                            <ul>
+                            {% if team.isValid %}
+                                <span class="badge badge-success">Validée</span>
+                            {% else %}
+                                <span class="badge">Non validée</span>
+                            {% endif %}
+                            <h4>
+                                {{ team.name }}
+                            </h4>
+                            <p class="text-center">
                                 {% for member in team.members %}
-                                    <li>{{ member.user.username }}</li>
+                                    {% if member == team.creator %}
+                                        <strong>{{ member.user.username }}</strong>
+                                    {% else %}
+                                        {{ member.user.username }}
+                                    {% endif %}
+
+                                    {% if not loop.last %}
+                                        -
+                                    {% endif %}
                                 {% endfor %}
-                            </ul>
+                            </p>
                         </div>
                     {% endfor %}
                 </div>

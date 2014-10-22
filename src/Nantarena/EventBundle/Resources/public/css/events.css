@@ -147,19 +147,14 @@ section.tournament .team h4 {
     border-top: 1px #CCC solid;
 }
 
-section.tournament .team ul {
-    list-style-type: none;
+section.tournament .team span.badge {
+    position: absolute;
+    margin-top: 6px;
+    margin-left: 10px;
+}
+
+section.tournament .team p {
     margin: 0;
     height: 30px;
     font-size: 0.9em;
-}
-
-section.tournament .team li {
-    float: left;
-    width: 20%;
-    text-align: center;
-}
-
-section.tournament .team li.captain {
-    font-weight: bold;
 }
