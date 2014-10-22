@@ -24,6 +24,7 @@ site:
         signout: Déconnexion
         signup: Inscription
         whoarewe: Présentation
+        reglements: Règlements
 
     nav:
         contact: 'Formulaire de contact'
