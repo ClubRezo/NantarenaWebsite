@@ -11,7 +11,9 @@ use Nantarena\PaymentBundle\Validator\Constraints\OneTransactionConstraint;
 /**
  * Transaction
  *
- * @ORM\Table(name="payment_transaction")
+ * @ORM\Table(name="payment_transaction", uniqueConstraints={
+ *     @ORM\UniqueConstraint(columns={"user_id", "event_id"})}
+ * )
  * @ORM\Entity(repositoryClass="Nantarena\PaymentBundle\Repository\TransactionRepository")
  */
 class Transaction
