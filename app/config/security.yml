@@ -48,7 +48,7 @@ security:
                 csrf_provider:  form.csrf_provider
             remember_me:
                 key:         %secret%
-                lifetime:    3600
+                lifetime:    1296000
                 path:        /
             logout:
                 path:        fos_user_security_logout

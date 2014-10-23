@@ -26,6 +26,7 @@ class BbcodeExtension extends \Twig_Extension
             '~\[list=1\](.*?)\[/list\]~s',
             '~\[list\](.*?)\[/list\]~s',
             '~\[\*\](.*?)\n~s',
+            '~((https?://?.*?[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))~s',
         );
 
         $replace = array(
@@ -38,9 +39,10 @@ class BbcodeExtension extends \Twig_Extension
             '<a href="$1" target="_blank">$2</a>',
             '<a href="$1" target="_blank">$1</a>',
             '<img src="$1" alt="User image invalid" style="max-width: 600px;"/>',
+            '<ol>$1</ol>',
             '<ul>$1</ul>',
-            '<ol>$1</ul>',
             '<li>$1</li>',
+            '<a href="$1" target="_blank">$1</a>',
         );
 
         return preg_replace($expressions, $replace, $str);
