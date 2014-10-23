@@ -235,10 +235,10 @@
                         <div class="span6">
                             <div class="progress">
                                 <div class="bar bar-success" style="width: {{ teamsValid / tournament.maxTeams * 100}}%"></div>
-                                <div class="bar" style="width: {{ teamsTotal / tournament.maxTeams * 100}}%"></div>
+                                <div class="bar" style="width: {{ teamsTotal * 0.9 / tournament.maxTeams * 100}}%"></div>
                             </div>
                             <p>
-                                {{ 'event.show.tournament.teams.total'|transchoice(teamsTotal) }}
+                                {{ 'event.show.tournament.teams.total'|transchoice(tournament.teams|length) }}
                                 ({{ 'event.show.tournament.teams.players'|transchoice(playersTotal) }})
                                 {{ 'event.show.tournament.teams.valid'|transchoice(teamsValid) }}
                             </p>
