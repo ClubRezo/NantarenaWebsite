@@ -20,13 +20,13 @@ class BbcodeExtension extends \Twig_Extension
             '~\[quote\](.*?)\[/quote\]~s',
             '~\[size=(.*?)\](.*?)\[/size\]~s',
             '~\[color=(.*?)\](.*?)\[/color\]~s',
+            //'~((https?://?.*?[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))~s',
             '~\[url=((?:ftp|https?)://.*?)\](.*?)\[/url\]~s',
             '~\[url\](.*?)\[/url\]~s',
             '~\[img\](https?://.*?\.(?:jpg|jpeg|gif|png|bmp))\[/img\]~s',
             '~\[list=1\](.*?)\[/list\]~s',
             '~\[list\](.*?)\[/list\]~s',
             '~\[\*\](.*?)\n~s',
-            '~((https?://?.*?[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))~s',
         );
 
         $replace = array(
@@ -36,13 +36,13 @@ class BbcodeExtension extends \Twig_Extension
             '<div class="forum-quote">$1</div>',
             '<span style="font-size:$1%;">$2</span>',
             '<span style="color:$1;">$2</span>',
+            //'<a href="$1" target="_blank">$1</a>',
             '<a href="$1" target="_blank">$2</a>',
             '<a href="$1" target="_blank">$1</a>',
             '<img src="$1" alt="User image invalid" style="max-width: 600px;"/>',
             '<ol>$1</ol>',
             '<ul>$1</ul>',
             '<li>$1</li>',
-            '<a href="$1" target="_blank">$1</a>',
         );
 
         return preg_replace($expressions, $replace, $str);
