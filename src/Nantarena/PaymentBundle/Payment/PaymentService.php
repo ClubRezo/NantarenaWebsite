@@ -3,6 +3,7 @@
 namespace Nantarena\PaymentBundle\Payment;
 
 use Doctrine\ORM\EntityManager;
+use Nantarena\EventBundle\Entity\Entry;
 
 class PaymentService
 {
@@ -13,11 +14,18 @@ class PaymentService
         $this->em = $em;
     }
 
+    /**
+     * @param Entry $entry
+     * @return \Nantarena\PaymentBundle\Entity\Transaction|null
+     */
     function getValidTransaction($entry)
     {
         $repository = $this->em->getRepository('NantarenaPaymentBundle:Transaction');
-        $transaction = $repository->findOneBy(array('user' => $entry->getUser(), 
-            'event' => $entry->getEntryType()->getEvent(), 'refund' => null));
+        $transaction = $repository->findOneBy(array(
+            'user' => $entry->getUser(),
+            'event' => $entry->getTournament()->getEvent(),
+            'refund' => null
+        ));
 
         if ($transaction && $transaction->getPayment()->getValid()) {
             return $transaction;
@@ -29,15 +37,6 @@ class PaymentService
     function isPaid($entry)
     {
         $result = $this->getValidTransaction($entry);
-        if ($result) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function isTransaction($entry)
-    {
-        return true;
+        return (null !== $result);
     }
 }

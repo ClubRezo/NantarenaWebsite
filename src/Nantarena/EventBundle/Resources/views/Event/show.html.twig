@@ -125,8 +125,9 @@
                             <strong>{{ 'Mon tournoi'|colon }}</strong>
                             {{ entry.tournament.name }}
 
-                            {# TODO: Ne pas afficher si payé #}
-                            (<a href="{{ path('nantarena_event_cancel', {'slug': event.slug}) }}">Se désinscrire</a>)
+                            {% if transaction is null %}
+                                (<a href="{{ path('nantarena_event_cancel', {'slug': event.slug}) }}">Se désinscrire</a>)
+                            {% endif %}
                         </li>
                         <li>
                             <strong>{{ 'Mon équipe'|colon }}</strong>
@@ -163,10 +164,23 @@
             <p class="text-center">
                 {% if entry.team is null %}
                     <a href="{{ path('nantarena_event_team_create', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
-                {% else %}
-                    {# TODO: Ne pas afficher si payé #}
+                {% elseif transation is null %}
                     {#<a class="btn btn-success" href="{{ path('nantarena_payment_paymentprocess_create', {'slug' : event.slug}) }}">Payer</a>#}
                     <a class="btn btn-success disabled ttip" title="Paiement bientôt possible" href="#">Payer</a>
+                {% elseif transaction is not null %}
+                    <span class="text-success">
+                        {% if transaction.user == transaction.payment.user %}
+                            Vous avez payé {{ transaction.price }}€
+                        {% else %}
+                            {{ transaction.payment.user.username }} a payé {{ transaction.price }}€ pour vous
+                        {% endif %}
+
+                        {% if transaction.payment.paypal %}
+                            par Paypal
+                        {% elseif transaction.payment.cash %}
+                            en liquide
+                        {% endif %}
+                    </span>
                 {% endif %}
             </p>
         </div>

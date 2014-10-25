@@ -40,15 +40,24 @@ class EventController extends Controller
         
         $event = $em->getRepository('NantarenaEventBundle:Event')->findOneShow($slug);
         $securityContext = $this->get('security.context');
+
         $entry = null;
+        $transaction = null;
+
         if($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $securityContext->getToken()->getUser();
             $user->hasEntry($event, $entry);
+
+            if (null !== $entry) {
+                $paymentService = $this->get('nantarena_payment.payment_service');
+                $transaction = $paymentService->getValidTransaction($entry);
+            }
         }
 
         return array(
             'event' => $event,
             'entry' => $entry,
+            'transaction' => $transaction,
         );
     }
 
@@ -217,7 +226,7 @@ class EventController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-//            try {
+            try {
                 if ($form->get('id')->getData() == $event->getId()) {
                     $em = $this->getDoctrine()->getManager();
 
@@ -228,9 +237,9 @@ class EventController extends Controller
                 } else {
                     throw new \Exception;
                 }
-//            } catch (\Exception $e) {
-//                $flashbag->add('error', $translator->trans('event.cancel.flash.error'));
-//            }
+            } catch (\Exception $e) {
+                $flashbag->add('error', $translator->trans('event.cancel.flash.error'));
+            }
 
             return $this->redirect($this->generateUrl('nantarena_event_show', array(
                 'slug' => $event->getSlug(),
