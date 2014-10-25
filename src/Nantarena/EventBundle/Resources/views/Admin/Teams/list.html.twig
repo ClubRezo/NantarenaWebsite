@@ -80,7 +80,7 @@
                         {{ team.tournament.name }}
                     </td>
                     <td>
-                        {% if team.valid %}
+                        {% if teamsValidation[team.id] %}
                             oui
                         {% else %}
                             non

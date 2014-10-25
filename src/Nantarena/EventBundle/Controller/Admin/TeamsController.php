@@ -51,10 +51,20 @@ class TeamsController extends Controller
             )));
         }
 
+        $teams = $db->getRepository('NantarenaEventBundle:Team')->findByEvent($event);
+        $teamService = $this->get('nantarena_event.team_service');
+        $teamsValidation = array();
+
+        /** @var Team $team */
+        foreach($teams as $team) {
+            $teamsValidation[$team->getId()] = $teamService->isValid($team);
+        }
+
         return array(
             'event' => $event,
-            'teams' => $db->getRepository('NantarenaEventBundle:Team')->findByEvent($event),
-            'form' => $form->createView()
+            'teams' => $teams,
+            'form' => $form->createView(),
+            'teamsValidation' => $teamsValidation
         );
     }
 
