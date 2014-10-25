@@ -297,20 +297,4 @@ class Tournament
     {
         return $this->teams;
     }
-
-    /**
-     * @return boolean
-     */
-    public function isComplete() {
-        $validTeams = 0;
-
-        /** @var Team $team */
-        foreach ($this->getTeams() as $team) {
-            if ($team->isValid()) {
-                $validTeams++;
-            }
-        }
-
-        return ($validTeams >= $this->getMaxTeams());
-    }
 }

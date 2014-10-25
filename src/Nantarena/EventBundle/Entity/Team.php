@@ -303,15 +303,4 @@ class Team
 
         return $this;
     }
-
-    /**
-     * Method to indicate if the team is valid or not
-     * (if the minimum team members have paid)
-     *
-     * @return bool
-     */
-    public function isValid() {
-        return false;
-    }
-
 }

@@ -150,7 +150,7 @@
             </div>
 
             {% if entry.team is not null %}
-                {% if entry.team.isValid %}
+                {% if teamsValidation[entry.team.id] %}
                     <p class="text-center text-success">
                         L'équipe a été validée définitivement
                     </p>
@@ -202,7 +202,7 @@
 
             {% for team in tournament.teams %}
                 {% set playersTotal = playersTotal + team.members|length %}
-                {% if team.isValid %}
+                {% if teamsValidation[team.id] %}
                     {% set teamsValid = teamsValid + 1 %}
                 {% endif %}
             {% endfor %}
@@ -263,7 +263,7 @@
                 <div class="teams hide">
                     {% for team in tournament.teams %}
                         <div class="team">
-                            {% if team.isValid %}
+                            {% if teamsValidation[team.id] %}
                                 <span class="badge badge-success">Validée</span>
                             {% else %}
                                 <span class="badge">Non validée</span>

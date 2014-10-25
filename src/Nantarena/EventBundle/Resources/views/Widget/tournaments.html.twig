@@ -16,7 +16,7 @@
 
                     {% for team in tournament.teams %}
                         {% set playersTotal = playersTotal + team.members|length %}
-                        {% if team.isValid %}
+                        {% if teamsValidation[team.id] %}
                             {% set teamsValid = teamsValid + 1 %}
                         {% endif %}
                     {% endfor %}

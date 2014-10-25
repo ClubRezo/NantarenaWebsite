@@ -5,6 +5,7 @@ namespace Nantarena\EventBundle\Controller;
 use Nantarena\EventBundle\Entity\Entry;
 use Nantarena\EventBundle\Entity\Event;
 use Nantarena\EventBundle\Entity\Team;
+use Nantarena\EventBundle\Entity\Tournament;
 use Nantarena\EventBundle\Form\Type\TeamType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -37,7 +38,8 @@ class EventController extends Controller
                 'slug' => $nextEvent->getSlug()
             )));
         }
-        
+
+        /** @var Event $event */
         $event = $em->getRepository('NantarenaEventBundle:Event')->findOneShow($slug);
         $securityContext = $this->get('security.context');
 
@@ -54,10 +56,22 @@ class EventController extends Controller
             }
         }
 
+        $teamService = $this->get('nantarena_event.team_service');
+        $teamsValidation = array();
+
+        /** @var Tournament $tournament */
+        foreach($event->getTournaments() as $tournament) {
+            /** @var Team $team */
+            foreach($tournament->getTeams() as $team) {
+                $teamsValidation[$team->getId()] = $teamService->isValid($team);
+            }
+        }
+
         return array(
             'event' => $event,
             'entry' => $entry,
             'transaction' => $transaction,
+            'teamsValidation' => $teamsValidation
         );
     }
 
