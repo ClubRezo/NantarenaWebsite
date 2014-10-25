@@ -125,6 +125,7 @@ event:
             notyet: 'Vous n''êtes pas inscrit à l''évènement'
             success: 'Vous êtes maintenant désinscrit avec succès'
             team: 'Vous avez créé une équipe, veuillez supprimer en premier cette équipe si vous souhaitez annuler votre participation'
+            paid: 'Vous avez déjà payé votre place. Veuillez contacter un administrateur si vous souhaitez vous désinscrire'
 
         submit: 'Se désinscrire'
         info: 'Etes-vous sûr de vouloir annuler votre participation à l''évènement ?'

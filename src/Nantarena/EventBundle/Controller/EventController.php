@@ -220,7 +220,14 @@ class EventController extends Controller
             return $this->redirect($this->generateUrl('nantarena_event_show'));
         }
 
-        // TODO: Check if user has not paid
+        // Check if user has not paid
+        $paymentService = $this->get('nantarena_payment.payment_service');
+        $transaction = $paymentService->getValidTransaction($entry);
+
+        if (null !== $transaction) {
+            $flashbag->add('error', $translator->trans('event.cancel.flash.paid'));
+            return $this->redirect($this->generateUrl('nantarena_event_show'));
+        }
 
         $form = $this->createDeleteForm($event);
         $form->handleRequest($request);
