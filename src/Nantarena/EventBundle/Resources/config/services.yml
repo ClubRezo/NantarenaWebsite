@@ -20,3 +20,11 @@ services:
         class: Nantarena\EventBundle\Validator\Constraints\TeamMembersTournamentsConstraintValidator
         tags:
             - { name: validator.constraint_validator, alias: team_members_tournaments_constraint }
+
+    nantarena_event.team_service:
+        class:        Nantarena\EventBundle\Services\TeamService
+        arguments:	  [@nantarena_payment.payment_service]
+
+    nantarena_event.tournament_service:
+        class:        Nantarena\EventBundle\Services\TournamentService
+        arguments:	  [@nantarena_event.team_service]
