@@ -73,7 +73,7 @@
                                     }) }}
                                 </td>
                                 <td>
-                                    {% if tournament.isComplete %}
+                                    {% if tournamentsComplete[tournament.id] %}
                                         <span class="text-error">Complet</span>
                                     {% else %}
                                         {{ form_row(form['tournament-' ~ tournament.id], {

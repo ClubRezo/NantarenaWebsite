@@ -67,11 +67,19 @@ class EventController extends Controller
             }
         }
 
+        $tournamentsComplete = array();
+        $tournamentService = $this->get('nantarena_event.tournament_service');
+
+        foreach($event->getTournaments() as $tournament) {
+            $tournamentsComplete[$tournament->getId()] = $tournamentService->isComplete($tournament);
+        }
+
         return array(
             'event' => $event,
             'entry' => $entry,
             'transaction' => $transaction,
-            'teamsValidation' => $teamsValidation
+            'teamsValidation' => $teamsValidation,
+            'tournamentsComplete' => $tournamentsComplete
         );
     }
 
@@ -112,16 +120,19 @@ class EventController extends Controller
         $event = $em->getRepository('NantarenaEventBundle:Event')->findOneShow($slug);
 
         // Check date constraints
-        if ($event->getStartRegistrationDate() > $now)
+        if ($event->getStartRegistrationDate() > $now) {
             $flashbag->add('error', $translator->trans('event.participate.flash.notyet'));
+        }
 
-        if ($event->getEndRegistrationDate() <= $now)
+        if ($event->getEndRegistrationDate() <= $now) {
             $flashbag->add('error', $translator->trans('event.participate.flash.closed'));
+        }
 
-        if ($flashbag->has('error'))
+        if ($flashbag->has('error')) {
             return $this->redirect($this->generateUrl('nantarena_event_show', array(
                 'slug' => $event->getSlug()
             )));
+        }
 
         // Check if user is logged
         if (!$this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -194,10 +205,18 @@ class EventController extends Controller
             )));
         }
 
+        $tournamentsComplete = array();
+        $tournamentService = $this->get('nantarena_event.tournament_service');
+
+        foreach($event->getTournaments() as $tournament) {
+            $tournamentsComplete[$tournament->getId()] = $tournamentService->isComplete($tournament);
+        }
+
         return array(
             'event' => $event,
             'underage' => ($diff->y < 18),
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'tournamentsComplete' => $tournamentsComplete
         );
     }
 
