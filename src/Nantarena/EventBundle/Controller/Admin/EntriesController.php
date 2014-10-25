@@ -49,10 +49,21 @@ class EntriesController extends Controller
             )));
         }
 
+        $entries = $db->getRepository('NantarenaEventBundle:Entry')->findByEvent($event);
+
+        $transactions = array();
+        $paymentService = $this->get('nantarena_payment.payment_service');
+
+        /** @var Entry $entry */
+        foreach($entries as $entry) {
+            $transactions[$entry->getId()] = $paymentService->getValidTransaction($entry);
+        }
+
         return array(
             'event' => $event,
-            'entries' => $db->getRepository('NantarenaEventBundle:Entry')->findByEvent($event),
-            'form' => $form->createView()
+            'entries' => $entries,
+            'form' => $form->createView(),
+            'transactions' => $transactions
         );
     }
 

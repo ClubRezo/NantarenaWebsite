@@ -164,7 +164,7 @@
             <p class="text-center">
                 {% if entry.team is null %}
                     <a href="{{ path('nantarena_event_team_create', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
-                {% elseif transation is null %}
+                {% elseif transaction is null %}
                     {#<a class="btn btn-success" href="{{ path('nantarena_payment_paymentprocess_create', {'slug' : event.slug}) }}">Payer</a>#}
                     <a class="btn btn-success disabled ttip" title="Paiement bientôt possible" href="#">Payer</a>
                 {% elseif transaction is not null %}

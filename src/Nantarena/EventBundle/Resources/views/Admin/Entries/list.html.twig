@@ -51,7 +51,7 @@
                     <td>{{ entry.registrationDate|date("d/m/Y H:i") }}</td>
                     <td>
                         {% if entry.team %}
-                            <a href="#">
+                            <a href="{{ url('nantarena_event_team_view', {'slug': event.slug, 'team': entry.team.id}) }}">
                                 {% if entry.team.tag is not empty %}
                                 <abbr title="[{{ entry.team.tag }}]" data-placement="right">
                                     {{ entry.team.name }}
@@ -65,7 +65,18 @@
                         {% endif %}
                     </td>
                     <td>
-                        TODO
+                        {% set transaction = transactions[entry.id] %}
+                        {% if transaction is null %}
+                            -
+                        {% else %}
+                            <a href="{{ url('nantarena_admin_payment_payment_details', {'id': transaction.payment.id}) }}">
+                                {% if transaction.paypal %}
+                                    Paypal
+                                {% elseif transaction.cash %}
+                                    Liquide
+                                {% endif %}
+                            </a>
+                        {% endif %}
                     </td>
                     <td>
                         <a href="{{ path('nantarena_event_admin_entries_edit', {
