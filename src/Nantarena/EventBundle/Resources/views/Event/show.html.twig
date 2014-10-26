@@ -286,7 +286,7 @@
                                 <span class="badge">Non validée</span>
                             {% endif %}
                             <h4>
-                                {{ team.name }}
+                                <a href="{{ url('nantarena_event_team_view', {'slug': event.slug, 'team': team.id}) }}">{{ team.name }}</a>
                             </h4>
                             <p class="text-center">
                                 {% for member in team.members %}
