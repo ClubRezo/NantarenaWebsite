@@ -368,7 +368,7 @@ class PaymentProcessController extends Controller
             // start local session
             $this->get('session')->set('payProcess', true);
             // Log starting state
-            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 1 - paypal NOK - BDD NOK - user "' . $log_user
+            $this->get('logger')->error('PAYPAL_PAY_PROCESS - 1 - paypal NOK - BDD NOK - user "' . $log_user
                 . '" - paypal id "' . $paypalPayment->getPaymentId()
                 . '" - cost "'. strval($transaction->getPayment()->getAmount())
                 . '€" - number of transactions "' . strval(count($transaction->getPayment()->getTransactions())) . '"');
@@ -384,7 +384,7 @@ class PaymentProcessController extends Controller
             }
 
             // Log paypal validation
-            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 2 - paypal OK - BDD NOK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
+            $this->get('logger')->error('PAYPAL_PAY_PROCESS - 2 - paypal OK - BDD NOK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
 
             $em = $this->getDoctrine()->getManager();
             $paypalPayment->setValid(true);
@@ -392,7 +392,7 @@ class PaymentProcessController extends Controller
             $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.payment_process.message.payment'));
 
             // Log BDD update
-            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 3 - paypal OK - BDD OK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
+            $this->get('logger')->error('PAYPAL_PAY_PROCESS - 3 - paypal OK - BDD OK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
             // finally
             $this->get('session')->set('payProcess', false);
 
