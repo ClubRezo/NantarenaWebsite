@@ -73,6 +73,10 @@ class TeamController extends Controller
 
                             $em->flush();
                             $flashbag->add('success', $translator->trans('event.profile.createTeam.success'));
+                            return $this->redirect($this->generateUrl('nantarena_event_team_edit', array(
+                                'slug' => $event->getSlug(),
+                                'team' => $team->getId()
+                            )));
                         } catch (\Exception $e) {
                             $flashbag->add('error', $translator->trans('event.profile.createTeam.error'));
                         }
