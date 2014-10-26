@@ -221,12 +221,9 @@ class PaypalService
         }
 
         if (!empty($msg)) {
-            $msg = 'paypal exception - '.$msg;
-
-            $details = $this->ApiErrorMessage($ex);
-            // TODO LOG
+            $msg = 'Paypal exception - '.$msg;
         }
-
+        // empty if not Paypal exception
         return $msg;
     }
 

@@ -126,6 +126,7 @@ payment:
                 price: 'Prix'
         message:
             base_error: 'Une erreur s''est produite durant la procédure'
+            event_entry: 'Aucune entrée pour cet événement n''a été trouvée'
             conflict_error: 'Un conflit de paiement a peut-être lieu avec un autre membre de votre équipe'
             event_signup: 'Vous n''êtes pas inscrit à cet événement'
             paypal: 'Un problème a été rencontré avec Paypal'

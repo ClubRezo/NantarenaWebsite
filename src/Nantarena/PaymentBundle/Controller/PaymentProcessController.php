@@ -150,6 +150,8 @@ class PaymentProcessController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->getConnection()->beginTransaction(); // suspend auto-commit
 
+            // Push all transactions with unicity constraint (event, player)
+            // Push associated payment
             try {
                 $em->persist($paypalPayment);
                 $em->flush();
@@ -261,7 +263,7 @@ class PaymentProcessController extends Controller
                 if (!empty($redirectUrl)) {
                     return $this->redirect($redirectUrl);
                 } else {
-                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.base_error'));
+                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
                     return $this->redirect($this->generateUrl('nantarena_event_show'));
                 }
 
@@ -274,6 +276,7 @@ class PaymentProcessController extends Controller
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
+                $this->get('logger')->info('PAYPAL_ERROR - "' . $paypal->ApiErrorMessage($ex) . '"');
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
@@ -358,8 +361,17 @@ class PaymentProcessController extends Controller
 
         $paypalPayment = $transaction->getPayment();
 
+        // variable for log system
+        $log_user = $this->getUser()->getUsername();
+
         try {
+            // start local session
             $this->get('session')->set('payProcess', true);
+            // Log starting state
+            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 1 - paypal NOK - BDD NOK - user "' . $log_user 
+                . '" - paypal id "' . $paypalPayment->getPaymentId() 
+                . '" - cost "'. strval($transaction->getPayment()->getAmount())
+                . '€" - number of transactions "' . strval(count($transaction->getPayment()->getTransactions())) . '"');
 
             if ($paypalPayment->getAmount() > $this->container->getParameter('nantarena_payment.payment_min_euro')) {
                 // Execution du paiement
@@ -368,28 +380,33 @@ class PaymentProcessController extends Controller
                     $paypalPayment->getPaymentId(),
                     $paypalPayment->getPayerId()
                 );
-
                 $paypalPayment->setState($payment->getState());
             }
 
-            $this->get('logger')->info('PAYPAL : ' . $this->getUser()->getUsername() . ' pays ' . strval($transaction->getPayment()->getAmount()) . '€ for ' . strval(count($transaction->getPayment()->getTransactions())) . ' people');
+            // Log paypal validation
+            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 2 - paypal OK - BDD NOK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
 
             $em = $this->getDoctrine()->getManager();
             $paypalPayment->setValid(true);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.payment_process.message.payment'));
 
+            // Log BDD update
+            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 3 - paypal OK - BDD OK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
+            // finally
+            $this->get('session')->set('payProcess', false);
+
         } catch (\Exception $ex) {
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
+                $this->get('logger')->info('PAYPAL_PAY_ERROR "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '" - error "' . $paypal->ApiErrorMessage($ex) . '"');
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
-        }
-        // finally {
+            //finally
             $this->get('session')->set('payProcess', false);
-        // }
+        }
 
         return $this->redirect($this->generateUrl('nantarena_event_show'));
     }
@@ -422,7 +439,6 @@ class PaymentProcessController extends Controller
     {
         $transaction = $this->getActivePaypalTransaction($event);
         if (!$transaction) {
-            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.bad_step'));
             return null;
         } else {
             /** @var Payment $paypalPayment */
@@ -430,6 +446,7 @@ class PaymentProcessController extends Controller
             $paymentId = $paypalPayment->getPaymentId();
             $paymentStatus = $paypalPayment->getState();
             $payerId = $paypalPayment->getPayerId();
+            $error = false;
 
             // Check if tournament is not full
             /** @var Entry $entry */
@@ -437,6 +454,7 @@ class PaymentProcessController extends Controller
             $paypalPayment->getUser()->hasEntry($event, $entry);
 
             if (null === $entry || null === $entry->getTeam()) {
+                $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.event_entry'));
                 return null;
             }
 
@@ -448,8 +466,7 @@ class PaymentProcessController extends Controller
                 return null;
             }
 
-            $error = false;
-
+            // Check step
             if ($step === 1 && (!empty($paymentId) || !empty($paymentStatus) || !empty($payerId))) {
                 $error = true;
             } else if ($step === 2 && (empty($paymentId) || empty($paymentStatus) || !empty($payerId))) {
@@ -458,6 +475,7 @@ class PaymentProcessController extends Controller
                 $error = true;
             }
 
+            // Final return management
             if ($error) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.bad_step'));
                 return null;
@@ -540,7 +558,7 @@ class PaymentProcessController extends Controller
 
 
     /**
-     * Procédure de vérification et nottoyqge
+     * Procédure de vérification et nettoyage
      * Si une transaction existe, on la supprime si possible
      */
     private function cleanPaypalTransaction($event)
