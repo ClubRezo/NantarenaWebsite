@@ -6,13 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use Nantarena\PaymentBundle\Validator\Constraints\OneTransactionConstraint;
-
 /**
  * Transaction
  *
  * @ORM\Table(name="payment_transaction", uniqueConstraints={
- *     @ORM\UniqueConstraint(columns={"user_id", "event_id"})}
+ *     @ORM\UniqueConstraint(columns={"user_id", "event_id", "refund_id"})}
  * )
  * @ORM\Entity(repositoryClass="Nantarena\PaymentBundle\Repository\TransactionRepository")
  */

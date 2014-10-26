@@ -4,12 +4,18 @@
 {% block page_title 'payment.admin.payment.cash.title'|trans %}
 
 {% block admin_content %}
+    <div class="row">
+        <div class="alert span6 offset3">
+            Vous êtes sur le point de valider le joueur <strong>{{ entry.user.username }}</strong>
+            pour le tournoi <strong>{{ entry.tournament.name }}</strong>
+            de l'évènement <strong>{{ entry.tournament.event.name }}</strong>.
+        </div>
+    </div>
+
     <div class="text-align">
-        {% if user %}
-            {{ user.username }}
-        {% else %}
-            Aucun utilisateur sélectionné
-        {% endif %}
+        {{ form_start(form) }}
+        {{ form_row(form.submit, {'label': 'Confirmer'}) }}
+        {{ form_rest(form) }}
     </div>
 
 {% endblock %}

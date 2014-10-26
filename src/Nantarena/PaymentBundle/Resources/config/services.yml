@@ -20,9 +20,3 @@ services:
         class: Nantarena\PaymentBundle\Controller\AdminController
         tags:
             - { name: nantarena_admin.dashboard}
-
-    nantarena_payment.one_transaction_constraint:
-        class: Nantarena\PaymentBundle\Validator\Constraints\OneTransactionConstraintValidator
-        arguments: [@doctrine.orm.entity_manager, @translator]
-        tags:
-            - { name: validator.constraint_validator, alias: one_transaction_constraint }
