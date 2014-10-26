@@ -12,7 +12,7 @@
     <h2>{{ 'payment.payment_process.success.event'|trans({'%event%': trans.event.name}) }}</h2>
 
 
-    <p><strong>{{ 'payment.payment_process.success.num'|trans({'%num%': trans.payment.id}) }}</strong></p>
+    <p><strong>{{ 'payment.payment_process.success.num'|trans|format(trans.payment.id) }}</strong></p>
 
     <div class="span12">
 
@@ -27,17 +27,19 @@
 
             <tbody>
             {% for ptransaction in payment.transactions %}
-                {% if ptransaction.id == trans.id %}
-                <tr class="success">
-                {% else %}
                 <tr>
-                {% endif %}
-                    <td>{{ ptransaction.user.username }}</td>
+                    <td>
+                        {% if ptransaction.id == trans.id %}
+                            <strong>{{ ptransaction.user.username }}</strong>
+                        {% else %}
+                            {{ ptransaction.user.username }}
+                        {% endif %}
+                    </td>
                     <td>
                         {% if ptransaction.entry is empty %}
-                        -
+                            -
                         {% else %}
-                        {{ ptransaction.entry.tournament.name }}
+                            {{ ptransaction.entry.tournament.name }}
                         {% endif %}
                     </td>
                     <td>
@@ -58,12 +60,12 @@
 
         <div class="text-center">
             <p>
-                <a class="btn btn-primary" href="{{ path('nantarena_payment_paypalpayment_pay', {'slug': trans.event.slug}) }}">
+                <a class="btn btn-danger" href="{{ path('nantarena_payment_paypalpayment_pay', {'slug': trans.event.slug}) }}">
                     {{ 'payment.payment_process.success.button'|trans }}
                 </a>
             </p>
             <p>
-                <a class="btn btn-danger" href="{{ path('nantarena_payment_paypalpayment_clean', {'slug': trans.event.slug}) }}">
+                <a href="{{ path('nantarena_payment_paypalpayment_clean', {'slug': trans.event.slug}) }}">
                     {{ 'payment.payment_process.cancel'|trans }}
                 </a>
             </p>

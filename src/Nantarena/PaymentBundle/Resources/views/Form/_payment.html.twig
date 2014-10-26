@@ -3,21 +3,25 @@
         {{ form_errors(form) }}
 
         <h2>{{ 'payment.payment_process.create.place.title'|trans }}</h2>
-        <p class="muted text-center">
-            <small>{{ 'payment.payment_process.create.place.desc'|trans }}</small>
-        </p>
+        {#<p class="muted text-center">#}
+            {#<small>{{ 'payment.payment_process.create.place.desc'|trans }}</small>#}
+        {#</p>#}
 
-        <table class="table" data-sort="1" data-perpage="50">
+        <table class="table">
             <thead>
-            <tr>
-                <th>{{ 'payment.payment_process.create.place.event'|trans }}</th>
-                <th>{{ 'payment.payment_process.create.place.status'|trans }}</th>
-                <th>{{ 'payment.payment_process.create.place.price'|trans }}</th>
-            </tr>
+                <tr>
+                    <th></th>
+                    <th>Joueur</th>
+                    <th>{{ 'payment.payment_process.create.place.event'|trans }}</th>
+                    <th>{{ 'payment.payment_process.create.place.status'|trans }}</th>
+                    <th>{{ 'payment.payment_process.create.place.price'|trans }}</th>
+                </tr>
             </thead>
 
             <tbody>
                 <tr>
+                    <td><input type="checkbox" checked disabled /></td>
+                    <td>{{ entry.user.username }}</td>
                     <td>{{ entry.tournament.event.name }}</td>
                     <td>
                         {{ entry.tournament.name }}
@@ -29,23 +33,46 @@
             </tbody>
         </table>
 
-        <h2>{{ 'payment.payment_process.create.option.title'|trans }}</h2>
-        <p class="muted text-center">
-            <small>{{ 'payment.payment_process.create.option.desc'|trans }}</small>
-        </p>
-        <p class="text-center text-warning" >
-            {{ 'payment.payment_process.create.option.no_coupon'|trans }}
-        </p>
+        {#<h2>{{ 'payment.payment_process.create.option.title'|trans }}</h2>#}
+        {#<p class="muted text-center">#}
+            {#<small>{{ 'payment.payment_process.create.option.desc'|trans }}</small>#}
+        {#</p>#}
+        {#<p class="text-center text-warning" >#}
+            {#{{ 'payment.payment_process.create.option.no_coupon'|trans }}#}
+        {#</p>#}
 
         <h2>{{ 'payment.payment_process.create.patners.title'|trans }}</h2>
-        <p class="muted text-center">
-            <small>{{ 'payment.payment_process.create.patners.desc'|trans }}</small>
-        </p>
+        {#<p class="muted text-center">#}
+            {#<small>{{ 'payment.payment_process.create.patners.desc'|trans }}</small>#}
+        {#</p>#}
 
         {% if is_partner %}
-            {{ form_row(form.partners, {'label': 'payment.payment_process.create.patners.label'|trans|colon}) }}
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Joueur</th>
+                        <th>{{ 'payment.payment_process.create.place.event'|trans }}</th>
+                        <th>{{ 'payment.payment_process.create.place.status'|trans }}</th>
+                        <th>{{ 'payment.payment_process.create.place.price'|trans }}</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in form.children.partners.children %}
+                        <tr>
+                            <td>{{ form_widget(row) }}</td>
+                            <td>{{ row.vars.label.username }}</td>
+                            <td>{{ row.vars.label.event }}</td>
+                            <td>{{ row.vars.label.tournament }}</td>
+                            <td>{{ row.vars.label.price }}€</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else %}
-            <p class="text-center text-warning" >
+            <p class="text-center" >
                 {{ 'payment.payment_process.create.patners.no_partner'|trans }}
             </p>
         {% endif %}

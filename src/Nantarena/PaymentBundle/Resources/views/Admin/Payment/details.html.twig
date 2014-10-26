@@ -12,7 +12,7 @@
             <div class="span4 offset4">
                 <dl class="dl-horizontal">
                     <dt>{{ 'payment.admin.payment.details.num'|trans|colon }}</dt>
-                    <dd>{{ payment.id }}</dd>
+                    <dd>{{ '%05d'|format(payment.id) }}</dd>
                     <dt>{{ 'payment.admin.payment.details.user'|trans|colon }}</dt>
                     <dd>{{ payment.user.username }}</dd>
                     <dt>{{ 'payment.admin.payment.details.date'|trans|colon }}</dt>
@@ -73,7 +73,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {{ transaction.price }}
+                    {{ transaction.price }}€
                 </td>
                 <td>
                     {% if transaction.refund %}
@@ -94,7 +94,7 @@
                         {% endif %}
                     {% else %}
                         <a href="{{ path('nantarena_admin_payment_refund_transaction', {'id': transaction.id}) }}">
-                            <i class="icon-download-alt"></i>{{ 'payment.admin.refund.transaction.btn'|trans }}
+                            {{ 'payment.admin.refund.transaction.btn'|trans }}
                         </a>
                     {% endif %}
                 </td>

@@ -41,20 +41,20 @@ payment:
                 btn: 'Annuler complètement le paiement'
             transaction:
                 title: 'Annulation de la transaction'
-                btn: 'Remboursement'
+                btn: 'Annuler'
             form:
-                submit: 'Rembourser'
+                submit: 'Annuler'
                 description: 'Explication'
                 valid: 'Validé'
             modify:
                 submit: 'Modifier'
             flash:
-                pay_refund: 'Le paiement est remboursé'
-                modify_refund: 'Le remboursement a été modifié'
-                validate_refund: 'Le remboursement a été validé'
+                pay_refund: 'Le paiement est annulé'
+                modify_refund: 'L''annulation du paiement a été modifiée'
+                validate_refund: 'L''annulation du paiement a été validée'
                 no_pay: 'Pas de paiement correspondant'
                 no_trans: 'Pas de transaction correspondante'
-                is_refund: 'Le remboursement de la transation a déjà été fait'
+                is_refund: 'L''annulation de la transation a déjà été fait'
         cash:
             title: 'Paiement en liquide'
         transaction:
@@ -78,10 +78,10 @@ payment:
                 title: 'Explications et recommandations'
                 content: >
                     <ul>
-                        <li>Ce système de paiement fonctionne entièrement avec Paypal</li>
+                        <li>Ce système de paiement fonctionne avec Paypal</li>
                         <li>Aucune information bancaire utilisée n'est enregistrée sur notre site</li>
-                        <li class="text-warning">Le paiement par carte bancaire s'effectue à travers le système Paypal</li>
-                        <li>Veuillez ne pas utiliser les flèches de navigation, ou vous recommencerez la procédure à zéro</li>
+                        <li>Le paiement par carte bancaire est possible à travers le système Paypal</li>
+                        <li>Veuillez ne pas utiliser les flèches de navigation durant la procédure de paiement</li>
                         <li>Si vous avez fait une erreur, vous devez annuler la procédure en cours</li>
                         <li>Une fois le paiement effectué, votre compte sera automatiquement mis à jour</li>
                     </ul>
@@ -106,7 +106,7 @@ payment:
             title: 'Accès à Paypal'
             explain: >
                     <ul>
-                        <li>La prochaine étape se déroule su Paypal</li>
+                        <li>La prochaine étape se déroule sur Paypal</li>
                         <li>Vous pourrez payer avec votre compte Paypal ou renseigner les informations pour votre carte bancaire</li>
                         <li>Un descriptif détaillé vous sera présenté avant de payer</li>
                     </ul>
@@ -115,11 +115,11 @@ payment:
             title: 'Récapitulatif de la commande'
             event: 'Évènement : %event%'
             button: 'Confirmer et payer'
-            num: 'Paiement n°%num%'
+            num: 'Paiement n°%05d'
             table:
                 total: 'Total'
                 name: 'Nom'
-                status: 'Statut'
+                status: 'Tournoi'
                 price: 'Prix'
         message:
             base_error: 'Une erreur s''est produite durant la procédure'
@@ -127,13 +127,13 @@ payment:
             event_signup: 'Vous n''êtes pas inscrit à cet événement'
             paypal: 'Un problème a été rencontré avec Paypal'
             cancel: 'La transaction a été supprimée'
-            payment: 'Le paiement s''est bien déroulé - Merci'
+            payment: 'Le paiement a été effectué avec succès'
             small_amount: 'Le montant est trop petit pour paypal'
             bad_step: 'Oups ! Vous n''êtes pas sur la bonne étape'
-            payed: 'Vous avez déjà payé !'
+            payed: 'Vous avez déjà payé'
             pay_running: 'Vous avez déjà un paiement en cours sur votre compte'
             pay_admin: 'Un paiement administrateur est en cours pour votre compte'
-            expired: 'La session est expirée'
+            expired: 'La session de paiement est expirée'
             time_error: 'Un paiement est en cours, si cette erreur apparait encore dans 15 min, contactez un admin'
             coop: 'Votre coéquipier %user% est en train de payer votre place.'
             time: 'Sa session expire dans %min% minutes et %sec% secondes'

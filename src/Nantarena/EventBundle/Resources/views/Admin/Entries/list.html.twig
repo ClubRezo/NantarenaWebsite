@@ -70,9 +70,9 @@
                             -
                         {% else %}
                             <a href="{{ url('nantarena_admin_payment_payment_details', {'id': transaction.payment.id}) }}">
-                                {% if transaction.paypal %}
+                                {% if transaction.payment.paypal %}
                                     Paypal
-                                {% elseif transaction.cash %}
+                                {% elseif transaction.payment.cash %}
                                     Liquide
                                 {% endif %}
                             </a>

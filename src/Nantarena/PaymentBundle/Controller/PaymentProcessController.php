@@ -81,7 +81,13 @@ class PaymentProcessController extends Controller
                     // Check payment
                     $validTransaction = $repository->findValidPayment($partner);
                     if (!$validTransaction) {
-                        $label = $partner->getUser()->getUsername() . ' - ' . $partner->getTournament()->getName() . ' - ' . $partner->getTournament()->getPrice() . '€';
+                        $label = array(
+                            'username' => $partner->getUser()->getUsername(),
+                            'event' => $partner->getTournament()->getEvent()->getName(),
+                            'tournament' => $partner->getTournament()->getName(),
+                            'price' => $partner->getTournament()->getPrice()
+                        );
+
                         $userList[] = $partner;
                         $userLabel[] = $label;
                     }

@@ -34,16 +34,16 @@
                     <li>
                         <strong>{{ 'event.show.registrations'|trans|colon }}</strong>
                         {% if event.startRegistrationDate|date('Y-m-d') == event.endRegistrationDate|date('Y-m-d') %}
-                            <time datetime="{{ event.startRegistrationDate|date('Y-m-d') }}">
+                            <time datetime="{{ event.startRegistrationDate|date('Y-m-d H:i') }}">
                                 {{ 'event.show.date.oneday'|trans({
-                                    '%date%': event.startRegistrationDate|date('d/m/Y')
+                                    '%date%': event.startRegistrationDate|date('d/m/Y \\à H\\hi')
                                 }) }}
                             </time>
                         {% else %}
-                            <time datetime="{{ event.startRegistrationDate|date('Y-m-d') }}">
+                            <time datetime="{{ event.startRegistrationDate|date('Y-m-d H:i') }}">
                                 {{ 'event.show.date.manydays'|trans({
-                                    '%date1%': event.startRegistrationDate|date('d/m/Y'),
-                                    '%date2%': event.endRegistrationDate|date('d/m/Y')
+                                    '%date1%': event.startRegistrationDate|date('d/m/Y \\à H\\hi'),
+                                    '%date2%': event.endRegistrationDate|date('d/m/Y \\à H\\hi')
                                 }) }}
                             </time>
                         {% endif %}
@@ -52,7 +52,7 @@
                         <strong>{{ 'event.show.open_hour'|trans|colon }}</strong>
                         <time datetime="{{ event.startDate|date('Y-m-d H:i') }}">
                             {{ 'event.show.datetime'|trans({
-                                '%datetime%': event.startDate|date('d/m/Y \\à H\\h')
+                                '%datetime%': event.startDate|date('d/m/Y \\à H\\hi')
                             }) }}
                             {% if event.startDate|date('i') > 0 %}
                                 {{ event.startDate|date('i') }}
@@ -64,7 +64,7 @@
                             <strong>{{ 'event.show.tournaments_start'|trans|colon }}</strong>
                             {% set startDate = event.tournaments|min('startDate').startDate %}
                             {{ 'event.show.datetime'|trans({
-                                '%datetime%': startDate|date('d/m/Y \\à H\\h')
+                                '%datetime%': startDate|date('d/m/Y \\à H\\hi')
                             }) }}
                             {% if startDate|date('i') > 0 %}
                                 {{ startDate|date('i') }}
@@ -174,7 +174,18 @@
                 {% elseif transaction is not null %}
                     <span class="text-success">
                         {% if transaction.user == transaction.payment.user %}
-                            Vous avez payé {{ transaction.price }}€
+                            Vous avez payé 
+                            {% if transaction.payment.transactions|length > 1 %}
+                                {% set others = [] %}
+                                {% for ptransaction in transaction.payment.transactions %}
+                                    {% if ptransaction.id != transaction.id %}
+                                        {% set others = others|merge([ptransaction.user.username]) %}
+                                    {% endif %}
+                                {% endfor %}
+                                <abbr title="Paiement n°{{ '%05d'|format(transaction.payment.id) }} - Pour {{ others|join(', ') }} et vous">{{ transaction.payment.amount }}€</abbr>
+                            {% else %}
+                                <abbr title="Paiement n°{{ '%05d'|format(transaction.payment.id) }}">{{ transaction.payment.amount }}€</abbr>
+                            {% endif %}
                         {% else %}
                             {{ transaction.payment.user.username }} a payé {{ transaction.price }}€ pour vous
                         {% endif %}
@@ -184,6 +195,8 @@
                         {% elseif transaction.payment.cash %}
                             en liquide
                         {% endif %}
+                        le
+                        {{ transaction.payment.date|date('d/m/Y \\à H\\hi') }}
                     </span>
                 {% endif %}
             </p>
