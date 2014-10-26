@@ -220,9 +220,6 @@ class PaypalService
             $msg .= 'Transformer Error';
         }
 
-        if (!empty($msg)) {
-            $msg = 'Paypal exception - '.$msg;
-        }
         // empty if not Paypal exception
         return $msg;
     }

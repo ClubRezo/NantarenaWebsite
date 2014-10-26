@@ -276,7 +276,7 @@ class PaymentProcessController extends Controller
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
-                $this->get('logger')->info('PAYPAL_ERROR - "' . $paypal->ApiErrorMessage($ex) . '"');
+                $this->get('logger')->info('PAYPAL_ERROR - ' . $res . ' - "' . $paypal->ApiErrorMessage($ex) . '"');
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
@@ -368,8 +368,8 @@ class PaymentProcessController extends Controller
             // start local session
             $this->get('session')->set('payProcess', true);
             // Log starting state
-            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 1 - paypal NOK - BDD NOK - user "' . $log_user 
-                . '" - paypal id "' . $paypalPayment->getPaymentId() 
+            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 1 - paypal NOK - BDD NOK - user "' . $log_user
+                . '" - paypal id "' . $paypalPayment->getPaymentId()
                 . '" - cost "'. strval($transaction->getPayment()->getAmount())
                 . '€" - number of transactions "' . strval(count($transaction->getPayment()->getTransactions())) . '"');
 
@@ -400,7 +400,7 @@ class PaymentProcessController extends Controller
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
-                $this->get('logger')->info('PAYPAL_PAY_ERROR "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '" - error "' . $paypal->ApiErrorMessage($ex) . '"');
+                $this->get('logger')->info('PAYPAL_PAY_ERROR - ' . $res . ' - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '" - error "' . $paypal->ApiErrorMessage($ex) . '"');
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
