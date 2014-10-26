@@ -92,6 +92,12 @@
                         }) }}">
                             <i class="icon-trash"></i>
                         </a>
+                        {% if transaction is null %}
+                            &nbsp;&nbsp;
+                            <a href="{{ path('nantarena_admin_payment_cash_user', {'id': entry.id}) }}">
+                                <i class="icon-shopping-cart"></i>
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
