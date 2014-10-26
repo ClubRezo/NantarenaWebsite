@@ -276,7 +276,7 @@ class PaymentProcessController extends Controller
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
-                $this->get('logger')->info('PAYPAL_ERROR - ' . $res . ' - "' . $paypal->ApiErrorMessage($ex) . '"');
+                $this->get('logger')->error('PAYPAL_ERROR - ' . $res . ' - "' . $paypal->ApiErrorMessage($ex) . '"');
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
@@ -400,7 +400,7 @@ class PaymentProcessController extends Controller
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
-                $this->get('logger')->info('PAYPAL_PAY_ERROR - ' . $res . ' - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '" - error "' . $paypal->ApiErrorMessage($ex) . '"');
+                $this->get('logger')->error('PAYPAL_PAY_ERROR - ' . $res . ' - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '" - error "' . $paypal->ApiErrorMessage($ex) . '"');
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
