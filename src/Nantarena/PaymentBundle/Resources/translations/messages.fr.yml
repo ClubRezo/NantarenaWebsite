@@ -99,7 +99,7 @@ payment:
                 title: 'Payer pour vos coéquipiers'
                 desc: 'Les coéquipiers pour qui vous payez ne pourront pas utiliser leurs coupons'
                 label: 'Coéquipier(s)'
-                no_partner: 'Pas de partenaires non payés'
+                no_partner: 'Pas de coéquipiers non payés'
             form:
                 submit: 'Continuer'
         paypal:
@@ -137,3 +137,4 @@ payment:
             time_error: 'Un paiement est en cours, si cette erreur apparait encore dans 15 min, contactez un admin'
             coop: 'Votre coéquipier %user% est en train de payer votre place.'
             time: 'Sa session expire dans %min% minutes et %sec% secondes'
+            tournament_complete: 'Le tournoi est désormais complet. La procédure de paiement a été annulée'

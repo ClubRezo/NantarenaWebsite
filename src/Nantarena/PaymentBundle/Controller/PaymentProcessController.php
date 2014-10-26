@@ -422,12 +422,26 @@ class PaymentProcessController extends Controller
     {
         $transaction = $this->getActivePaypalTransaction($event);
         if (!$transaction) {
+            $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.bad_step'));
             return null;
         } else {
+            /** @var Payment $paypalPayment */
             $paypalPayment = $transaction->getPayment();
             $paymentId = $paypalPayment->getPaymentId();
             $paymentStatus = $paypalPayment->getState();
             $payerId = $paypalPayment->getPayerId();
+
+            // Check if tournament is not full
+            $entry = null;
+            $paypalPayment->getUser()->hasEntry($event, $entry);
+
+            if (null !== $entry) {
+                $tournamentService = $this->get('nantarena_event.tournament_service');
+                if ($tournamentService->isComplete($entry->getTournament())) {
+                    $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.tournament_complete'));
+                    return null;
+                }
+            }
 
             $error = false;
 
