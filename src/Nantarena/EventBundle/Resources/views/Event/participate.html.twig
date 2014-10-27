@@ -75,6 +75,13 @@
                                 <td>
                                     {% if tournamentsComplete[tournament.id] %}
                                         <span class="text-error">Complet</span>
+                                        {{ form_row(form['tournament-' ~ tournament.id], {
+                                            'label': '',
+                                            'attr': {
+                                                'class': 'btn-success hide',
+                                                'disabled': true
+                                            }
+                                        }) }}
                                     {% else %}
                                         {{ form_row(form['tournament-' ~ tournament.id], {
                                             'label': 'event.participate.confirm.many'|trans,
