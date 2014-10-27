@@ -58,12 +58,14 @@ class EventController extends Controller
 
         $teamService = $this->get('nantarena_event.team_service');
         $teamsValidation = array();
+        $teamsTransactions = array();
 
         /** @var Tournament $tournament */
         foreach($event->getTournaments() as $tournament) {
             /** @var Team $team */
             foreach($tournament->getTeams() as $team) {
-                $teamsValidation[$team->getId()] = $teamService->isValid($team);
+                $teamsTransactions[$team->getId()] = array();
+                $teamsValidation[$team->getId()] = $teamService->isValid($team, $teamsTransactions[$team->getId()]);
             }
         }
 
@@ -79,6 +81,7 @@ class EventController extends Controller
             'entry' => $entry,
             'transaction' => $transaction,
             'teamsValidation' => $teamsValidation,
+            'teamsTransactions' => $teamsTransactions,
             'tournamentsComplete' => $tournamentsComplete
         );
     }

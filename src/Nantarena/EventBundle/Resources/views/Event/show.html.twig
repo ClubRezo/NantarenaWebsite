@@ -279,6 +279,12 @@
 
                 <div class="teams hide">
                     {% for team in tournament.teams %}
+
+                        {% set paidMembers = [] %}
+                        {% for t in teamsTransactions[team.id] %}
+                            {% set paidMembers = paidMembers|merge([t.user.id]) %}
+                        {% endfor %}
+
                         <div class="team">
                             {% if teamsValidation[team.id] %}
                                 <span class="badge badge-success">Validée</span>
@@ -290,15 +296,21 @@
                             </h4>
                             <p class="text-center">
                                 {% for member in team.members %}
-                                    {% if member == team.creator %}
-                                        <strong>{{ member.user.username }}</strong>
+                                    {% if member.user.id in paidMembers and (is_granted('ROLE_ADMIN')) %}
+                                        <span class="text-success">
                                     {% else %}
-                                        {{ member.user.username }}
+                                        <span>
                                     {% endif %}
+                                        {% if member == team.creator %}
+                                            <strong>{{ member.user.username }}</strong>
+                                        {% else %}
+                                            {{ member.user.username }}
+                                        {% endif %}
 
-                                    {% if not loop.last %}
-                                        -
-                                    {% endif %}
+                                        {% if not loop.last %}
+                                            -
+                                        {% endif %}
+                                    </span>
                                 {% endfor %}
                             </p>
                         </div>
