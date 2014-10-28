@@ -2,14 +2,15 @@
 
 namespace Nantarena\ForumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ORM\NoResultException;
+use Nantarena\SiteBundle\Controller\BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * @Route("/forum")
  */
-class DefaultController extends Controller
+class DefaultController extends BaseController
 {
     /**
      * @Route("/")
@@ -53,5 +54,27 @@ class DefaultController extends Controller
         return array(
             'pagination' => $pagination,
         );
+    }
+
+    /**
+     * @Route("/read_all")
+     */
+    public function readAllAction()
+    {
+        if ($this->getSecurityContext()->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            try {
+                $unreads = $this->getDoctrine()->getRepository('NantarenaForumBundle:ReadStatus')->findOneByUser($this->getUser());
+                $unreads->clearThreads();
+                $this->getDoctrine()->getManager()->flush();
+
+                $this->addFlash('success', $this->get('translator')->trans('forum.read_all.success'));
+            } catch (NoResultException $exception) {
+                $this->addFlash('error', $this->get('translator')->trans('forum.read_all.error'));
+            }
+        } else {
+            $this->addFlash('error', $this->get('translator')->trans('forum.read_all.error'));
+        }
+
+        return $this->redirect($this->generateUrl('nantarena_forum_default_index'));
     }
 }

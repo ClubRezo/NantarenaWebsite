@@ -147,4 +147,12 @@ class ReadStatus
 
         return $this;
     }
+
+    /**
+     * Supprime tous les topics non lus du ReadStatus
+     */
+    public function clearThreads()
+    {
+        $this->threads->clear();
+    }
 }

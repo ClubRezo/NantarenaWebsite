@@ -3,11 +3,13 @@
 {% block title 'forum.unreads.title'|trans %}
 
 {% block forum_content %}
-    <div class="span6">
-        <i class="icon-chevron-left"></i> <a href="{{ path('nantarena_forum_default_index') }}">{{ 'forum.unreads.back'|trans }}</a>
-    </div>
-
     <table class="table">
+        <tr>
+            <td colspan="3" style="border: none;">
+                <a class="pull-right" href="{{ path('nantarena_forum_default_readall') }}">{{ 'forum.unreads.read_all'|trans }}</a>
+                <i class="icon-chevron-left"></i> <a href="{{ path('nantarena_forum_default_index') }}">{{ 'forum.unreads.back'|trans }}</a>
+            </td>
+        </tr>
         <tr class="forum-table-header">
             <th class="thread-column">{{ 'forum.unreads.threads'|trans }}</th>
             <th class="posts-column">{{ 'forum.unreads.posts'|trans }}</th>

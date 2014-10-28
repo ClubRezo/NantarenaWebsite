@@ -187,7 +187,7 @@ forum:
         posts: Réponses
         threads: Fil de discussion
         title: 'Fils de discussion non lus'
-
+        read_all: 'Marquer tous les messages comme lus'
     widget:
         recent:
             in: ' &raquo; %forum%'
@@ -195,3 +195,6 @@ forum:
             no_results: 'Aucun fil de discussion récent'
             title: 'Derniers messages sur le forum'
             unreads: 'Consulter les messages non lus'
+    read_all:
+        success: 'Tous les fils de discussion non lus sont désormais lus'
+        error: 'Impossible de passer tous les fils de discussion à lus'
