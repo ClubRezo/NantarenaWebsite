@@ -269,9 +269,13 @@
                                 <div class="bar" style="width: {{ (teamsTotal - teamsValid) / tournament.maxTeams * 100}}%"></div>
                             </div>
                             <p>
-                                {{ 'event.show.tournament.teams.total'|transchoice(tournament.teams|length) }}
-                                ({{ 'event.show.tournament.teams.players'|transchoice(playersTotal) }})
-                                {{ 'event.show.tournament.teams.valid'|transchoice(teamsValid) }}
+                                {% if tournamentsComplete[tournament.id] %}
+                                    <span class="text-error">Ce tournoi est complet</span>
+                                {% else %}
+                                    {{ 'event.show.tournament.teams.total'|transchoice(tournament.teams|length) }}
+                                    ({{ 'event.show.tournament.teams.players'|transchoice(playersTotal) }})
+                                    {{ 'event.show.tournament.teams.valid'|transchoice(teamsValid) }}
+                                {% endif %}
                             </p>
                         </div>
                     </div>
@@ -285,35 +289,37 @@
                             {% set paidMembers = paidMembers|merge([t.user.id]) %}
                         {% endfor %}
 
-                        <div class="team">
-                            {% if teamsValidation[team.id] %}
-                                <span class="badge badge-success">Validée</span>
-                            {% else %}
-                                <span class="badge">Non validée</span>
-                            {% endif %}
-                            <h4>
-                                <a href="{{ url('nantarena_event_team_view', {'slug': event.slug, 'team': team.id}) }}">{{ team.name }}</a>
-                            </h4>
-                            <p class="text-center">
-                                {% for member in team.members %}
-                                    {% if member.user.id in paidMembers and (is_granted('ROLE_ADMIN')) %}
-                                        <span class="text-success">
-                                    {% else %}
-                                        <span>
-                                    {% endif %}
-                                        {% if member == team.creator %}
-                                            <strong>{{ member.user.username }}</strong>
+                        {% if teamsValidation[team.id] or (not tournamentsComplete[tournament.id]) or (is_granted('ROLE_ADMIN')) %}
+                            <div class="team">
+                                {% if teamsValidation[team.id] %}
+                                    <span class="badge badge-success">Validée</span>
+                                {% else %}
+                                    <span class="badge">Non validée</span>
+                                {% endif %}
+                                <h4>
+                                    <a href="{{ url('nantarena_event_team_view', {'slug': event.slug, 'team': team.id}) }}">{{ team.name }}</a>
+                                </h4>
+                                <p class="text-center">
+                                    {% for member in team.members %}
+                                        {% if member.user.id in paidMembers and (is_granted('ROLE_ADMIN')) %}
+                                            <span class="text-success">
                                         {% else %}
-                                            {{ member.user.username }}
+                                            <span>
                                         {% endif %}
+                                            {% if member == team.creator %}
+                                                <strong>{{ member.user.username }}</strong>
+                                            {% else %}
+                                                {{ member.user.username }}
+                                            {% endif %}
 
-                                        {% if not loop.last %}
-                                            -
-                                        {% endif %}
-                                    </span>
-                                {% endfor %}
-                            </p>
-                        </div>
+                                            {% if not loop.last %}
+                                                -
+                                            {% endif %}
+                                        </span>
+                                    {% endfor %}
+                                </p>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
 
