@@ -20,11 +20,12 @@ class TeamService
      * @param Team $team
      * @return bool
      */
-    public function isValid(Team $team) {
+    public function isValid(Team $team, &$transactions = null) {
         $members = $team->getMembers();
         $capacity = $team->getTournament()->getGame()->getTeamCapacity();
         $threesold = ceil($capacity / 2);
         $paid = 0;
+        $transactions = array();
 
         if (count($members) < $capacity) {
             return false;
@@ -33,6 +34,7 @@ class TeamService
         /** @var Entry $member */
         foreach($members as $member) {
             $transaction = $this->payment->getValidTransaction($member);
+            $transactions[] = $transaction;
 
             if (null !== $transaction) {
                 $paid++;
