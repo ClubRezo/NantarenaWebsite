@@ -23,6 +23,12 @@ monolog:
         chromephp:
             type:  chromephp
             level: info
+        paypal:
+            type:               stream
+            path:               "%kernel.logs_dir%/nantarena_paypal.log"
+            level:              info
+            channels:           paypal
+
 
 assetic:
     use_controller: true
