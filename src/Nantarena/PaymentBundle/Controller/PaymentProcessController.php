@@ -240,15 +240,23 @@ class PaymentProcessController extends Controller
                 array_push($items, $item);
             }
 
+            $route_success = $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', array(
+                // FIXME ajout d'un '?' temporairement
+                'state' => 'success', 'slug' => $event->getSlug()), true) . '?';
+            $route_cancel = $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', array(
+                // FIXME ajout d'un '?' temporairement
+                'state' => 'cancel', 'slug' => $event->getSlug()), true) . '?';
+
             $payment = $paypal->paypalPaymentApproval(
                 $total,
                 $event->getName(),
                 $items,
-                $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', 
-                    array('state' => 'success', 'slug' => $event->getSlug()), true),
-                $this->get('router')->generate('nantarena_payment_paypalpayment_paypalreturn', 
-                    array('state' => 'cancel', 'slug' => $event->getSlug()), true)
+                $route_success,
+                $route_cancel
             );
+
+            $this->get('monolog.logger.paypal')->info('PAYPAL_INFO - Redir route success = ' . $route_success .
+                ', Redir route cancel = ' . $route_cancel);
         
             // Retrieve paypal url
             $redirectUrl = $paypal->getPaymentLink($payment);
@@ -276,7 +284,7 @@ class PaymentProcessController extends Controller
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
-                $this->get('logger')->error('PAYPAL_ERROR - ' . $res . ' - "' . $paypal->ApiErrorMessage($ex) . '"');
+                $this->get('monolog.logger.paypal')->error('PAYPAL_ERROR - ' . $res . ' - "' . $paypal->ApiErrorMessage($ex) . '"');
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
@@ -368,7 +376,7 @@ class PaymentProcessController extends Controller
             // start local session
             $this->get('session')->set('payProcess', true);
             // Log starting state
-            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 1 - paypal NOK - BDD NOK - user "' . $log_user
+            $this->get('monolog.logger.paypal')->info('PAYPAL_PAY_PROCESS - 1 - paypal NOK - BDD NOK - user "' . $log_user
                 . '" - paypal id "' . $paypalPayment->getPaymentId()
                 . '" - cost "'. strval($transaction->getPayment()->getAmount())
                 . '€" - number of transactions "' . strval(count($transaction->getPayment()->getTransactions())) . '"');
@@ -384,7 +392,7 @@ class PaymentProcessController extends Controller
             }
 
             // Log paypal validation
-            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 2 - paypal OK - BDD NOK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
+            $this->get('monolog.logger.paypal')->info('PAYPAL_PAY_PROCESS - 2 - paypal OK - BDD NOK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
 
             $em = $this->getDoctrine()->getManager();
             $paypalPayment->setValid(true);
@@ -392,7 +400,7 @@ class PaymentProcessController extends Controller
             $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('payment.payment_process.message.payment'));
 
             // Log BDD update
-            $this->get('logger')->info('PAYPAL_PAY_PROCESS - 3 - paypal OK - BDD OK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
+            $this->get('monolog.logger.paypal')->info('PAYPAL_PAY_PROCESS - 3 - paypal OK - BDD OK - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '"');
             // finally
             $this->get('session')->set('payProcess', false);
 
@@ -400,7 +408,7 @@ class PaymentProcessController extends Controller
             $res = $paypal->ApiErrorHandle($ex);
             if (!empty($res)) {
                 $this->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('payment.payment_process.message.paypal'));
-                $this->get('logger')->error('PAYPAL_PAY_ERROR - ' . $res . ' - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '" - error "' . $paypal->ApiErrorMessage($ex) . '"');
+                $this->get('monolog.logger.paypal')->error('PAYPAL_PAY_ERROR - ' . $res . ' - user "' . $log_user . '" - paypal id "' . $paypalPayment->getPaymentId() . '" - error "' . $paypal->ApiErrorMessage($ex) . '"');
             } else {
                 $this->get('session')->getFlashBag()->add('error', $ex->getMessage());
             }
