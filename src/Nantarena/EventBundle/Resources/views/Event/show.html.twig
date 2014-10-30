@@ -166,8 +166,8 @@
                     <a href="{{ path('nantarena_event_team_create', {'slug' : event.slug}) }}" class="btn btn-success">{{ 'event.profile.createTeam.createButton'|trans }}</a>
                 {% elseif transaction is null %}
                     {% if not tournamentsComplete[entry.tournament.id] or teamsValidation[entry.team.id] %}
-                        {#<a class="btn btn-success" href="{{ path('nantarena_payment_paymentprocess_create', {'slug' : event.slug}) }}">Payer</a>#}
-                        <a class="btn btn-success disabled ttip" title="Paiement bientôt possible" href="#">Payer</a>
+                        <a class="btn btn-success" href="{{ path('nantarena_payment_paymentprocess_create', {'slug' : event.slug}) }}">Payer</a>
+                        {#<a class="btn btn-success disabled ttip" title="Paiement bientôt possible" href="#">Payer</a>#}
                     {% else %}
                         <span class="text-error">Le tournoi est désormais complet</span>
                     {% endif %}
@@ -266,7 +266,7 @@
                         <div class="span6">
                             <div class="progress">
                                 <div class="bar bar-success" style="width: {{ teamsValid / tournament.maxTeams * 100}}%"></div>
-                                <div class="bar" style="width: {{ teamsTotal * 0.9 / tournament.maxTeams * 100}}%"></div>
+                                <div class="bar" style="width: {{ (teamsTotal - teamsValid) / tournament.maxTeams * 100}}%"></div>
                             </div>
                             <p>
                                 {{ 'event.show.tournament.teams.total'|transchoice(tournament.teams|length) }}

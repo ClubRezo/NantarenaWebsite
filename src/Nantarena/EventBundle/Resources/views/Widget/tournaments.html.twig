@@ -25,7 +25,7 @@
                         <p><a href="#">{{ tournament.name }}</a></p>
                         <div class="progress ttip" data-title="{{ teamsValid }}/{{ tournament.maxTeams }} validées (sur {{ tournament.teams|length }} équipes inscrites)" data-placement="bottom">
                             <div class="bar bar-success" style="width: {{ teamsValid / tournament.maxTeams * 100 }}%"></div>
-                            <div class="bar" style="width: {{ teamsTotal * 0.9 / tournament.maxTeams * 100 }}%"></div>
+                            <div class="bar" style="width: {{ (teamsTotal - teamsValid) / tournament.maxTeams * 100 }}%"></div>
                         </div>
                     </li>
                 {% endfor %}
