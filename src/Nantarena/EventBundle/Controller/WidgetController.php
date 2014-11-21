@@ -29,6 +29,13 @@ class WidgetController extends Controller
 
         /** @var Event $event */
         $event = $em->getRepository('NantarenaEventBundle:Event')->findNext();
+
+        if (null === $event) {
+            return array(
+                'active' => false
+            );
+        }
+
         $tournaments = $em->getRepository('NantarenaEventBundle:Tournament')->findWithTeams($event);
 
         $teamService = $this->get('nantarena_event.team_service');

@@ -34,6 +34,11 @@ class EventController extends Controller
         if (null === $slug) {
             /** @var Event $nextEvent */
             $nextEvent = $em->getRepository('NantarenaEventBundle:Event')->findNext();
+
+            if (null === $nextEvent) {
+                return $this->redirect($this->generateUrl('nantarena_site_home'));
+            }
+
             return $this->redirect($this->generateUrl('nantarena_event_show', array(
                 'slug' => $nextEvent->getSlug()
             )));

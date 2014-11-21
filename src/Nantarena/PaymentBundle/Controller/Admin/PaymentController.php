@@ -32,9 +32,12 @@ class PaymentController extends Controller
      */
     public function listAction(Request $request, Event $event = null)
     {
+        $db = $this->getDoctrine();
+
         if (null === $event) {
-            if (null === ($event = $this->getDoctrine()->getRepository('NantarenaEventBundle:Event')->findNext()))
-                return array();
+            if (null === ($event = $db->getRepository('NantarenaEventBundle:Event')->findNext())) {
+                $event = $db->getRepository('NantarenaEventBundle:Event')->findLast();
+            }
         }
 
         $form = $this->createEventChoiceForm($event)->handleRequest($request);

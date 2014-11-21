@@ -62,4 +62,15 @@ class EventRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findLast()
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.startDate < :now')
+            ->orderBy('e.startDate', 'asc')
+            ->setParameter('now', new \DateTime())
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
